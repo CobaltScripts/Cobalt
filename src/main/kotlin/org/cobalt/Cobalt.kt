@@ -24,5 +24,4 @@ object Cobalt : ClientModInitializer{
     RichPresenceManager.startRpc()
     println("Cobalt Mod Initialized")
   }
-  
 }

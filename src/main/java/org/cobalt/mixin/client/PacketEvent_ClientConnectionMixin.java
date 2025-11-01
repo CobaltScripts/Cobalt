@@ -2,6 +2,7 @@ package org.cobalt.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.BundlePacket;
 import org.cobalt.api.event.impl.PacketEvent;
 import org.cobalt.api.event.impl.ChatEvent;
 import org.cobalt.api.event.EventBus;
@@ -9,16 +10,33 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.listener.PacketListener;
 import io.netty.channel.ChannelFutureListener;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.network.packet.s2c.play.BundleS2CPacket;
 
 @Mixin(ClientConnection.class)
 public class PacketEvent_ClientConnectionMixin {
 
+    @Shadow
+    private static <T extends PacketListener> void handlePacket(Packet<T> packet, PacketListener listener) {}
+    
     @Inject(method = "Lnet/minecraft/network/ClientConnection;handlePacket(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/listener/PacketListener;)V", at = @At("HEAD"), cancellable = true)
     private static void onPacketReceived(Packet<?> packet, PacketListener listener, CallbackInfo ci) {
         if (listener instanceof net.minecraft.client.network.ClientPlayNetworkHandler) {
+            if (packet instanceof BundleS2CPacket bundlePacket) {
+                ci.cancel();
+                for (Packet<?> subPacket : bundlePacket.getPackets()) {
+                    try {
+                        handlePacket(subPacket, listener);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                return;
+            }
+            
             new PacketEvent.Incoming(packet).post();
             if (packet.getClass().getSimpleName().equals("GameMessageS2CPacket")) {
                 new ChatEvent.Receive(packet).post();
