@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "client.TickEvent_MinecraftClientMixin",
+    "client.PacketEvent_ClientConnectionMixin",
     "player.LookLock_MouseMixin",
     "render.TextureTracking_GlStateManagerMixin",
     "render.WorldContext_WorldRendererMixin"
