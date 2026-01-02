@@ -4,7 +4,7 @@ import java.awt.Color
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
 
-internal class UITextTooltip(
+internal class aUITextTooltip(
   private val text: String,
   textHeight: Float = 16F
 ) : UIComponent(0f, 0f, 0f, 0f) {

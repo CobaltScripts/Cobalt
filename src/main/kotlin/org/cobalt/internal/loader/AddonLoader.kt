@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.impl.launch.FabricLauncherBase
 import org.cobalt.api.addon.Addon
 import org.cobalt.api.addon.AddonMetadata
+import org.cobalt.internal.test.TestAddon
 import org.spongepowered.asm.mixin.Mixins
 
 object AddonLoader {
@@ -18,12 +19,22 @@ object AddonLoader {
   private val gson = Gson()
 
   fun findAddons() {
+    //REMOVE TO REMOVE TEST ADDON!!!
+    val testAddon = TestAddon()
+    addons += AddonMetadata(
+      id = "test",
+      name = "Test",
+      version = "1.0.0",
+      entrypoints = listOf(),
+      mixins = listOf()
+    ) to testAddon
+
     if (FabricLauncherBase.getLauncher().isDevelopment) {
       for (entry in FabricLoader.getInstance().getEntrypointContainers("cobalt", Addon::class.java)) {
         val modMeta = entry.provider.metadata
         val metadata = AddonMetadata(
           id = modMeta.id,
-          name = modMeta.name,
+          name   = modMeta.name,
           version = modMeta.version?.toString() ?: "unknown",
           entrypoints = listOf(entry.entrypoint.javaClass.name),
           mixins = listOf()
@@ -107,5 +118,5 @@ object AddonLoader {
     return addons.toList()
   }
 
-
 }
+
