@@ -2,6 +2,7 @@ package org.cobalt.internal.ui.components
 
 import java.awt.Color
 import org.cobalt.api.addon.Addon
+import org.cobalt.api.addon.AddonMetadata
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.loader.AddonLoader
 import org.cobalt.internal.ui.UIComponent
@@ -10,7 +11,7 @@ import org.cobalt.internal.ui.screen.UIConfig
 import org.cobalt.internal.ui.util.isHoveringOver
 
 internal class UIAddonEntry(
-  private val metadata: AddonLoader.AddonMetadata,
+  private val metadata: AddonMetadata,
   private val addon: Addon,
 ) : UIComponent(
   x = 0F,

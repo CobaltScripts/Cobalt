@@ -2,6 +2,7 @@ package org.cobalt.internal.ui.panel.panels
 
 import java.awt.Color
 import org.cobalt.api.addon.Addon
+import org.cobalt.api.addon.AddonMetadata
 import org.cobalt.api.module.setting.impl.CheckboxSetting
 import org.cobalt.api.module.setting.impl.ColorSetting
 import org.cobalt.api.module.setting.impl.KeyBindSetting
@@ -28,7 +29,7 @@ import org.cobalt.internal.ui.util.ScrollHandler
 import org.cobalt.internal.ui.util.isHoveringOver
 
 internal class UIModuleList(
-  private val metadata: AddonLoader.AddonMetadata,
+  private val metadata: AddonMetadata,
   addon: Addon,
 ) : UIPanel(
   x = 0F,

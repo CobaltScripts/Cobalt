@@ -8,6 +8,7 @@ import java.util.zip.ZipFile
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.impl.launch.FabricLauncherBase
 import org.cobalt.api.addon.Addon
+import org.cobalt.api.addon.AddonMetadata
 import org.spongepowered.asm.mixin.Mixins
 
 object AddonLoader {
@@ -106,12 +107,5 @@ object AddonLoader {
     return addons.toList()
   }
 
-  data class AddonMetadata(
-    val id: String,
-    val name: String,
-    val version: String,
-    val entrypoints: List<String>,
-    val mixins: List<String>,
-  )
 
 }
