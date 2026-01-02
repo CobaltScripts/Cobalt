@@ -18,11 +18,9 @@ import org.cobalt.internal.ui.panel.panels.UISidebar
 
 internal object UIConfig : UIScreen() {
 
-  /** Needed for opening animation */
   private val openAnim = BounceAnimation(400)
   private var wasClosed = true
 
-  /** UI Panels */
   private val sidebar = UISidebar()
   private var body: UIPanel = UIAddonList()
 

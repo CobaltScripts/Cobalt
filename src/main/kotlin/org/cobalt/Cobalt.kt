@@ -8,6 +8,7 @@ import org.cobalt.api.event.annotation.SubscribeEvent
 import org.cobalt.api.event.impl.client.TickEvent
 import org.cobalt.api.event.impl.render.WorldRenderEvent
 import org.cobalt.api.module.ModuleManager
+import org.cobalt.api.notification.NotificationManager
 import org.cobalt.api.pathfinder.IPathExec
 import org.cobalt.api.util.TickScheduler
 import org.cobalt.api.util.rotation.IRotationExec
@@ -38,7 +39,7 @@ object Cobalt : ClientModInitializer {
     CommandManager.register(MainCommand)
     CommandManager.dispatchAll()
 
-    listOf(TickScheduler, DiscordPresence, MainCommand).forEach { EventBus.register(it) }
+    listOf(TickScheduler, DiscordPresence, MainCommand, NotificationManager).forEach { EventBus.register(it) }
 
     Config.loadModulesConfig()
     EventBus.register(this)

@@ -3,6 +3,7 @@ package org.cobalt.internal.command
 import org.cobalt.api.command.Command
 import org.cobalt.api.command.annotation.DefaultHandler
 import org.cobalt.api.command.annotation.SubCommand
+import org.cobalt.api.notification.NotificationManager
 import org.cobalt.internal.rotation.EasingType
 import org.cobalt.internal.rotation.RotationExec
 import org.cobalt.internal.rotation.strategy.TimedEaseStrategy
@@ -29,6 +30,11 @@ internal object MainCommand : Command(
         duration = duration.toLong()
       )
     )
+  }
+
+  @SubCommand
+  fun notification(title: String, description: String) {
+    NotificationManager.addNotification(title, description)
   }
 
 }
