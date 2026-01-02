@@ -111,7 +111,7 @@ internal class UIColorSetting(private val setting: ColorSetting) : UIComponent(
   }
 
   private fun getPickerBounds(colorBoxX: Float, colorBoxY: Float): PickerBounds {
-    val pickerHeight = paletteHeight + sliderHeight + 50F
+    val pickerHeight = paletteHeight + sliderHeight + 36F
     val pickerX = colorBoxX - pickerWidth - 15F
     val pickerY = colorBoxY - pickerHeight - 10F
     val paletteX = pickerX + 12F
