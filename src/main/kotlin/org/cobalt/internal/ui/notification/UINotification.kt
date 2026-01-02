@@ -44,7 +44,7 @@ internal class UINotification(
 
     for (word in words) {
       val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
-      val estimatedWidth = testLine.length * (fontSize * 0.5F)
+      val estimatedWidth = NVGRenderer.textWidth(testLine, fontSize)
 
       if (estimatedWidth <= maxWidth) {
         currentLine = testLine
