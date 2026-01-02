@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "cobalt",
+  "version": "${version}",
+  "name": "Cobalt",
+  "description": "Core mod that loads and manages external modules through a shared API",
+  "authors": [
+    "QuiteBoring",
+    "Twiston",
+    "oblongboot"
+  ],
+  "contact": {
+    "homepage": "https://cobalt.quiteboring.dev/",
+    "sources": "https://github.com/CobaltScripts/Cobalt"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/cobalt/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "org.cobalt.Cobalt"
+      }
+    ],
+    "preLaunch": [
+      "org.cobalt.PreLaunch"
+    ]
+  },
+  "mixins": [
+    "cobalt.mixins.json"
+  ],
+  "depends": {
+    "fabric-api": "*",
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-language-kotlin": ">=${fabric_kotlin_version}"
+  }
+}

@@ -1,0 +1,7 @@
+.idea/
+.gradle/
+.kotlin/
+build/
+run/
+docs-versions/
+.vscode/
