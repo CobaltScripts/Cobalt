@@ -6,11 +6,10 @@ import org.cobalt.internal.ui.UIComponent
 
 internal class UITextTooltip(
   private val text: String,
-  textHeight: Float = 16F
+  private val textHeight: Float = 16F
 ) : UIComponent(0f, 0f, 0f, 0f) {
 
   private val padding = 8F
-  private val textHeight = textHeight
 
   init {
     width = NVGRenderer.textWidth(text, textHeight) + (padding * 2)
