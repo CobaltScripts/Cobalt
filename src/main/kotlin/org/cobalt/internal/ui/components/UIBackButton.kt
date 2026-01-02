@@ -38,6 +38,14 @@ internal class UIBackButton : UIComponent(
       !hovering
     )
 
+    val arrowColor = colorAnim.get(
+      Color(230, 230, 230),
+
+      Color(61, 94, 149),
+
+      !hovering
+    )
+
     NVGRenderer.rect(x, y, width, height, bgColor.rgb, 5F)
     NVGRenderer.hollowRect(x, y, width, height, 2F, borderColor.rgb, 5F)
     NVGRenderer.image(
@@ -45,7 +53,7 @@ internal class UIBackButton : UIComponent(
       x + width / 2F - 10F,
       y + height / 2F - 10F,
       20F, 20F, 0F,
-      borderColor.rgb
+      arrowColor.rgb
     )
   }
 
