@@ -123,7 +123,7 @@ object AddonLoader {
   }
 
   fun getAddonIcon(addonId: String): Image? {
-return NVGRenderer.createImage(
+    return NVGRenderer.createImage(
       addons.find { it.first.id == addonId }?.first?.icon ?: return null
     )
   }
