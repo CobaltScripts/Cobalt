@@ -1,11 +1,13 @@
 package org.cobalt.internal.test
 
+import java.awt.Color
 import org.cobalt.api.addon.Addon
 import org.cobalt.api.addon.AddonMetadata
 import org.cobalt.api.module.Module
+import org.cobalt.api.module.setting.impl.ColorSetting
 import org.cobalt.api.module.setting.impl.InfoSetting
 import org.cobalt.api.module.setting.impl.InfoType
-//REMOVE THIS SOMETIME TO RMOVE TEST ADDON!!!!
+
 @Suppress("unused")
 class TestModule : Module(
   name = "Test Settings"
@@ -49,6 +51,30 @@ class TestModule : Module(
         name = null,
         text = "This info has no title, just a message",
         type = InfoType.INFO
+      )
+    )
+
+    addSetting(
+      ColorSetting(
+        name = "Rohan Likes Children",
+        description = "Rohan is a serial child molester and this is his favorite color",
+        defaultValue = Color(61, 94, 149, 255).rgb
+      )
+    )
+
+    addSetting(
+      ColorSetting(
+        name = "Secondary Color",
+        description = "Secondary accent color",
+        defaultValue = Color(100, 150, 200, 200).rgb
+      )
+    )
+
+    addSetting(
+      ColorSetting(
+        name = "Background Color",
+        description = "UI Background color",
+        defaultValue = Color(25, 25, 25, 255).rgb
       )
     )
   }

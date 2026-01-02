@@ -21,7 +21,9 @@ object Cobalt : ClientModInitializer {
 
   const val MOD_NAME = "Cobalt"
   const val VERSION = "1.0.0"
-  const val MC_VERSION = "1.21.10"
+
+  val MC_VERSION: String
+    get() = mc.gameVersion
 
   val mc: MinecraftClient
     get() = MinecraftClient.getInstance()

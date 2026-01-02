@@ -41,7 +41,7 @@ internal class UISidebar : UIPanel(
 
   private val userIconTooltip = UITooltip(
     content = { UITextTooltip("Hello, ${MinecraftClient.getInstance().session.username}!") },
-    position = TooltipPosition.RIGHT
+    position = TooltipPosition.BELOW
   )
 
   init {
