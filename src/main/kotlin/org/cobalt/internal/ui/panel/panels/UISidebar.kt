@@ -1,9 +1,14 @@
 package org.cobalt.internal.ui.panel.panels
 
 import java.awt.Color
+import kotlin.random.Random
+import kotlin.random.nextInt
 import net.minecraft.client.MinecraftClient
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
+import org.cobalt.internal.ui.components.tooltips.TooltipPosition
+import org.cobalt.internal.ui.components.tooltips.UITextTooltip
+import org.cobalt.internal.ui.components.tooltips.UITooltip
 import org.cobalt.internal.ui.panel.UIPanel
 import org.cobalt.internal.ui.screen.UIConfig
 import org.cobalt.internal.ui.util.isHoveringOver
@@ -34,6 +39,11 @@ internal class UISidebar : UIPanel(
     }
   } ?: steveIcon
 
+  private val userIconTooltip = UITooltip(
+    content = { UITextTooltip("Hello, ${MinecraftClient.getInstance().session.username}!") },
+    position = TooltipPosition.RIGHT
+  )
+
   init {
     components.addAll(
       listOf(moduleButton)
@@ -42,8 +52,9 @@ internal class UISidebar : UIPanel(
 
   override fun render() {
     NVGRenderer.rect(x, y, width, height, Color(18, 18, 18).rgb, 10F)
-    NVGRenderer.text("cb", x + width / 2F - 15F, y + 25F, 25F, Color(230, 230, 230).rgb)
-
+    val hue = Random.nextDouble(0.0, 1.0).toFloat()
+    val neon = Color.getHSBColor(hue, 0.85f + Random.nextFloat() * 0.15f, 0.9f + Random.nextFloat() * 0.1f)
+    NVGRenderer.text("cb", x + width / 2F - 15F, y + 25F, 25F, neon.rgb)
     moduleButton
       .setSelected(true)
       .updateBounds(x + (width / 2F) - (moduleButton.width / 2F), y + 75F)
@@ -53,14 +64,19 @@ internal class UISidebar : UIPanel(
 //      .updateBounds(x + (width / 2F) - (hudButton.width / 2F), y + 115F)
 //      .render()
 
+    val userIconX = x + (width / 2F) - 16F
+    val userIconY = y + height - 32F - 20F
+
     NVGRenderer.image(
       userIcon,
-      x + (width / 2F) - 16F,
-      y + height - 32F - 20F,
+      userIconX,
+      userIconY,
       32F,
       32F,
       radius = 10F
     )
+
+    userIconTooltip.updateBounds(userIconX, userIconY, 32F, 32F)
   }
 
   private class UIButton(
