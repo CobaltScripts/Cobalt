@@ -5,7 +5,7 @@ import net.minecraft.client.MinecraftClient
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
 import org.cobalt.internal.ui.components.tooltips.TooltipPosition
-import org.cobalt.internal.ui.components.tooltips.UITextTooltip
+import org.cobalt.internal.ui.components.tooltips.impl.UITextTooltip
 import org.cobalt.internal.ui.components.tooltips.UITooltip
 import org.cobalt.internal.ui.panel.UIPanel
 import org.cobalt.internal.ui.screen.UIConfig

@@ -115,7 +115,7 @@ tasks.dokkaHtml {
       jdkVersion.set(21)
 
       perPackageOption {
-        matchingRegex.set("org\\.cobalt\\.internal(\$|\\.).*")
+        matchingRegex.set("org\\.cobalt\\.internal($|\\.).*")
         suppress.set(true)
       }
 

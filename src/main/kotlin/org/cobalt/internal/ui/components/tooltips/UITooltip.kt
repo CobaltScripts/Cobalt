@@ -6,9 +6,6 @@ import org.cobalt.internal.ui.UIComponent
 import org.cobalt.internal.ui.animation.ColorAnimation
 import org.cobalt.internal.ui.util.isHoveringOver
 
-enum class TooltipPosition {
-  ABOVE, BELOW, LEFT, RIGHT
-}
 
 internal class UITooltip(
   private val content: () -> UIComponent,
@@ -40,14 +37,17 @@ internal class UITooltip(
         x + (targetWidth / 2F) - (contentWidth / 2F),
         y - contentHeight - padding
       )
+
       TooltipPosition.BELOW -> Pair(
         x + (targetWidth / 2F) - (contentWidth / 2F),
         y + targetHeight + padding
       )
+
       TooltipPosition.LEFT -> Pair(
         x - contentWidth - padding,
         y + (targetHeight / 2F) - (contentHeight / 2F)
       )
+
       TooltipPosition.RIGHT -> Pair(
         x + targetWidth + padding,
         y + (targetHeight / 2F) - (contentHeight / 2F)

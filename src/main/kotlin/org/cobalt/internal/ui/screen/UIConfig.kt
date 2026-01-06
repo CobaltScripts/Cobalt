@@ -62,7 +62,6 @@ internal object UIConfig : UIScreen() {
       .render()
 
     TooltipManager.renderAll()
-
     NVGRenderer.endFrame()
   }
 
