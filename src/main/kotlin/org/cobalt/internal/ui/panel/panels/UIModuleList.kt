@@ -132,6 +132,10 @@ internal class UIModuleList(
   }
 
   override fun mouseScrolled(horizontalAmount: Double, verticalAmount: Double): Boolean {
+    if (settings.any { it.mouseScrolled(horizontalAmount, verticalAmount) }) {
+      return true
+    }
+
     if (isHoveringOver(x, y, width / 4F, height)) {
       modulesScroll.handleScroll(verticalAmount)
       return true

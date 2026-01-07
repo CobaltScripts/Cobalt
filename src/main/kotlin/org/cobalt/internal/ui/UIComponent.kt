@@ -15,6 +15,7 @@ internal abstract class UIComponent(
   open fun mouseClicked(button: Int): Boolean = false
   open fun mouseReleased(button: Int): Boolean = false
   open fun mouseDragged(button: Int, offsetX: Double, offsetY: Double): Boolean = false
+  open fun mouseScrolled(horizontalAmount: Double, verticalAmount: Double): Boolean = false
 
   open fun charTyped(input: CharInput): Boolean = false
   open fun keyPressed(input: KeyInput): Boolean = false
