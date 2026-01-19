@@ -1,5 +1,6 @@
 package org.cobalt.api.util.render
 
+import com.mojang.blaze3d.opengl.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import java.awt.Color
 import kotlin.math.max
@@ -31,7 +32,7 @@ object Render3D {
     val lineLayer = if (esp) RenderLayers.LINE_LIST_ESP else RenderLayers.LINE_LIST
 
     matrix.push()
-    with(context.camera.pos) { matrix.translate(-x, -y, -z) }
+    with(context.camera.cameraPos) { matrix.translate(-x, -y, -z) }
 
     VertexRendering.drawFilledBox(
       matrix,
@@ -76,7 +77,7 @@ object Render3D {
     RenderSystem.lineWidth(thickness)
 
     matrix.push()
-    with(context.camera.pos) { matrix.translate(-x, -y, -z) }
+    with(context.camera.cameraPos) { matrix.translate(-x, -y, -z) }
 
     val startOffset = Vector3f(start.x.toFloat(), start.y.toFloat(), start.z.toFloat())
     val direction = end.subtract(start)
