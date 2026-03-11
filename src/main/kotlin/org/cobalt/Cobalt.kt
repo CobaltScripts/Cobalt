@@ -5,6 +5,7 @@ import org.cobalt.api.command.CommandManager
 import org.cobalt.api.event.EventBus
 import org.cobalt.api.hud.HudModuleManager
 import org.cobalt.api.hud.modules.WatermarkModule
+import org.cobalt.api.hud.modules.bestiary.BestiaryModule
 import org.cobalt.api.module.ModuleManager
 import org.cobalt.api.notification.NotificationManager
 import org.cobalt.api.rotation.RotationExecutor
@@ -18,7 +19,7 @@ object Cobalt : ClientModInitializer {
 
 
   override fun onInitializeClient() {
-    ModuleManager.addModules(listOf(WatermarkModule(), WatermarkModule()))
+    ModuleManager.addModules(listOf(WatermarkModule(), WatermarkModule(), BestiaryModule()))
 
     AddonLoader.getAddons().map { it.second }.forEach {
       it.onLoad()
