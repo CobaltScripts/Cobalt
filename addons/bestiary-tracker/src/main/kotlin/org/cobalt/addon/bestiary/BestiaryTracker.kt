@@ -1,4 +1,4 @@
-package org.cobalt.api.hud.modules.bestiary
+package org.cobalt.addon.bestiary
 
 import com.google.gson.JsonParser
 import java.util.concurrent.ConcurrentHashMap

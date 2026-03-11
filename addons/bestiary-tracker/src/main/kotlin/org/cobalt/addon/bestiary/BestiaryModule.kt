@@ -1,4 +1,4 @@
-package org.cobalt.api.hud.modules.bestiary
+package org.cobalt.addon.bestiary
 
 import org.cobalt.api.event.EventBus
 import org.cobalt.api.event.annotation.SubscribeEvent

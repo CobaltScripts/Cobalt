@@ -7,3 +7,5 @@ pluginManagement {
 }
 
 rootProject.name = "Cobalt"
+
+include("addons:bestiary-tracker")

@@ -1,0 +1,7 @@
+{
+  "id": "bestiary-tracker",
+  "name": "Bestiary Tracker",
+  "version": "1.0.0",
+  "entrypoints": ["org.cobalt.addon.bestiary.BestiaryAddon"],
+  "mixins": []
+}
