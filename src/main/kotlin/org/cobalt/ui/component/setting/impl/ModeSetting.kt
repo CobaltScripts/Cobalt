@@ -13,6 +13,9 @@ class ModeSetting(
   val options: Array<String>,
 ) : Setting<Int>(name, description, defaultValue) {
 
+  init {
+    require(options.isNotEmpty()) { "ModeSetting: '$name' must have at least one option" }
+  }
   override fun read(element: JsonElement) {
     this.value = element.asInt
   }
@@ -51,6 +54,8 @@ class ModeSetting(
   }
 
   override fun mouseClicked(button: Int): Boolean {
+    if (options.isEmpty()) return false
+
     val display = options.getOrNull(value) ?: ""
     val buttonWidth = Skia.textWidth(Skia.regularFont, display, FONT_SIZE) + 30f
     val startX = xPos + width - buttonWidth - PADDING
