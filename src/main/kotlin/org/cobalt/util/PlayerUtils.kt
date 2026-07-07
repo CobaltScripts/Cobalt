@@ -7,7 +7,6 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.util.rotation.Rotation
 
 object PlayerUtils {
-
   @JvmStatic
   val player: LocalPlayer?
     get() = minecraft.player
@@ -43,17 +42,20 @@ object PlayerUtils {
   @JvmStatic
   val rotation: Rotation
     get() {
-      val player = minecraft.player!!
+      val player = minecraft.player ?: return Rotation(0f, 0f, true)
       return Rotation(player.yRot, player.xRot, true)
     }
 
   @JvmStatic
   val position: BlockPos
-    get() = BlockPos(
-      floor(player!!.x).toInt(),
-      player!!.blockPosition().y,
-      floor(player!!.z).toInt()
-    )
+    get() {
+      val player = player ?: return BlockPos(0, 0, 0)
+      return BlockPos(
+        floor(player.x).toInt(),
+        player.blockPosition().y,
+        floor(player.z).toInt()
+      )
+    }
 
   @JvmStatic
   val isSuffocating: Boolean

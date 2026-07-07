@@ -23,15 +23,17 @@ data class PathNode(
   val centerVec: Vec3 = Vec3(x + 0.5, y + 0.5, z + 0.5)
 
   override fun equals(other: Any?): Boolean {
-    val otherNode = other as PathNode
+    if (this === other) return true
+    if (other !is PathNode) return false
 
-    return otherNode.x == x &&
-      otherNode.y == y &&
-      otherNode.z == z
+    return other.x == x &&
+      other.y == y &&
+      other.z == z
   }
 
   override fun hashCode(): Int {
-    return longHash(x, y, z).toInt()
+    val hash = longHash(x, y, z)
+    return (hash xor (hash ushr 32)).toInt() // IntelliJ is saying ushr isn't a thing, but it is wrong
   }
 
   companion object {
