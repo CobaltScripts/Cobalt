@@ -67,8 +67,6 @@ style:
       - value: 'java.math.BigDecimal.<init>(kotlin.Double)'
       - value: 'java.math.BigDecimal.<init>(kotlin.String)'
       - value: 'kotlin.system.measureTimeMillis'
-      - value: 'org.lwjgl.opengl.GL11.glBindTexture'
-        reason: 'replace with GlStateManager._bindTexture(), because everything else will mess up the internal state handling.'
       - value: 'java.util.Vector.<init>'
         reason: 'Replaced with CopyOnWriteArrayList and list.synchronized()'
       - value: 'java.util.Stack.<init>'
