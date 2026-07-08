@@ -1,14 +1,15 @@
 package org.cobalt.util
 
 import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.sqrt
 import net.minecraft.util.Mth
+import net.minecraft.world.phys.Vec3
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.util.rotation.Rotation
 
 
 object RotationUtils {
-
-  const val RAD_TO_DEG: Double = 180.0 / Math.PI
 
   @JvmStatic
   val gcd: Double
@@ -34,6 +35,27 @@ object RotationUtils {
     return abs(deltaYaw) <= tolerance && abs(deltaPitch) <= tolerance
   }
 
+  @JvmStatic
+  fun getRotation(start: Vec3, end: Vec3): Rotation {
+    val dx = end.x - start.x
+    val dy = end.y - start.y
+    val dz = end.z - start.z
+
+    val horizontalDistance = sqrt(dx * dx + dz * dz)
+
+    val yaw = (atan2(dz, dx) * RAD_TO_DEG).toFloat() - 90f
+    val pitch = (-(atan2(dy, horizontalDistance) * RAD_TO_DEG)).toFloat()
+
+    return Rotation(yaw, pitch)
+  }
+
+  @JvmStatic
+  fun getRotation(end: Vec3): Rotation {
+    val start = minecraft.player?.eyePosition ?: return Rotation.ZERO
+    return getRotation(start, end)
+  }
+
+  const val RAD_TO_DEG: Double = 180.0 / Math.PI
   private const val MOUSE_TURN_SCALE = 0.15f
 
 }

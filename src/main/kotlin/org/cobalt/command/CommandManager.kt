@@ -2,13 +2,9 @@ package org.cobalt.command
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.exceptions.CommandSyntaxException
-import net.minecraft.ChatFormatting
 import net.minecraft.client.multiplayer.ClientSuggestionProvider
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.command.impl.MainCommand
-import org.cobalt.event.EventBus
-import org.cobalt.event.annotation.SubscribeEvent
-import org.cobalt.event.impl.ChatSendEvent
 import org.cobalt.util.ChatUtils
 
 object CommandManager {

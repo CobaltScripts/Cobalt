@@ -1,6 +1,5 @@
 package org.cobalt.module.type
 
-import net.minecraft.ChatFormatting
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
 import org.cobalt.util.ChatUtils
@@ -23,7 +22,6 @@ abstract class Script(
       return
     }
 
-    onEnable()
     ChatUtils.sendSystemMessage("$name Script has been <green>Enabled</green>")
     enabled = true
   }
@@ -33,7 +31,6 @@ abstract class Script(
       return
     }
 
-    onDisable()
     ChatUtils.sendSystemMessage("$name Script has been <red>Disabled</red>")
     enabled = false
   }

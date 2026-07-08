@@ -17,7 +17,6 @@ class TextSetting(
     height = INPUT_BOX_HEIGHT,
     fontSize = 12f,
     placeholder = placeholder,
-    startText = value,
     onChange = { query ->
       value = query
     }
@@ -28,7 +27,8 @@ class TextSetting(
   }
 
   override fun read(element: JsonElement) {
-    this.value = element.asString
+    value = element.asString
+    inputBox.updateContent(value)
   }
 
   override fun write(): JsonElement {

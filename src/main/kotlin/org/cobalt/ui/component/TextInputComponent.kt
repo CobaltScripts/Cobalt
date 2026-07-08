@@ -16,13 +16,12 @@ class TextInputComponent(
   val placeholder: String,
   val fontSize: Float,
   val type: Type = Type.DEFAULT,
-  startText: String = "",
 ) : UIComponent(
   width = width,
   height = height
 ) {
 
-  private val inputHandler = TextInputHelper(fontSize, type, onChange, startText)
+  private val inputHandler = TextInputHelper(fontSize, type, onChange)
   private var xOffset: Float = 0f
 
   override fun renderComponent() {
@@ -70,6 +69,10 @@ class TextInputComponent(
       width, height,
       1f, 5f, theme.border
     )
+  }
+
+  fun updateContent(content: String) {
+    inputHandler.text = content
   }
 
   private fun drawSelection(textX: Float, textY: Float) {

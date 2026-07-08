@@ -1,6 +1,6 @@
 package org.cobalt.util.helper
 
-import java.util.PriorityQueue
+import java.util.*
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent

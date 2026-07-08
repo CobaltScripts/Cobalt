@@ -1,8 +1,9 @@
 package org.cobalt.util
 
+import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.KeyMapping
 import org.cobalt.Cobalt.minecraft
-
+import org.lwjgl.glfw.GLFW
 
 object KeybindUtils {
 
@@ -28,21 +29,6 @@ object KeybindUtils {
     minecraft.options.keyJump,
     minecraft.options.keyShift,
   )
-
-  @JvmStatic
-  fun leftClick() {
-    press(minecraft.options.keyAttack)
-  }
-
-  @JvmStatic
-  fun middleClick() {
-    press(minecraft.options.keyPickItem)
-  }
-
-  @JvmStatic
-  fun rightClick() {
-    press(minecraft.options.keyUse)
-  }
 
   @JvmStatic
   fun press(keyMapping: KeyMapping) {
@@ -91,6 +77,21 @@ object KeybindUtils {
       if (key !in keyMappings && key.isDown) {
         setKeyState(key, false)
       }
+    }
+  }
+
+  @JvmStatic
+  fun isKeyDown(key: InputConstants.Key): Boolean {
+    if (key == InputConstants.UNKNOWN) {
+      return false
+    }
+
+    val window = minecraft.window
+
+    return if (key.value > GLFW.GLFW_MOUSE_BUTTON_LAST) {
+      InputConstants.isKeyDown(window, key.value)
+    } else {
+      GLFW.glfwGetMouseButton(window.handle(), key.value) == GLFW.GLFW_PRESS
     }
   }
 

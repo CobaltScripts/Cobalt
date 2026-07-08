@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "client.MinecraftMixin",
+    "client.MouseHandlerAccessor",
     "client.MouseHandlerMixin",
     "command.CommandSuggestionsMixin",
     "gui.FontMixin",

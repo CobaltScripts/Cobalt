@@ -24,7 +24,7 @@ class CalculatingState : ExecutorState() {
       val path = pathFinder.findPath()
 
       if (path == null) {
-        ChatUtils.sendSystemMessage("<red>Unable to find a path.</red>")
+        ChatUtils.sendSystemMessage("<red>Unable to find a path</red>")
         PathExecutor.stop()
         return@runAsync
       }

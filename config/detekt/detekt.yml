@@ -54,9 +54,7 @@ style:
     active: true
     maxJumpCount: 3
   WildcardImport:
-    active: true
-    excludeImports:
-      - 'org.lwjgl.opengl.GL45.*'
+    active: false
   ForbiddenComment:
     active: false
   UnusedPrivateProperty:

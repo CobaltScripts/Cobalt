@@ -1,9 +1,8 @@
-@file:Suppress("TooManyFunctions", "WildcardImport")
+@file:Suppress("TooManyFunctions")
 
 package org.cobalt.pathfinder.movement
 
 import kotlin.math.sqrt
-import net.minecraft.client.KeyMapping
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.level.EmptyBlockGetter
@@ -15,7 +14,6 @@ import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.material.WaterFluid
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.Vec3
-import org.cobalt.Cobalt.minecraft
 import org.cobalt.pathfinder.helper.BlockStateAccessor
 import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.precompute.Ternary

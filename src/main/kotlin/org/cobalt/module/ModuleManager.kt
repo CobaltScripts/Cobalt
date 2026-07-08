@@ -1,18 +1,14 @@
 package org.cobalt.module
 
-import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.screens.LevelLoadingScreen
 import net.minecraft.client.gui.screens.ProgressScreen
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.RenderEvent
-import org.cobalt.module.impl.misc.AutoHarp
-import org.cobalt.module.impl.misc.AutoSprint
-import org.cobalt.module.impl.misc.Debug
-import org.cobalt.module.impl.misc.DiscordRPC
-import org.cobalt.module.impl.misc.NickHider
-import org.cobalt.module.impl.misc.Rotations
+import org.cobalt.module.impl.combat.AutoClicker
+import org.cobalt.module.impl.misc.*
+import org.cobalt.module.impl.skills.Fishing
 import org.cobalt.module.impl.visual.PerformanceHUD
 import org.cobalt.module.type.RenderableModule
 import org.cobalt.module.type.Script
@@ -34,13 +30,22 @@ object ModuleManager {
 
   internal fun registerModules() {
     val builtIn = arrayOf(
-      Rotations,
-      PerformanceHUD,
-      AutoSprint,
-      DiscordRPC,
+      // Combat
+      AutoClicker,
+
+      // Misc
       AutoHarp,
+      AutoSprint,
+      Debug,
+      DiscordRPC,
       NickHider,
-      Debug
+      Rotations,
+
+      // Skills
+      Fishing,
+
+      // Visual
+      PerformanceHUD,
     )
 
     builtIn.forEach { module ->

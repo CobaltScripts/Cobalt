@@ -17,7 +17,7 @@ object ColorUtils {
     text: String,
     startColor: Int,
     endColor: Int,
-    baseStyle: Style = Style.EMPTY
+    baseStyle: Style = Style.EMPTY,
   ): MutableComponent {
     val result = Component.empty()
     val textLength = text.length

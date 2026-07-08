@@ -13,11 +13,10 @@ class TextInputHelper(
   private val fontSize: Float,
   private val textInputType: TextInputComponent.Type,
   private val onChange: Consumer<String>,
-  startText: String = "",
 ) {
 
-  var text = startText
-    private set(value) {
+  var text = ""
+    set(value) {
       if (field == value) {
         return
       }
@@ -29,7 +28,7 @@ class TextInputHelper(
   var focused = false
     private set
 
-  var caretIndex = startText.length
+  var caretIndex = text.length
     private set
 
   var selectionStart = -1

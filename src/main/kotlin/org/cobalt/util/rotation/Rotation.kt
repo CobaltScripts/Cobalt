@@ -36,4 +36,8 @@ data class Rotation(
     )
   }
 
+  companion object {
+    val ZERO = Rotation(0f, 0f, true)
+  }
+
 }

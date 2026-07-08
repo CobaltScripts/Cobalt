@@ -4,8 +4,10 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.module.ModuleCategory
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.component.button.SidebarButton
+import org.cobalt.util.helper.Multithreading
 import org.cobalt.util.skia.Skia
 import org.cobalt.util.skia.helper.SkiaCorner
+import org.cobalt.util.skia.helper.SkiaImage
 
 object SidebarComponent : UIComponent(
   width = 250f,
@@ -13,15 +15,19 @@ object SidebarComponent : UIComponent(
 ) {
 
   private val buttons = mutableListOf<SidebarButton>()
+  private val steveFace = Skia.createImage("/assets/cobalt/ui/steve.png")
+  private var playerFace: SkiaImage? = null
 
-  internal fun preload() {
+  init {
     for (category in ModuleCategory.entries) {
       val button = SidebarButton(category)
       this.addChild(button)
       buttons.add(button)
     }
 
-    playerFace
+    Multithreading.runAsync {
+      playerFace = Skia.createImage("https://mc-heads.net/avatar/${minecraft.user.name}/100/face.png")
+    }
   }
 
   override fun renderComponent() {
@@ -73,7 +79,7 @@ object SidebarComponent : UIComponent(
     val playerFaceY = boxY + (USER_INFO_HEIGHT - PLAYER_FACE_SIDE_LENGTH) / 2
 
     Skia.image(
-      playerFace,
+      playerFace ?: steveFace,
       playerFaceX, playerFaceY,
       PLAYER_FACE_SIDE_LENGTH, PLAYER_FACE_SIDE_LENGTH,
       PLAYER_FACE_SIDE_LENGTH / 2
@@ -98,12 +104,6 @@ object SidebarComponent : UIComponent(
       textX, textY + USER_INFO_TEXT_SIZE + 2f,
       USER_INFO_TEXT_SIZE, theme.textSecondary,
     )
-  }
-
-  private val playerFace = try {
-    Skia.createImage("https://mc-heads.net/avatar/${minecraft.user.name}/100/face.png")
-  } catch (_: Exception) {
-    Skia.createImage("/assets/cobalt/ui/steve.png")
   }
 
   private const val TITLE_TEXT = "cobalt"

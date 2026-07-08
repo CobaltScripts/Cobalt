@@ -2,8 +2,8 @@ package org.cobalt.module
 
 import net.minecraft.client.Minecraft
 import org.cobalt.event.EventBus
+import org.cobalt.module.type.Script
 import org.cobalt.ui.component.setting.Setting
-import org.cobalt.util.ChatUtils
 import org.cobalt.util.config.SettingContainer
 
 abstract class Module(
@@ -22,7 +22,11 @@ abstract class Module(
 
   var enabled: Boolean = startValue
     set(value) {
-      if (!toggleable || field == value) {
+      if (field == value) {
+        return
+      }
+
+      if (!toggleable && this !is Script) {
         return
       }
 

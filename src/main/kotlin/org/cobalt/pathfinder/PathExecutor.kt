@@ -5,7 +5,7 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
-import org.cobalt.event.impl.WorldRenderEvent
+import org.cobalt.event.impl.WorldEvent
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.impl.CalculatingState
@@ -100,7 +100,7 @@ object PathExecutor {
   }
 
   @SubscribeEvent
-  fun onRender(ignored: WorldRenderEvent) {
+  fun onRender(ignored: WorldEvent.Render) {
     if (!running) {
       return
     }

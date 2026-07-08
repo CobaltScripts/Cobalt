@@ -1,6 +1,10 @@
 package org.cobalt.util
 
+import net.minecraft.client.input.MouseButtonInfo
 import org.cobalt.Cobalt.minecraft
+import org.cobalt.Cobalt.runOnClientThread
+import org.cobalt.mixin.client.MouseHandlerAccessor
+import org.lwjgl.glfw.GLFW
 
 object MouseUtils {
 
@@ -16,11 +20,37 @@ object MouseUtils {
     get() = minecraft.mouseHandler.ypos().toFloat()
 
   @JvmStatic
+  fun leftClick() {
+    click(GLFW.GLFW_MOUSE_BUTTON_LEFT)
+  }
+
+  @JvmStatic
+  fun middleClick() {
+    click(GLFW.GLFW_MOUSE_BUTTON_MIDDLE)
+  }
+
+  @JvmStatic
+  fun rightClick() {
+    click(GLFW.GLFW_MOUSE_BUTTON_RIGHT)
+  }
+
+  @JvmStatic
   fun isHoveringOver(x: Float, y: Float, width: Float, height: Float): Boolean {
     return mouseX >= x &&
       mouseX <= x + width &&
       mouseY >= y &&
       mouseY <= y + height
+  }
+
+  private fun click(button: Int) {
+    val window = minecraft.window.handle()
+    val mouse = minecraft.mouseHandler as MouseHandlerAccessor
+    val info = MouseButtonInfo(button, 0)
+
+    runOnClientThread {
+      mouse.invokeOnButton(window, info, GLFW.GLFW_PRESS)
+      mouse.invokeOnButton(window, info, GLFW.GLFW_RELEASE)
+    }
   }
 
 }

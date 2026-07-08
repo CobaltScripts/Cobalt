@@ -4,9 +4,11 @@ import kotlin.math.floor
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import org.cobalt.Cobalt.minecraft
+import org.cobalt.Cobalt.runOnClientThread
 import org.cobalt.util.rotation.Rotation
 
 object PlayerUtils {
+
   @JvmStatic
   val player: LocalPlayer?
     get() = minecraft.player
@@ -42,14 +44,17 @@ object PlayerUtils {
   @JvmStatic
   val rotation: Rotation
     get() {
-      val player = minecraft.player ?: return Rotation(0f, 0f, true)
+      val player = minecraft.player
+        ?: return Rotation.ZERO
+
       return Rotation(player.yRot, player.xRot, true)
     }
 
   @JvmStatic
   val position: BlockPos
     get() {
-      val player = player ?: return BlockPos(0, 0, 0)
+      val player = player ?: return BlockPos.ZERO
+
       return BlockPos(
         floor(player.x).toInt(),
         player.blockPosition().y,
@@ -89,7 +94,7 @@ object PlayerUtils {
       return
     }
 
-    minecraft.execute {
+    runOnClientThread {
       player?.closeContainer()
     }
   }

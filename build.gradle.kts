@@ -46,7 +46,6 @@ dependencies {
   jij(libs.skija.shared)
   jij(libs.discordIpc)
 
-  compileOnly(libs.bundles.skija.natives)
   runtimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
 }
 

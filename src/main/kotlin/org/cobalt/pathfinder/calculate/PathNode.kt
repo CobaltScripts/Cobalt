@@ -33,7 +33,7 @@ data class PathNode(
 
   override fun hashCode(): Int {
     val hash = longHash(x, y, z)
-    return (hash xor (hash ushr 32)).toInt() // IntelliJ is saying ushr isn't a thing, but it is wrong
+    return (hash xor (hash ushr 32)).toInt()
   }
 
   companion object {

@@ -5,7 +5,7 @@ import kotlin.math.exp
 import kotlin.math.pow
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
-import org.cobalt.event.impl.WorldRenderEvent
+import org.cobalt.event.impl.WorldEvent
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
 import org.cobalt.ui.component.setting.impl.SliderSetting
@@ -94,7 +94,7 @@ object Rotations : Module(
   }
 
   @SubscribeEvent
-  fun onRender(ignored: WorldRenderEvent) {
+  fun onRender(ignored: WorldEvent.Render) {
     if (!running || minecraft.gui.screen() != null) {
       return
     }

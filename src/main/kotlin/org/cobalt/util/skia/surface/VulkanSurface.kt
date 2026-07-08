@@ -1,5 +1,3 @@
-@file:Suppress("WildcardImport")
-
 package org.cobalt.util.skia.surface
 
 import com.mojang.blaze3d.GpuFormat

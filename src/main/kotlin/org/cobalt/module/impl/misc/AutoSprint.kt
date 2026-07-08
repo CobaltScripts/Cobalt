@@ -4,7 +4,6 @@ import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
-import org.cobalt.pathfinder.PathExecutor
 
 object AutoSprint : Module(
   name = "AutoSprint",

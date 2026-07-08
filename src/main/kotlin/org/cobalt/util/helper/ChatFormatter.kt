@@ -66,6 +66,7 @@ object ChatFormatter {
         styleStack.clear()
         baseStyle
       }
+
       else -> applyOpeningTag(tag, currentStyle)?.also { styleStack.addLast(currentStyle) }
     }
   }

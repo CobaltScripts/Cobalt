@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions", "WildcardImport")
+@file:Suppress("TooManyFunctions")
 
 package org.cobalt.util.skia
 
