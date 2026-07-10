@@ -6,7 +6,7 @@ class GoalBlock(
   val goalX: Int,
   val goalY: Int,
   val goalZ: Int,
-) : IGoal {
+) : Goal {
 
   override fun heuristic(x: Int, y: Int, z: Int): Double {
     val dx = abs(goalX - x).toDouble()

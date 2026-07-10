@@ -5,18 +5,18 @@ import kotlin.time.Duration.Companion.milliseconds
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.calculate.openset.BinaryHeapOpenSet
-import org.cobalt.pathfinder.goal.IGoal
+import org.cobalt.pathfinder.goal.Goal
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
 
 class AStarPathfinder(
-  val startX: Int,
-  val startY: Int,
-  val startZ: Int,
-  val goal: IGoal,
-  val movements: Array<out Movement>,
-  val returnBestNode: Boolean,
+    val startX: Int,
+    val startY: Int,
+    val startZ: Int,
+    val goal: Goal,
+    val movements: Array<out Movement>,
+    val returnBestNode: Boolean,
 ) {
 
   private val closedSet = Long2ObjectOpenHashMap<PathNode>()

@@ -1,5 +1,6 @@
 package org.cobalt.util
 
+import kotlin.math.ceil
 import kotlin.math.floor
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
@@ -38,7 +39,7 @@ object PlayerUtils {
 
   @get:JvmName("isOnGround")
   @JvmStatic
-  val isOnGround: Boolean
+  val onGround: Boolean
     get() = player?.onGround() ?: false
 
   @JvmStatic
@@ -57,7 +58,7 @@ object PlayerUtils {
 
       return BlockPos(
         floor(player.x).toInt(),
-        (player.blockPosition().y  + 0.1251).toInt(),
+        ceil(player.blockPosition().y.toDouble() - 0.25).toInt(),
         floor(player.z).toInt()
       )
     }

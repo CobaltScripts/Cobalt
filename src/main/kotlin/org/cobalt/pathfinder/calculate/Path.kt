@@ -1,17 +1,16 @@
 package org.cobalt.pathfinder.calculate
 
 import kotlin.time.Duration
-import org.cobalt.pathfinder.goal.IGoal
+import org.cobalt.pathfinder.goal.Goal
 
 data class Path(
   val nodes: List<PathNode>,
   val timeElapsed: Duration,
-  val goal: IGoal,
+  val goal: Goal,
 ) {
 
   val keyNodes: List<PathNode> = buildKeyNodes()
 
-  // TODO: Replace this simple key nodes extractor with a better implementation (or use Theta*)
   private fun buildKeyNodes(): List<PathNode> {
     if (nodes.size <= 2) {
       return nodes

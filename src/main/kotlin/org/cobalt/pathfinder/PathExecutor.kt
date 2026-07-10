@@ -9,6 +9,7 @@ import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
 import org.cobalt.event.impl.WorldEvent
+import org.cobalt.module.impl.misc.Debug
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.impl.CalculatingState
@@ -116,16 +117,19 @@ object PathExecutor {
     }
 
     val theme = ThemeManager.activeTheme
-    val nodes = path?.keyNodes ?: return
+    val nodes = path?.nodes ?: return
+    val keyNodes = path?.keyNodes ?: return
 
     val targetNode = nodes[pathIndex].centerVec
     val playerPos = PlayerUtils.position.centerVec()
 
-    WorldRenderUtils.drawBox(playerPos.smallBox(), Color.GREEN)
-    WorldRenderUtils.drawBox(targetNode.smallBox(), Color.RED)
+    if (Debug.enabled) {
+      WorldRenderUtils.drawBox(playerPos.smallBox(), Color.GREEN)
+      WorldRenderUtils.drawBox(targetNode.smallBox(), Color.RED)
+    }
 
-    for (index in nodes.indices) {
-      val node = nodes[index]
+    for (index in keyNodes.indices) {
+      val node = keyNodes[index]
 
       WorldRenderUtils.drawBlockPos(
         if (node.isFly) node.block else node.blockStandingOn,
@@ -133,10 +137,11 @@ object PathExecutor {
       )
 
       if (index > 0) {
-        val prev = nodes[index - 1]
+        val prev = keyNodes[index - 1]
 
         WorldRenderUtils.drawLine(
-          prev.topCenterVec, node.topCenterVec,
+          if (prev.isFly) prev.centerVec else prev.topCenterVec,
+          if (node.isFly) node.centerVec else node.topCenterVec,
           theme.accentSecondary
         )
       }

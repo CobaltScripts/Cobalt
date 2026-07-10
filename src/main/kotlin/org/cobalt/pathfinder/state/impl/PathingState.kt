@@ -1,19 +1,19 @@
 package org.cobalt.pathfinder.state.impl
 
 import java.awt.Color
+import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.AABB
-import net.minecraft.world.phys.Vec3
 import org.cobalt.dsl.centerVec
 import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.helper.PlayerInput
-import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementHelper
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.PlayerUtils
 import org.cobalt.util.RotationUtils
 import org.cobalt.util.WorldRenderUtils
+import org.cobalt.util.helper.Clock
 import org.cobalt.util.rotation.RotationTarget
 
 class PathingState : ExecutorState() {
@@ -33,14 +33,13 @@ class PathingState : ExecutorState() {
     }
 
     val index = PathExecutor.pathIndex
-    val node = path.keyNodes[index]
+    val node = path.nodes[index]
 
     val playerPos = PlayerUtils.position
     val nodePos = node.block
-    val isFlyNode = node.type == Movement.Type.FLY
 
-    if (hasReached(playerPos.centerVec(), path.keyNodes, index)) {
-      if (index + 1 >= path.keyNodes.size) {
+    if (hasReached(playerPos, path.nodes, index)) {
+      if (index + 1 >= path.nodes.size) {
         PathExecutor.stop()
         return
       }
@@ -50,7 +49,7 @@ class PathingState : ExecutorState() {
     }
 
     if (
-      isFlyNode &&
+      node.isFly &&
       config.useFlyMovement &&
       PlayerUtils.canFly &&
       !PlayerUtils.isFlying
@@ -61,7 +60,7 @@ class PathingState : ExecutorState() {
 
     val sameXZ = nodePos.x == playerPos.x && nodePos.z == playerPos.z
     val targetVec = MovementHelper.getRotationTarget(
-      playerPos.centerVec(), path.keyNodes, index
+      playerPos.centerVec(), path.nodes, index
     )
 
     val playerInput = PlayerInput()
@@ -74,14 +73,17 @@ class PathingState : ExecutorState() {
       playerInput.apply(neededKeys)
     }
 
-    if (config.shouldSprint && !isFlyNode) {
-      playerInput.sprint = true
+    if (!node.isFly) {
+      if (config.shouldSprint) {
+        playerInput.sprint = true
+      }
+
+      if (shouldJump(playerPos, path.nodes, index)) { // TODO: make it actually good
+        playerInput.jump = true
+      }
     }
 
-    // TODO: add jump logic for walking
-    // playerInput.jump = !PlayerUtils.isFlying
-
-    if (isFlyNode && sameXZ) {
+    if (node.isFly && sameXZ) {
       val diffY = nodePos.y - playerPos.y
 
       when {
@@ -104,7 +106,7 @@ class PathingState : ExecutorState() {
     val playerPos = PlayerUtils.position
 
     val targetVec = MovementHelper.getRotationTarget(
-      playerPos.centerVec(), path.keyNodes, index
+      playerPos.centerVec(), path.nodes, index
     )
 
     WorldRenderUtils.drawBox(
@@ -119,15 +121,27 @@ class PathingState : ExecutorState() {
     )
   }
 
+  // TODO: make it actually good
   private fun hasReached(
-    playerPos: Vec3,
+    playerPos: BlockPos,
     nodes: List<PathNode>,
-    currentIndex: Int
+    currentIndex: Int,
   ): Boolean {
-    val currentNodePos = nodes[currentIndex].centerVec
+    val currNode = nodes[currentIndex]
+    val currNodePos = currNode.centerVec
+    val playerVec = playerPos.centerVec()
 
-    if (playerPos.distanceToSqr(currentNodePos) < 0.3 * 0.3) {
+    if (currNode.block.y - playerPos.y >= 1) {
+      return currNode.block == playerPos
+    }
+
+    if (playerVec.distanceToSqr(currNodePos) < 0.3 * 0.3) {
       return true
+    }
+
+    // TODO: Fly pathfinder overshooting detection (its diff from walk)
+    if (currNode.isFly) {
+      return false
     }
 
     if (currentIndex + 1 >= nodes.size) {
@@ -135,10 +149,31 @@ class PathingState : ExecutorState() {
     }
 
     val nextNodePos = nodes[currentIndex + 1].centerVec
-    val segment = nextNodePos.subtract(currentNodePos)
-    val toPlayer = playerPos.subtract(currentNodePos)
+    val segment = nextNodePos.subtract(currNodePos)
+    val toPlayer = playerVec.subtract(currNodePos)
 
     return toPlayer.dot(segment) >= 0.0
+  }
+
+  private val jumpDelay = Clock()
+
+  private fun shouldJump(
+    playerPos: BlockPos,
+    nodes: List<PathNode>,
+    currentIndex: Int
+  ): Boolean {
+    if (!PlayerUtils.onGround || !jumpDelay.passed()) {
+      return false
+    }
+
+    val currNode = nodes[currentIndex]
+    val result = currNode.block.y - playerPos.y >= 1
+
+    if (result && PlayerUtils.canFly) {
+      jumpDelay.schedule(370)
+    }
+
+    return result
   }
 
 }

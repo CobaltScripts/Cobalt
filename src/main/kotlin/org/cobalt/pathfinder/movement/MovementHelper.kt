@@ -314,13 +314,14 @@ object MovementHelper {
     }
   }
 
+  // TODO: make it actually good
   @JvmStatic
   fun getRotationTarget(playerPos: Vec3, nodes: List<PathNode>, currentIndex: Int): Vec3 {
     val startIndex = (currentIndex - 1).coerceAtLeast(0)
     var target: Vec3? = null
 
     // TODO: remove hardcoded lookahead distance and make it a setting
-    val lookaheadDistance = 5.0
+    val lookaheadDistance = 10.0
 
     for (i in startIndex until nodes.size - 1) {
       val start = nodes[i].centerVec.add(0.0, 1.0, 0.0)

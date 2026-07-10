@@ -2,14 +2,14 @@ package org.cobalt.pathfinder.calculate
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
-import org.cobalt.pathfinder.goal.IGoal
+import org.cobalt.pathfinder.goal.Goal
 import org.cobalt.pathfinder.movement.Movement
 
 data class PathNode(
   val x: Int,
   val y: Int,
   val z: Int,
-  val goal: IGoal,
+  val goal: Goal,
 ) {
 
   var costSoFar = 1e6
