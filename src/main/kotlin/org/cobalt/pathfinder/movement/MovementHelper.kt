@@ -14,12 +14,11 @@ import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.material.WaterFluid
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.Vec3
+import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.helper.BlockStateAccessor
 import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.precompute.Ternary
 import org.cobalt.pathfinder.precompute.Ternary.*
-import org.cobalt.util.RotationUtils.RAD_TO_DEG
-import org.cobalt.util.rotation.Rotation
 
 object MovementHelper {
 
@@ -300,19 +299,6 @@ object MovementHelper {
   }
 
   @JvmStatic
-  fun getRotation(orig: Vec3, dest: Vec3): Rotation {
-    val delta = doubleArrayOf(orig.x - dest.x, orig.y - dest.y, orig.z - dest.z)
-    val yaw = Mth.atan2(delta[0], -delta[2])
-    val dist = sqrt(delta[0] * delta[0] + delta[2] * delta[2])
-    val pitch = Mth.atan2(delta[1], dist)
-
-    return Rotation(
-      (yaw * RAD_TO_DEG).toFloat(),
-      (pitch * RAD_TO_DEG).toFloat()
-    )
-  }
-
-  @JvmStatic
   fun getNeededKeys(playerYaw: Float, idealYaw: Float): PlayerInput {
     val diff = Mth.wrapDegrees(idealYaw - playerYaw)
 
@@ -325,6 +311,100 @@ object MovementHelper {
       diff >= -157.5f && diff < -112.5f -> PlayerInput(backward = true, left = true)
       diff >= -112.5f && diff < -67.5f -> PlayerInput(left = true)
       else -> PlayerInput(forward = true, left = true)
+    }
+  }
+
+  @JvmStatic
+  fun getRotationTarget(playerPos: Vec3, nodes: List<PathNode>, currentIndex: Int): Vec3 {
+    val startIndex = (currentIndex - 1).coerceAtLeast(0)
+    var target: Vec3? = null
+
+    // TODO: remove hardcoded lookahead distance and make it a setting
+    val lookaheadDistance = 5.0
+
+    for (i in startIndex until nodes.size - 1) {
+      val start = nodes[i].centerVec.add(0.0, 1.0, 0.0)
+      val end = nodes[i + 1].centerVec.add(0.0, 1.0, 0.0)
+
+      val intersection = findIntersection(playerPos, start, end, lookaheadDistance) ?: continue
+      target = intersection
+    }
+
+    val lastNode = nodes.last().centerVec.add(0.0, 1.0, 0.0)
+    val endDirection = getExtendedEndDirection(nodes, playerPos)
+    val virtualEnd = lastNode.add(endDirection.scale(lookaheadDistance))
+    val extendedIntersection = findIntersection(playerPos, lastNode, virtualEnd, lookaheadDistance)
+
+    if (extendedIntersection != null) {
+      target = extendedIntersection
+    }
+
+    if (target != null) {
+      return target
+    }
+
+    return if (playerPos.distanceTo(virtualEnd) <= lookaheadDistance) {
+      virtualEnd
+    } else {
+      nodes[currentIndex].centerVec.add(0.0, 1.0, 0.0)
+    }
+  }
+
+  private fun getExtendedEndDirection(nodes: List<PathNode>, playerPos: Vec3): Vec3 {
+    val lastNode = nodes.last().centerVec.add(0.0, 1.0, 0.0)
+
+    val reference = if (nodes.size >= 2) {
+      nodes[nodes.size - 2].centerVec.add(0.0, 1.0, 0.0)
+    } else {
+      playerPos
+    }
+
+    val direction = lastNode.subtract(reference)
+
+    return if (direction.lengthSqr() > 1.0E-4) {
+      direction.normalize()
+    } else {
+      Vec3(0.0, 0.0, 1.0)
+    }
+  }
+
+  private fun findIntersection(
+    sphereCenter: Vec3,
+    start: Vec3,
+    end: Vec3,
+    sphereRadius: Double
+  ): Vec3? {
+    val direction = end.subtract(start)
+    val offset = start.subtract(sphereCenter)
+
+    val directionLengthSqr = direction.dot(direction)
+
+    if (directionLengthSqr == 0.0) {
+      return null
+    }
+
+    val linearTerm = 2.0 * offset.dot(direction)
+    val constantTerm = offset.dot(offset) - sphereRadius * sphereRadius
+    val discriminant = linearTerm * linearTerm - 4.0 * directionLengthSqr * constantTerm
+
+    if (discriminant < 0.0) {
+      return null
+    }
+
+    val sqrtDiscriminant = sqrt(discriminant)
+    val nearIntersection = (-linearTerm - sqrtDiscriminant) / (2.0 * directionLengthSqr)
+    val farIntersection = (-linearTerm + sqrtDiscriminant) / (2.0 * directionLengthSqr)
+
+    return when {
+      farIntersection in 0.0..1.0 -> {
+        start.add(direction.scale(farIntersection))
+      }
+
+      nearIntersection in 0.0..1.0 -> {
+        start.add(direction.scale(nearIntersection))
+      }
+
+      else -> null
     }
   }
 

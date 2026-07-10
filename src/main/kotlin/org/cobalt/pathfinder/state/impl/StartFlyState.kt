@@ -1,5 +1,6 @@
 package org.cobalt.pathfinder.state.impl
 
+import org.cobalt.Cobalt.minecraft
 import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.PlayerUtils

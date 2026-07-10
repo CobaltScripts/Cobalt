@@ -57,7 +57,7 @@ object PlayerUtils {
 
       return BlockPos(
         floor(player.x).toInt(),
-        player.blockPosition().y,
+        (player.blockPosition().y  + 0.1251).toInt(),
         floor(player.z).toInt()
       )
     }

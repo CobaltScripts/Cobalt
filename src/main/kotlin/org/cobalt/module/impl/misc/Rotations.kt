@@ -14,6 +14,8 @@ import org.cobalt.util.MouseUtils
 import org.cobalt.util.PlayerUtils
 import org.cobalt.util.RotationUtils
 import org.cobalt.util.rotation.Rotation
+import org.cobalt.util.rotation.RotationDelta
+import org.cobalt.util.rotation.RotationTarget
 
 object Rotations : Module(
   name = "Rotations",
@@ -25,7 +27,8 @@ object Rotations : Module(
   var running = false
     private set
 
-  private var targetRotation: Rotation? = null
+  private var mode: RotationType = RotationType.ROTATE
+  private var target: RotationTarget? = null
   private var lastFrameMs = 0L
   private var returnMouseMode = false
 
@@ -60,6 +63,7 @@ object Rotations : Module(
     max = 10,
     defaultValue = 5
   )
+
   val endTolerance by SliderSetting(
     name = "End Tolerance",
     description = "Rotation completion tolerance in degrees",
@@ -72,9 +76,21 @@ object Rotations : Module(
     EventBus.register(this)
   }
 
-  fun start(target: Rotation) {
-    targetRotation = target
+  fun start(rotationTarget: Rotation) {
+    mode = RotationType.ROTATE
+    target = RotationTarget(rotationTarget)
     lastFrameMs = System.currentTimeMillis()
+    running = true
+
+    if (MouseUtils.mouseMode == MouseMode.DEFAULT) {
+      MouseUtils.mouseMode = MouseMode.LOCK_MOUSE
+      returnMouseMode = true
+    }
+  }
+
+  fun track(rotationTarget: RotationTarget) {
+    mode = RotationType.TRACK
+    target = rotationTarget
     running = true
 
     if (MouseUtils.mouseMode == MouseMode.DEFAULT) {
@@ -85,7 +101,7 @@ object Rotations : Module(
 
   fun stop() {
     running = false
-    targetRotation = null
+    target = null
 
     if (returnMouseMode) {
       MouseUtils.mouseMode = MouseMode.DEFAULT
@@ -99,7 +115,8 @@ object Rotations : Module(
       return
     }
 
-    val target = targetRotation ?: return
+    val targetObj = target ?: return
+    val currentTargetRotation = targetObj.targetRotation
 
     val now = System.currentTimeMillis()
     val deltaTime = ((now - lastFrameMs) / 50f).coerceIn(0f, 1f)
@@ -107,6 +124,13 @@ object Rotations : Module(
 
     lastFrameMs = now
 
+    when (mode) {
+      RotationType.ROTATE -> handleRotate(current, currentTargetRotation, deltaTime)
+      RotationType.TRACK -> handleTrack(current, currentTargetRotation, deltaTime)
+    }
+  }
+
+  private fun handleRotate(current: Rotation, target: Rotation, deltaTime: Float) {
     if (RotationUtils.approximatelyEquals(current, target, endTolerance.toFloat())) {
       stop()
       return
@@ -116,9 +140,33 @@ object Rotations : Module(
     val stepYaw = smoothStep(abs(delta.deltaYaw), turnSpeedYaw.toFloat(), deltaTime)
     val stepPitch = smoothStep(abs(delta.deltaPitch), turnSpeedPitch.toFloat(), deltaTime)
 
+    applyRotation(
+      current,
+      stepYaw * if (delta.deltaYaw >= 0f) 1f else -1f,
+      stepPitch * if (delta.deltaPitch >= 0f) 1f else -1f
+    )
+  }
+
+  private fun handleTrack(current: Rotation, target: Rotation, deltaTime: Float) {
+    if (RotationUtils.approximatelyEquals(current, target, endTolerance.toFloat())) {
+      return
+    }
+
+    val delta = current.rotationDeltaTo(target)
+
+    // TODO: remove hardcoded smoothing factor and make it a setting
+    val stepYaw = (delta.deltaYaw * 0.8f * deltaTime)
+      .coerceIn(-turnSpeedYaw.toFloat() * deltaTime, turnSpeedYaw.toFloat() * deltaTime)
+    val stepPitch = (delta.deltaPitch * 0.8f * deltaTime)
+      .coerceIn(-turnSpeedPitch.toFloat() * deltaTime, turnSpeedPitch.toFloat() * deltaTime)
+
+    applyRotation(current, stepYaw, stepPitch)
+  }
+
+  private fun applyRotation(current: Rotation, stepYaw: Float, stepPitch: Float) {
     val next = Rotation(
-      yaw = current.yaw + stepYaw * if (delta.deltaYaw >= 0f) 1f else -1f,
-      pitch = current.pitch + stepPitch * if (delta.deltaPitch >= 0f) 1f else -1f
+      yaw = current.yaw + stepYaw,
+      pitch = current.pitch + stepPitch
     )
 
     PlayerUtils.setRotation(next.normalize(current))
@@ -145,5 +193,10 @@ object Rotations : Module(
 
   private fun bezier(start: Float, end: Float, t: Float): Float =
     (1f - t) * (1f - t) * start + 2f * (1f - t) * t * 1f + t * t * end
+
+  enum class RotationType {
+    ROTATE,
+    TRACK
+  }
 
 }

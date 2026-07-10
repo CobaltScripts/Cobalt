@@ -1,19 +1,21 @@
 package org.cobalt.pathfinder.state.impl
 
+import java.awt.Color
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 import org.cobalt.dsl.centerVec
+import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.pathfinder.PathExecutor
+import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementHelper
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.PlayerUtils
+import org.cobalt.util.RotationUtils
+import org.cobalt.util.WorldRenderUtils
+import org.cobalt.util.rotation.RotationTarget
 
-/**
- * TODO: Fix Movement & Rotations
- * - Find points alone path to rotate to and make a custom aiming system for pathfinding
- * - Handle unstuck (where you just need to move left or right to realign to center of path line)
- * - Handle jumps and descending blocks
- */
 class PathingState : ExecutorState() {
 
   private val path = PathExecutor.path
@@ -21,6 +23,7 @@ class PathingState : ExecutorState() {
 
   override fun exit() {
     input.stopMovement()
+    Rotations.stop()
   }
 
   override fun onTick() {
@@ -32,15 +35,11 @@ class PathingState : ExecutorState() {
     val index = PathExecutor.pathIndex
     val node = path.keyNodes[index]
 
-    val (yaw, _) = PlayerUtils.rotation
     val playerPos = PlayerUtils.position
-    val nodePos = node.blockPos
+    val nodePos = node.block
     val isFlyNode = node.type == Movement.Type.FLY
 
-    val distSq = playerPos.centerVec().distanceToSqr(nodePos.centerVec())
-
-    // TODO: Update this logic to handle overshooting at high speeds or jumping over target (if user has jump boost)
-    if (distSq < 0.3 * 0.3) {
+    if (hasReached(playerPos.centerVec(), path.keyNodes, index)) {
       if (index + 1 >= path.keyNodes.size) {
         PathExecutor.stop()
         return
@@ -60,11 +59,16 @@ class PathingState : ExecutorState() {
       return
     }
 
-    val rotation = MovementHelper.getRotation(playerPos.centerVec(), nodePos.centerVec())
     val sameXZ = nodePos.x == playerPos.x && nodePos.z == playerPos.z
+    val targetVec = MovementHelper.getRotationTarget(
+      playerPos.centerVec(), path.keyNodes, index
+    )
 
     val playerInput = PlayerInput()
-    val neededKeys = MovementHelper.getNeededKeys(yaw, rotation.yaw)
+    val neededKeys = MovementHelper.getNeededKeys(
+      PlayerUtils.rotation.yaw,
+      RotationUtils.getRotation(node.topCenterVec).yaw
+    )
 
     if (!sameXZ) {
       playerInput.apply(neededKeys)
@@ -75,7 +79,7 @@ class PathingState : ExecutorState() {
     }
 
     // TODO: add jump logic for walking
-    // playerInput.jump = !PlayerUtils.isFlying && false
+    // playerInput.jump = !PlayerUtils.isFlying
 
     if (isFlyNode && sameXZ) {
       val diffY = nodePos.y - playerPos.y
@@ -86,11 +90,55 @@ class PathingState : ExecutorState() {
       }
     }
 
+    Rotations.track(RotationTarget(targetVec))
     input.applyInput(playerInput)
   }
 
   override fun onRender() {
-    // TODO: call rotation update here
+    if (path == null || config == null) {
+      PathExecutor.stop()
+      return
+    }
+
+    val index = PathExecutor.pathIndex
+    val playerPos = PlayerUtils.position
+
+    val targetVec = MovementHelper.getRotationTarget(
+      playerPos.centerVec(), path.keyNodes, index
+    )
+
+    WorldRenderUtils.drawBox(
+      AABB(
+        targetVec.x - 0.25,
+        targetVec.y - 0.25,
+        targetVec.z - 0.25,
+        targetVec.x + 0.25,
+        targetVec.y + 0.25,
+        targetVec.z + 0.25
+      ), Color.GREEN
+    )
+  }
+
+  private fun hasReached(
+    playerPos: Vec3,
+    nodes: List<PathNode>,
+    currentIndex: Int
+  ): Boolean {
+    val currentNodePos = nodes[currentIndex].centerVec
+
+    if (playerPos.distanceToSqr(currentNodePos) < 0.3 * 0.3) {
+      return true
+    }
+
+    if (currentIndex + 1 >= nodes.size) {
+      return false
+    }
+
+    val nextNodePos = nodes[currentIndex + 1].centerVec
+    val segment = nextNodePos.subtract(currentNodePos)
+    val toPlayer = playerPos.subtract(currentNodePos)
+
+    return toPlayer.dot(segment) >= 0.0
   }
 
 }

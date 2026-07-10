@@ -1,7 +1,10 @@
 package org.cobalt.pathfinder
 
+import java.awt.Color
 import net.minecraft.client.player.KeyboardInput
 import org.cobalt.Cobalt.minecraft
+import org.cobalt.dsl.centerVec
+import org.cobalt.dsl.smallBox
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
@@ -89,6 +92,7 @@ object PathExecutor {
     }
 
     if (minecraft.gui.screen() != null) {
+      pathInput.stopMovement()
       return
     }
 
@@ -114,34 +118,25 @@ object PathExecutor {
     val theme = ThemeManager.activeTheme
     val nodes = path?.keyNodes ?: return
 
-    val targetNode = nodes[pathIndex].blockPos
-    val playerPos = PlayerUtils.position
+    val targetNode = nodes[pathIndex].centerVec
+    val playerPos = PlayerUtils.position.centerVec()
 
-    WorldRenderUtils.drawBlockPos(
-      playerPos,
-      color = theme.success
-    )
-
-    WorldRenderUtils.drawBlockPos(
-      targetNode,
-      color = theme.error
-    )
+    WorldRenderUtils.drawBox(playerPos.smallBox(), Color.GREEN)
+    WorldRenderUtils.drawBox(targetNode.smallBox(), Color.RED)
 
     for (index in nodes.indices) {
       val node = nodes[index]
 
-      if (node.blockPos !in listOf(targetNode, playerPos)) {
-        WorldRenderUtils.drawBlockPos(
-          node.blockPos,
-          color = theme.accentPrimary
-        )
-      }
+      WorldRenderUtils.drawBlockPos(
+        if (node.isFly) node.block else node.blockStandingOn,
+        color = theme.accentPrimary
+      )
 
       if (index > 0) {
         val prev = nodes[index - 1]
 
         WorldRenderUtils.drawLine(
-          prev.centerVec, node.centerVec,
+          prev.topCenterVec, node.topCenterVec,
           theme.accentSecondary
         )
       }

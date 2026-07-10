@@ -3,7 +3,7 @@ package org.cobalt.util.skia.surface
 import com.mojang.blaze3d.opengl.GlStateManager
 import com.mojang.blaze3d.opengl.GlTexture
 import com.mojang.blaze3d.textures.GpuTexture
-import io.github.humbleui.skija.DirectContext
+import io.github.humbleui.skija.*
 import org.cobalt.util.skia.Skia
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL30C

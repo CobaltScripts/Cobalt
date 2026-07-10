@@ -19,12 +19,22 @@ data class PathNode(
   var type = Movement.Type.WALK
   var parent: PathNode? = null
 
-  val blockPos: BlockPos = BlockPos(x, y, z)
+  val block: BlockPos = BlockPos(x, y, z)
+  val blockStandingOn: BlockPos = BlockPos(x, y - 1, z)
   val centerVec: Vec3 = Vec3(x + 0.5, y + 0.5, z + 0.5)
+  val topCenterVec: Vec3 = Vec3(x + 0.5, y.toDouble(), z + 0.5)
+
+  val isFly: Boolean
+    get() = type == Movement.Type.FLY
 
   override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (other !is PathNode) return false
+    if (this === other) {
+      return true
+    }
+
+    if (other !is PathNode) {
+      return false
+    }
 
     return other.x == x &&
       other.y == y &&
