@@ -4,6 +4,7 @@ import kotlin.math.ceil
 import kotlin.math.floor
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.Vec3
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.Cobalt.runOnClientThread
 import org.cobalt.util.rotation.Rotation
@@ -16,11 +17,11 @@ object PlayerUtils {
 
   @JvmStatic
   val ign: String
-    get() = minecraft.player?.gameProfile?.name ?: "Undefined"
+    get() = player?.gameProfile?.name ?: "Undefined"
 
   @get:JvmName("isInventoryEmpty")
   val isInventoryEmpty: Boolean
-    get() = minecraft.player?.inventory?.nonEquipmentItems?.all { it.isEmpty } ?: true
+    get() = player?.inventory?.nonEquipmentItems?.all { it.isEmpty } ?: true
 
   @get:JvmName("isInventoryFull")
   @JvmStatic
@@ -45,10 +46,22 @@ object PlayerUtils {
   @JvmStatic
   val rotation: Rotation
     get() {
-      val player = minecraft.player
-        ?: return Rotation.ZERO
-
+      val player = player ?: return Rotation.ZERO
       return Rotation(player.yRot, player.xRot, true)
+    }
+
+  @JvmStatic
+  val velocity: Vec3
+    get() {
+      val player = player ?: return Vec3.ZERO
+      return player.deltaMovement
+    }
+
+  @JvmStatic
+  val positionVec: Vec3
+    get() {
+      val player = player ?: return Vec3.ZERO
+      return player.position()
     }
 
   @JvmStatic
@@ -66,7 +79,7 @@ object PlayerUtils {
   @JvmStatic
   val isSuffocating: Boolean
     get() {
-      val player = minecraft.player ?: return false
+      val player = player ?: return false
       val level = minecraft.level ?: return false
 
       return !level.noCollision(

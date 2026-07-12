@@ -27,7 +27,7 @@ class StartFlyState : ExecutorState() {
       return false
     }
 
-    if (PlayerUtils.player!!.onGround()) {
+    if (PlayerUtils.onGround) {
       flyStage = 0
     }
 

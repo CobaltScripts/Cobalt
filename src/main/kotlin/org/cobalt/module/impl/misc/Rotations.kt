@@ -3,6 +3,7 @@ package org.cobalt.module.impl.misc
 import kotlin.math.abs
 import kotlin.math.exp
 import kotlin.math.pow
+import kotlin.random.Random
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.WorldEvent
@@ -14,7 +15,6 @@ import org.cobalt.util.MouseUtils
 import org.cobalt.util.PlayerUtils
 import org.cobalt.util.RotationUtils
 import org.cobalt.util.rotation.Rotation
-import org.cobalt.util.rotation.RotationDelta
 import org.cobalt.util.rotation.RotationTarget
 
 object Rotations : Module(
@@ -31,6 +31,7 @@ object Rotations : Module(
   private var target: RotationTarget? = null
   private var lastFrameMs = 0L
   private var returnMouseMode = false
+
 
   val turnSpeedYaw by SliderSetting(
     name = "Turn Speed Yaw",
@@ -70,6 +71,14 @@ object Rotations : Module(
     min = 1,
     max = 5,
     defaultValue = 1
+  )
+
+  val trackingSpeed by SliderSetting(
+    name = "Tracking Speed",
+    description = "How fast rotations track the target (higher = faster)",
+    min = 1,
+    max = 50,
+    defaultValue = 25
   )
 
   init {
@@ -152,15 +161,20 @@ object Rotations : Module(
       return
     }
 
-    val delta = current.rotationDeltaTo(target)
+    var needYaw = RotationUtils.angleDifference(target.yaw, current.yaw)
+    var needPitch = RotationUtils.angleDifference(target.pitch, current.pitch)
+    val distance = abs(needYaw) + abs(needPitch)
 
-    // TODO: remove hardcoded smoothing factor and make it a setting
-    val stepYaw = (delta.deltaYaw * 0.8f * deltaTime)
-      .coerceIn(-turnSpeedYaw.toFloat() * deltaTime, turnSpeedYaw.toFloat() * deltaTime)
-    val stepPitch = (delta.deltaPitch * 0.8f * deltaTime)
-      .coerceIn(-turnSpeedPitch.toFloat() * deltaTime, turnSpeedPitch.toFloat() * deltaTime)
+    val randomFactor = (0.8f + Random.nextFloat() * 0.4f)
+    val deceleration = 1f / maxOf(distance / 80f, 1f)
 
-    applyRotation(current, stepYaw, stepPitch)
+    needYaw *= (trackingSpeed / 100f) * randomFactor * deltaTime * deceleration
+    needPitch *= (trackingSpeed / 100f) * randomFactor * deltaTime * deceleration
+
+    val newYaw = current.yaw + needYaw
+    val newPitch = (current.pitch + needPitch).coerceIn(-75f, 75f)
+
+    PlayerUtils.setRotation(Rotation(newYaw, newPitch).normalize(current))
   }
 
   private fun applyRotation(current: Rotation, stepYaw: Float, stepPitch: Float) {

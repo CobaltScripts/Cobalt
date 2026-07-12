@@ -2,13 +2,13 @@
 
 package org.cobalt.pathfinder.movement
 
-import kotlin.math.sqrt
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.level.EmptyBlockGetter
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.piston.MovingPistonBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.SlabType
 import net.minecraft.world.level.material.FlowingFluid
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.material.WaterFluid
@@ -272,6 +272,12 @@ object MovementHelper {
   }
 
   @JvmStatic
+  fun isBottomSlab(state: BlockState): Boolean {
+    return state.block is SlabBlock &&
+      state.getValue(SlabBlock.TYPE) == SlabType.BOTTOM
+  }
+
+  @JvmStatic
   fun isBlockNormalCube(state: BlockState): Boolean {
     val block = state.block
 
@@ -303,110 +309,95 @@ object MovementHelper {
     val diff = Mth.wrapDegrees(idealYaw - playerYaw)
 
     return when {
-      diff >= -22.5f && diff < 22.5f -> PlayerInput(forward = true)
-      diff in 22.5f..<67.5f -> PlayerInput(forward = true, right = true)
-      diff in 67.5f..<112.5f -> PlayerInput(right = true)
-      diff in 112.5f..<157.5f -> PlayerInput(backward = true, right = true)
-      diff >= 157.5f || diff < -157.5f -> PlayerInput(backward = true)
-      diff >= -157.5f && diff < -112.5f -> PlayerInput(backward = true, left = true)
-      diff >= -112.5f && diff < -67.5f -> PlayerInput(left = true)
+      diff >= -45f && diff < 45f -> PlayerInput(forward = true)
+      diff in 45f..<75f -> PlayerInput(forward = true, right = true)
+      diff in 75f..<105f -> PlayerInput(right = true)
+      diff in 105f..<150f -> PlayerInput(backward = true, right = true)
+      diff >= 150f || diff < -150f -> PlayerInput(backward = true)
+      diff in -150f..<(-105f) -> PlayerInput(backward = true, left = true)
+      diff in -105f..<(-75f) -> PlayerInput(left = true)
       else -> PlayerInput(forward = true, left = true)
     }
   }
 
-  // TODO: make it actually good
   @JvmStatic
-  fun getRotationTarget(playerPos: Vec3, nodes: List<PathNode>, currentIndex: Int): Vec3 {
-    val startIndex = (currentIndex - 1).coerceAtLeast(0)
-    var target: Vec3? = null
+  fun getRotationTarget(playerEyePos: Vec3, nodes: List<PathNode>, currentIndex: Int, lookAhead: Double = 3.0): Vec3 {
+    val playerXZ = Vec3(playerEyePos.x, 0.0, playerEyePos.z)
 
-    // TODO: remove hardcoded lookahead distance and make it a setting
-    val lookaheadDistance = 10.0
+    var bestDistSq = Double.MAX_VALUE
+    var bestSegIndex = currentIndex
+    var bestT = 0.0
 
-    for (i in startIndex until nodes.size - 1) {
-      val start = nodes[i].centerVec.add(0.0, 1.0, 0.0)
-      val end = nodes[i + 1].centerVec.add(0.0, 1.0, 0.0)
+    val searchStart = (currentIndex - 1).coerceAtLeast(0)
+    val searchEnd = (currentIndex + 3).coerceAtMost(nodes.size - 1)
 
-      val intersection = findIntersection(playerPos, start, end, lookaheadDistance) ?: continue
-      target = intersection
+    for (i in searchStart until searchEnd) {
+      val from = nodes[i].centerVec
+      val to = nodes[i + 1].centerVec
+      val seg = Vec3(to.x - from.x, 0.0, to.z - from.z)
+      val segLenSq = seg.x * seg.x + seg.z * seg.z
+
+      if (segLenSq <= 0.0) continue
+
+      val t = ((playerXZ.x - from.x) * seg.x + (playerXZ.z - from.z) * seg.z)
+        .coerceIn(0.0, segLenSq) / segLenSq
+
+      val px = from.x + seg.x * t
+      val pz = from.z + seg.z * t
+      val dx = playerXZ.x - px
+      val dz = playerXZ.z - pz
+      val distSq = dx * dx + dz * dz
+
+      if (distSq < bestDistSq) {
+        bestDistSq = distSq
+        bestSegIndex = i
+        bestT = t
+      }
     }
 
-    val lastNode = nodes.last().centerVec.add(0.0, 1.0, 0.0)
-    val endDirection = getExtendedEndDirection(nodes, playerPos)
-    val virtualEnd = lastNode.add(endDirection.scale(lookaheadDistance))
-    val extendedIntersection = findIntersection(playerPos, lastNode, virtualEnd, lookaheadDistance)
+    var remaining = lookAhead
 
-    if (extendedIntersection != null) {
-      target = extendedIntersection
+    val from = nodes[bestSegIndex].centerVec
+    val to = nodes[bestSegIndex + 1].centerVec
+    val seg = Vec3(to.x - from.x, 0.0, to.z - from.z)
+    val segLen = seg.length()
+
+    if (segLen > 0.0) {
+      val remainingSeg = (1.0 - bestT) * segLen
+      if (remaining <= remainingSeg) {
+        val point = from.add(seg.scale(bestT + remaining / segLen))
+        return Vec3(point.x, playerEyePos.y, point.z)
+      }
+      remaining -= remainingSeg
     }
 
-    if (target != null) {
-      return target
-    }
+    for (i in (bestSegIndex + 1) until nodes.size - 1) {
+      val sFrom = nodes[i].centerVec
+      val sTo = nodes[i + 1].centerVec
+      val sSeg = Vec3(sTo.x - sFrom.x, 0.0, sTo.z - sFrom.z)
+      val sLen = sSeg.length()
 
-    return if (playerPos.distanceTo(virtualEnd) <= lookaheadDistance) {
-      virtualEnd
-    } else {
-      nodes[currentIndex].centerVec.add(0.0, 1.0, 0.0)
-    }
-  }
+      if (sLen <= 0.0) continue
 
-  private fun getExtendedEndDirection(nodes: List<PathNode>, playerPos: Vec3): Vec3 {
-    val lastNode = nodes.last().centerVec.add(0.0, 1.0, 0.0)
-
-    val reference = if (nodes.size >= 2) {
-      nodes[nodes.size - 2].centerVec.add(0.0, 1.0, 0.0)
-    } else {
-      playerPos
-    }
-
-    val direction = lastNode.subtract(reference)
-
-    return if (direction.lengthSqr() > 1.0E-4) {
-      direction.normalize()
-    } else {
-      Vec3(0.0, 0.0, 1.0)
-    }
-  }
-
-  private fun findIntersection(
-    sphereCenter: Vec3,
-    start: Vec3,
-    end: Vec3,
-    sphereRadius: Double
-  ): Vec3? {
-    val direction = end.subtract(start)
-    val offset = start.subtract(sphereCenter)
-
-    val directionLengthSqr = direction.dot(direction)
-
-    if (directionLengthSqr == 0.0) {
-      return null
-    }
-
-    val linearTerm = 2.0 * offset.dot(direction)
-    val constantTerm = offset.dot(offset) - sphereRadius * sphereRadius
-    val discriminant = linearTerm * linearTerm - 4.0 * directionLengthSqr * constantTerm
-
-    if (discriminant < 0.0) {
-      return null
-    }
-
-    val sqrtDiscriminant = sqrt(discriminant)
-    val nearIntersection = (-linearTerm - sqrtDiscriminant) / (2.0 * directionLengthSqr)
-    val farIntersection = (-linearTerm + sqrtDiscriminant) / (2.0 * directionLengthSqr)
-
-    return when {
-      farIntersection in 0.0..1.0 -> {
-        start.add(direction.scale(farIntersection))
+      if (remaining <= sLen) {
+        val point = sFrom.add(sSeg.scale(remaining / sLen))
+        return Vec3(point.x, playerEyePos.y, point.z)
       }
 
-      nearIntersection in 0.0..1.0 -> {
-        start.add(direction.scale(nearIntersection))
-      }
-
-      else -> null
+      remaining -= sLen
     }
+
+    val last = nodes.last()
+    val prev = if (nodes.size > 1) nodes[nodes.size - 2] else last
+    val dir = Vec3((last.x - prev.x).toDouble(), 0.0, (last.z - prev.z).toDouble())
+    val dirLen = dir.length()
+    val extrapolated = if (dirLen > 0.0) {
+      last.centerVec.add(dir.scale(remaining / dirLen))
+    } else {
+      last.centerVec
+    }
+
+    return Vec3(extrapolated.x, playerEyePos.y, extrapolated.z)
   }
 
 }
