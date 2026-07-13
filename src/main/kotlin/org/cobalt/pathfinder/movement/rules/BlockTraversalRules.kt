@@ -1,13 +1,15 @@
-package org.cobalt.pathfinder.movement
+package org.cobalt.pathfinder.movement.rules
 
+import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.rules.PassthroughRules.canPassThrough
-import org.cobalt.pathfinder.movement.rules.StandingRules.canStandOn
+import org.cobalt.pathfinder.movement.rules.StandOnRules.canStandOn
 
-object MovementValidator {
-
+object BlockTraversalRules {
   @JvmStatic
   fun canWalkOn(calculationContext: CalculationContext, x: Int, y: Int, z: Int): Boolean {
-    if (!canWalkThrough(calculationContext, x, y + 1, z)) {
+    if (
+      !canWalkThrough(calculationContext, x, y + 1, z)
+    ) {
       return false
     }
 
@@ -19,5 +21,4 @@ object MovementValidator {
     return canPassThrough(calculationContext.blockStateAccessor, x, y, z) &&
       canPassThrough(calculationContext.blockStateAccessor, x, y + 1, z)
   }
-
 }

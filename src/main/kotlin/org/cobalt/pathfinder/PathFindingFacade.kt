@@ -7,17 +7,20 @@ import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
 import org.cobalt.event.impl.WorldEvent
 import org.cobalt.pathfinder.calculate.Path
-import org.cobalt.pathfinder.helper.PathInput
+import org.cobalt.pathfinder.calculate.PathMode
+import org.cobalt.pathfinder.goal.Goal
+import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.calculation.CalculatingState
 import org.cobalt.util.ChatUtils
 import org.cobalt.util.MessageType
 import org.cobalt.util.PlayerUtils
 
-object PathExecutor {
-
+object PathFindingFacade {
   var state: ExecutorState? = null
-  var config: PathConfig? = null
+
+  var currentGoal: Goal? = null
+  var availableMovements: Array<out Movement>? = null
 
   var path: Path? = null
   var pathIndex: Int = 0
@@ -29,33 +32,37 @@ object PathExecutor {
     EventBus.register(this)
   }
 
-  fun goTo(config: PathConfig) {
-    val player = minecraft.player ?: run {
-      ChatUtils.sendSystemMessage(
-        "Tried running pathfinder, but minecraft.player is null!",
-        MessageType.DEBUG
-      )
-
-      return
-    }
-
+  fun goTo(goal: Goal, fly: Boolean = false) {
+    // Are we sure we want to do this? There's no warning or anything.
+    // I've kept it but with a debug message
     if (running) {
       ChatUtils.sendSystemMessage(
         "Stopping current pathfinder because a new one started.",
         MessageType.DEBUG
       )
-
       stop()
     }
 
-    if (config.allowFly && !PlayerUtils.canFly) {
+    if (fly && !PlayerUtils.canFly) {
       ChatUtils.sendSystemMessage("<red>Invalid path config, since player cannot fly!</red>")
       return
     }
 
-    player.input = pathInput
+    val player = minecraft.player
 
-    this.config = config
+    if (player == null) {
+      ChatUtils.sendSystemMessage(
+        "Tried running pathfinder, but minecraft.player is null!",
+        MessageType.DEBUG
+      )
+      return
+    } else {
+      player.input = pathInput
+    }
+
+    availableMovements = if (fly) PathMode.FLY.movements else PathMode.WALK.movements
+    currentGoal = goal
+
     this.running = true
 
     changeState(CalculatingState())
@@ -111,10 +118,6 @@ object PathExecutor {
   fun onRender(ignored: WorldEvent.Render) {
     if (!running) {
       return
-    }
-
-    if (state !is CalculatingState) {
-      PathRenderer.render()
     }
 
     state?.onRender()

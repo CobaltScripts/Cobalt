@@ -10,14 +10,14 @@ import net.minecraft.world.level.block.StairBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluids
 import org.cobalt.pathfinder.helper.BlockStateAccessor
+import org.cobalt.pathfinder.movement.FlowingCheck
 import org.cobalt.pathfinder.movement.rules.data.BlockSetRule
 import org.cobalt.pathfinder.movement.rules.data.BlockTypeRule
 import org.cobalt.pathfinder.movement.rules.data.Ternary
-import org.cobalt.util.BlockUtils
 
-object StandingRules {
+object StandOnRules {
 
-  val STANDING_RULES = listOf(
+  val STAND_ON_RULES = listOf(
     BlockSetRule(
       setOf(
         Blocks.LADDER,
@@ -57,19 +57,19 @@ object StandingRules {
   private fun compute(state: BlockState): Ternary {
     val block = state.block
 
-    if (BlockUtils.isBlockNormalCube(state) &&
+    if (BlockSupportRules.isBlockNormalCube(state) &&
       block != Blocks.BUBBLE_COLUMN &&
       block != Blocks.HONEY_BLOCK
     ) {
       return Ternary.YES
     }
 
-    STANDING_RULES.firstOrNull { it.matches(state) }
+    STAND_ON_RULES.firstOrNull { it.matches(state) }
       ?.let { return it.result }
 
     return when {
-      BlockUtils.isWater(state) -> Ternary.MAYBE
-      BlockUtils.isLava(state) -> Ternary.MAYBE
+      BlockSupportRules.isWater(state) -> Ternary.MAYBE
+      BlockSupportRules.isLava(state) -> Ternary.MAYBE
       else -> Ternary.NO
     }
   }
@@ -90,7 +90,7 @@ object StandingRules {
   }
 
   private fun resolveMaybe(bsa: BlockStateAccessor, x: Int, y: Int, z: Int, state: BlockState): Boolean {
-    if (BlockUtils.isWater(state)) {
+    if (BlockSupportRules.isWater(state)) {
       val upState = bsa.get(x, y + 1, z)
       val upBlock = upState.block
 
@@ -98,14 +98,13 @@ object StandingRules {
         return true
       }
 
-      if (BlockUtils.isFlowing(x, y, z, state, bsa) || upState.fluidState.type == Fluids.FLOWING_WATER) {
-        return BlockUtils.isWater(upState)
+      if (FlowingCheck.isFlowing(x, y, z, state, bsa) || upState.fluidState.type == Fluids.FLOWING_WATER) {
+        return BlockSupportRules.isWater(upState)
       }
 
-      return BlockUtils.isWater(upState) xor false
+      return BlockSupportRules.isWater(upState) xor false
     }
 
     return false
   }
-
 }
