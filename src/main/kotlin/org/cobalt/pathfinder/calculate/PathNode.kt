@@ -10,7 +10,7 @@ data class PathNode(
   val y: Int,
   val z: Int,
   val goal: Goal,
-) {
+) : Comparable<PathNode> {
 
   var costSoFar = 1e6
   val costToEnd = goal.heuristic(x, y, z)
@@ -26,6 +26,15 @@ data class PathNode(
 
   val isFly: Boolean
     get() = movementType == MovementType.FLY
+
+  override fun compareTo(other: PathNode): Int {
+    return compareValuesBy(
+      this,
+      other,
+      PathNode::costToEnd,
+      PathNode::costSoFar,
+    )
+  }
 
   override fun equals(other: Any?): Boolean {
     if (this === other) {

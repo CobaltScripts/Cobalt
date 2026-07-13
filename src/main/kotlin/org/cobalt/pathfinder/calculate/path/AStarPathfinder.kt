@@ -20,50 +20,41 @@ class AStarPathfinder(
   val returnBestNode: Boolean,
 ) {
 
-  private val closedSet = Long2ObjectOpenHashMap<PathNode>()
-  private var startTime = 0L
+  private val nodeCache = Long2ObjectOpenHashMap<PathNode>()
 
   fun findPath(): Path? {
-    val ctx = CalculationContext()
+    val calculationContext = CalculationContext()
     val openSet = BinaryHeapOpenSet()
-    val res = MovementResult()
+    val movementResult = MovementResult()
 
     val startNode = PathNode(
       startX, startY, startZ, goal
-    ).also {
-      it.costSoFar = 0.0
-      it.totalCost = it.costToEnd
-    }
+    )
+
+    startNode.costSoFar = 0.0
+    startNode.totalCost = startNode.costToEnd
 
     openSet.add(startNode)
 
-    startTime = System.currentTimeMillis()
+    val startTime = System.nanoTime()
     var bestNode = startNode
 
-    while (!openSet.isEmpty()) {
-      if (System.currentTimeMillis() - startTime >= PathFindingConfig.maxCalculationTime) {
-        break
-      }
+    val deadline = startTime + PathFindingConfig.maxCalculationTime
 
+    while (!openSet.isEmpty() && System.nanoTime() < deadline) {
       val currentNode = openSet.poll()
 
-      if (
-        currentNode.costToEnd < bestNode.costToEnd ||
-        (currentNode.costToEnd == bestNode.costToEnd &&
-          currentNode.costSoFar < bestNode.costSoFar)
-      ) {
-        bestNode = currentNode
-      }
+      if (currentNode < bestNode) bestNode = currentNode
 
       if (goal.isAtGoal(currentNode.x, currentNode.y, currentNode.z)) {
-        return reconstruct(currentNode)
+        return reconstruct(currentNode, startTime)
       }
 
-      evaluateMovements(currentNode, ctx, res, openSet)
+      evaluateMovements(currentNode, calculationContext, movementResult, openSet)
     }
 
     return if (returnBestNode) {
-      reconstruct(bestNode)
+      reconstruct(bestNode, startTime)
     } else {
       null
     }
@@ -71,51 +62,56 @@ class AStarPathfinder(
 
   private fun evaluateMovements(
     currentNode: PathNode,
-    ctx: CalculationContext,
-    res: MovementResult,
+    calculationContext: CalculationContext,
+    movementResult: MovementResult,
     openSet: BinaryHeapOpenSet,
   ) {
     for (move in movements) {
-      res.reset()
-      move.calculateCost(ctx, currentNode, res)
+      movementResult.reset()
+      move.calculateCost(calculationContext, currentNode, movementResult)
 
-      if (res.cost >= ctx.infCost) {
-        continue
-      }
+      if (movementResult.cost < calculationContext.infCost) relaxNeighbor(currentNode, move, movementResult, openSet)
+    }
+  }
 
-      val neighborCostSoFar = currentNode.costSoFar + res.cost
-      val neighborNode = getNode(
-        res.x, res.y, res.z,
-        PathNode.longHash(res.x, res.y, res.z)
-      )
+  private fun relaxNeighbor(
+    currentNode: PathNode,
+    movement: Movement,
+    movementResult: MovementResult,
+    openSet: BinaryHeapOpenSet
+  ) {
+    val neighborCostSoFar = currentNode.costSoFar + movementResult.cost
+    val neighborNode = getNode(
+      movementResult.x, movementResult.y, movementResult.z,
+      PathNode.longHash(movementResult.x, movementResult.y, movementResult.z)
+    )
 
-      if (neighborCostSoFar < neighborNode.costSoFar) {
-        neighborNode.parent = currentNode
-        neighborNode.costSoFar = neighborCostSoFar
-        neighborNode.totalCost = neighborCostSoFar + neighborNode.costToEnd
-        neighborNode.movementType = move.movementType
+    if (neighborCostSoFar >= neighborNode.costSoFar) return
 
-        if (neighborNode.heapPosition == -1) {
-          openSet.add(neighborNode)
-        } else {
-          openSet.relocate(neighborNode)
-        }
-      }
+    neighborNode.parent = currentNode
+    neighborNode.costSoFar = neighborCostSoFar
+    neighborNode.totalCost = neighborCostSoFar + neighborNode.costToEnd
+    neighborNode.movementType = movement.type
+
+    if (neighborNode.heapPosition == -1) {
+      openSet.add(neighborNode)
+    } else {
+      openSet.relocate(neighborNode)
     }
   }
 
   fun getNode(x: Int, y: Int, z: Int, hash: Long): PathNode {
-    var node: PathNode? = closedSet.get(hash)
+    var node: PathNode? = nodeCache.get(hash)
 
     if (node == null) {
       node = PathNode(x, y, z, goal)
-      closedSet.put(hash, node)
+      nodeCache.put(hash, node)
     }
 
     return node
   }
 
-  private fun reconstruct(endNode: PathNode): Path {
+  private fun reconstruct(endNode: PathNode, startTime: Long): Path {
     val path = mutableListOf<PathNode>()
     var node: PathNode? = endNode
 
@@ -126,7 +122,7 @@ class AStarPathfinder(
 
     return Path(
       nodes = path,
-      timeElapsed = (System.currentTimeMillis() - startTime).milliseconds,
+      timeElapsed = (System.nanoTime() - startTime).milliseconds,
       goal = goal
     )
   }
