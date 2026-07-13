@@ -204,7 +204,8 @@ class PathingState : ExecutorState() {
     nodes: List<PathNode>,
     currentIndex: Int,
   ): Boolean {
-    val level = minecraft.level ?: return false
+    val level = minecraft.level
+    requireNotNull(level)
 
     if (!PlayerUtils.onGround || !jumpDelay.passed()) {
       return false
@@ -212,11 +213,9 @@ class PathingState : ExecutorState() {
 
     val node = nodes[currentIndex]
 
-    if (node.block.y - playerPos.y < 1) {
-      return false
-    }
-
-    if (MovementHelper.isBottomSlab(level.getBlockState(node.blockStandingOn))) {
+    if (node.block.y - playerPos.y < 1 ||
+      MovementHelper.isBottomSlab(level.getBlockState(node.blockStandingOn))
+    ) {
       return false
     }
 
@@ -225,11 +224,7 @@ class PathingState : ExecutorState() {
     val dx = abs(nodeCenter.x - playerVec.x)
     val dz = abs(nodeCenter.z - playerVec.z)
 
-    if (dx + dz > 1.2) {
-      return false
-    }
-
-    if (minOf(dx, dz) > 0.2) {
+    if (dx + dz > 1.2 || minOf(dx, dz) > 0.2) {
       return false
     }
 
