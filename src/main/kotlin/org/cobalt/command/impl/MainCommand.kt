@@ -33,4 +33,9 @@ object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
     PathFindingFacade.goTo(GoalBlock(x, y, z), fly)
   }
 
+  @SubCommand
+  fun stopPathfinder() {
+    PathFindingFacade.stop()
+  }
+
 }
