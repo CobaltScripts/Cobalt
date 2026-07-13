@@ -23,21 +23,20 @@ import org.cobalt.pathfinder.precompute.Ternary.*
 object MovementHelper {
   private const val DIRECTIONS_COUNT = 8
   private const val FULL_CIRCLE_DEGREES = 360f
-  private const val SECTOR_WIDTH_DEGREES = FULL_CIRCLE_DEGREES / DIRECTIONS_COUNT           // 45f
-  private const val SECTOR_HALF_WIDTH_DEGREES = SECTOR_WIDTH_DEGREES / 2f                   // 22.5f
+  private const val SECTOR_WIDTH_DEGREES = FULL_CIRCLE_DEGREES / DIRECTIONS_COUNT
+  private const val SECTOR_HALF_WIDTH_DEGREES = SECTOR_WIDTH_DEGREES / 2f
 
   private const val DEAD_BAND_DEGREES = 0.05f
-  private const val SWITCH_THRESHOLD_DEGREES = SECTOR_HALF_WIDTH_DEGREES + DEAD_BAND_DEGREES // 27.5f
 
-  private const val FORWARD_RIGHT_START_DEGREES = SECTOR_HALF_WIDTH_DEGREES                              // 22.5f
-  private const val RIGHT_START_DEGREES = FORWARD_RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES             // 67.5f
-  private const val BACK_RIGHT_START_DEGREES = RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES                // 112.5f
-  private const val BACKWARD_START_DEGREES = BACK_RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES             // 157.5f
+  private const val FORWARD_RIGHT_START_DEGREES = SECTOR_HALF_WIDTH_DEGREES
+  private const val RIGHT_START_DEGREES = FORWARD_RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES
+  private const val BACK_RIGHT_START_DEGREES = RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES
+  private const val BACKWARD_START_DEGREES = BACK_RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES
 
-  private const val FORWARD_LEFT_START_DEGREES = -FORWARD_RIGHT_START_DEGREES   // -22.5f
-  private const val LEFT_START_DEGREES = -RIGHT_START_DEGREES                   // -67.5f
-  private const val BACK_LEFT_START_DEGREES = -BACK_RIGHT_START_DEGREES         // -112.5f
-  private const val BACKWARD_NEG_START_DEGREES = -BACKWARD_START_DEGREES        // -157.5f
+  private const val FORWARD_LEFT_START_DEGREES = -FORWARD_RIGHT_START_DEGREES
+  private const val LEFT_START_DEGREES = -RIGHT_START_DEGREES
+  private const val BACK_LEFT_START_DEGREES = -BACK_RIGHT_START_DEGREES
+  private const val BACKWARD_NEG_START_DEGREES = -BACKWARD_START_DEGREES
 
   private const val FORWARD_RIGHT_HOLD_DEGREES = FORWARD_RIGHT_START_DEGREES + DEAD_BAND_DEGREES
   private const val RIGHT_HOLD_DEGREES = RIGHT_START_DEGREES + DEAD_BAND_DEGREES
@@ -49,10 +48,7 @@ object MovementHelper {
   private const val BACK_LEFT_HOLD_DEGREES = BACK_LEFT_START_DEGREES - DEAD_BAND_DEGREES
   private const val BACKWARD_NEG_HOLD_DEGREES = BACKWARD_NEG_START_DEGREES - DEAD_BAND_DEGREES
 
-  // --- Sector identity ----------------------------------------------------
   private enum class Sector { FORWARD, FORWARD_RIGHT, RIGHT, BACK_RIGHT, BACKWARD, BACK_LEFT, LEFT, FORWARD_LEFT }
-
-  // Persists between calls so we can apply hysteresis.
   private var lastSector: Sector = Sector.FORWARD
 
   @JvmStatic
