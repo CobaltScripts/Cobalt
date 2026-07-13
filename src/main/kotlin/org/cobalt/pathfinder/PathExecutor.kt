@@ -10,9 +10,9 @@ import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.helper.PathInput
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.calculation.CalculatingState
-import org.cobalt.util.ChatUtils
-import org.cobalt.util.MessageType
-import org.cobalt.util.PlayerUtils
+import org.cobalt.util.chat.ChatUtils
+import org.cobalt.util.chat.MessageType
+import org.cobalt.util.client.PlayerUtils
 
 object PathExecutor {
 

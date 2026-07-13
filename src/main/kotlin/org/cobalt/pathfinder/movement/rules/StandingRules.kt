@@ -1,19 +1,13 @@
 package org.cobalt.pathfinder.movement.rules
 
-import net.minecraft.world.level.block.AzaleaBlock
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.CarpetBlock
-import net.minecraft.world.level.block.SlabBlock
-import net.minecraft.world.level.block.StainedGlassBlock
-import net.minecraft.world.level.block.StairBlock
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluids
 import org.cobalt.pathfinder.helper.BlockStateAccessor
 import org.cobalt.pathfinder.movement.rules.data.BlockSetRule
 import org.cobalt.pathfinder.movement.rules.data.BlockTypeRule
 import org.cobalt.pathfinder.movement.rules.data.Ternary
-import org.cobalt.util.BlockUtils
+import org.cobalt.util.block.BlockUtils
 
 object StandingRules {
 

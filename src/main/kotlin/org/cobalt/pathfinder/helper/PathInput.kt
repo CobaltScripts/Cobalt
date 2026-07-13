@@ -30,13 +30,13 @@ class PathInput : ClientInput() {
 
   override fun tick() {
     this.keyPresses = Input(
-        forward,
-        backward,
-        left,
-        right,
-        jump,
-        shift,
-        sprint
+      forward,
+      backward,
+      left,
+      right,
+      jump,
+      shift,
+      sprint
     )
 
     val forwardImpulse = calculateImpulse(forward, backward)

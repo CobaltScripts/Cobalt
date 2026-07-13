@@ -1,21 +1,21 @@
 package org.cobalt.ui.component.button
 
-import org.cobalt.dsl.updateAlpha
 import org.cobalt.module.ModuleCategory
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.animation.ColorAnimation
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.page.impl.ModulesPage
 import org.cobalt.ui.screen.ConfigScreen
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.color.updateAlpha
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 class SidebarButton(val category: ModuleCategory) : UIComponent(
   width = WIDTH,
   height = HEIGHT
 ) {
 
-  private val icon = Skia.createImage(category.iconPath)
+  private val icon = SkiaRenderer.createImage(category.iconPath)
   private val colorAnimation = ColorAnimation(150L)
   private val xOffsetAnimation = EaseOutAnimation(200L)
 
@@ -38,14 +38,14 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
     val xOffset = xOffsetAnimation.get(0F, TEXT_SELECTED_OFFSET, !isSelectedNow)
 
     if (isSelectedNow) {
-      Skia.roundedRect(
+      SkiaRenderer.roundedRect(
         xPos, yPos,
         width, height,
         CORNER_RADIUS,
         opaqueColor
       )
 
-      Skia.roundedOutline(
+      SkiaRenderer.roundedOutline(
         xPos, yPos,
         width, height,
         1f, CORNER_RADIUS, mainColor
@@ -55,7 +55,7 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
     val iconX = xPos + ICON_LEFT_PADDING
     fun iconY(iconSize: Float) = yPos + (height - iconSize) / 2F
 
-    Skia.image(
+    SkiaRenderer.image(
       icon,
       iconX + xOffset, iconY(ICON_SIZE),
       ICON_SIZE, ICON_SIZE,
@@ -63,7 +63,7 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
     )
 
     if (isSelectedNow) {
-      Skia.image(
+      SkiaRenderer.image(
         selectedIcon,
         iconX, iconY(SELECTION_ICON_SIZE),
         SELECTION_ICON_SIZE, SELECTION_ICON_SIZE,
@@ -74,8 +74,8 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
     val textX = iconX + ICON_SIZE + ICON_TEXT_PADDING
     val textY = yPos + height / 2F - FONT_SIZE / 2F
 
-    Skia.text(
-      Skia.regularFont,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont,
       category.displayName,
       textX + xOffset, textY,
       FONT_SIZE, textColor
@@ -83,7 +83,7 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
   }
 
   override fun mouseClicked(button: Int): Boolean {
-    if (button == 0 && MouseUtils.isHoveringOver(xPos, yPos, width, height)) {
+    if (button == 0 && Mouse.isHoveringOver(xPos, yPos, width, height)) {
       ConfigScreen.currentPage = ModulesPage
       ConfigScreen.selectedCategory = category
       return true
@@ -104,7 +104,7 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
     private const val SELECTION_ICON_SIZE = 13f
     private const val TEXT_SELECTED_OFFSET = 17f
 
-    private val selectedIcon = Skia.createImage("/assets/cobalt/ui/selected.svg")
+    private val selectedIcon = SkiaRenderer.createImage("/assets/cobalt/ui/selected.svg")
   }
 
 }

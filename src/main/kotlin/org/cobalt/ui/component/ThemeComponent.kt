@@ -1,11 +1,11 @@
 package org.cobalt.ui.component
 
-import org.cobalt.dsl.updateAlpha
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.theme.Theme
 import org.cobalt.ui.theme.ThemeManager
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.color.updateAlpha
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 class ThemeComponent(val newTheme: Theme) : UIComponent(
   width = WIDTH,
@@ -13,13 +13,13 @@ class ThemeComponent(val newTheme: Theme) : UIComponent(
 ) {
 
   override fun renderComponent() {
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos,
       width, height,
       5f, newTheme.accentPrimary.updateAlpha(40)
     )
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       xPos, yPos,
       width, height,
       1f, 5f, newTheme.accentPrimary
@@ -28,8 +28,8 @@ class ThemeComponent(val newTheme: Theme) : UIComponent(
     val startX = xPos + INNER_PADDING
     var startY = yPos + INNER_PADDING
 
-    Skia.text(
-      Skia.regularFont, newTheme.name,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, newTheme.name,
       startX, startY,
       THEME_NAME_FONT_SIZE, theme.textPrimary
     )
@@ -39,21 +39,21 @@ class ThemeComponent(val newTheme: Theme) : UIComponent(
     val textColor = if (isActive) theme.success else theme.textMuted
     val statusY = startY + THEME_NAME_FONT_SIZE + TEXT_PADDING
 
-    Skia.text(
-      Skia.regularFont, text,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, text,
       startX, statusY,
       STATUS_FONT_SIZE, textColor
     )
 
     startY = yPos + height - SWATCH_HEIGHT - INNER_PADDING
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       startX, startY,
       SWATCH_WIDTH, SWATCH_HEIGHT,
       2.5f, newTheme.accentPrimary
     )
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       startX + SWATCH_WIDTH + SWATCH_PADDING, startY,
       SWATCH_WIDTH, SWATCH_HEIGHT,
       2.5f, newTheme.accentSecondary
@@ -61,7 +61,7 @@ class ThemeComponent(val newTheme: Theme) : UIComponent(
   }
 
   override fun mouseClicked(button: Int): Boolean {
-    val isHovered = MouseUtils.isHoveringOver(xPos, yPos, width, height)
+    val isHovered = Mouse.isHoveringOver(xPos, yPos, width, height)
 
     if (button != 0 || !isHovered) {
       return false

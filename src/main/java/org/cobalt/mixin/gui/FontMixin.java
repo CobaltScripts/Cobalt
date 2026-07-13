@@ -8,7 +8,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import org.cobalt.module.impl.misc.NickHider;
-import org.cobalt.util.PlayerUtils;
+import org.cobalt.util.client.PlayerUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

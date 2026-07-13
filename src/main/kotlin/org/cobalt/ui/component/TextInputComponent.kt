@@ -3,11 +3,11 @@ package org.cobalt.ui.component
 import java.util.function.Consumer
 import net.minecraft.client.input.CharacterEvent
 import net.minecraft.client.input.KeyEvent
-import org.cobalt.dsl.updateAlpha
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.helper.TextInputHelper
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.color.updateAlpha
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 class TextInputComponent(
   width: Float,
@@ -27,7 +27,7 @@ class TextInputComponent(
   override fun renderComponent() {
     inputHandler.updateBounds(xPos, yPos, width, height)
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos,
       width, height,
       5f, theme.backgroundPrimary
@@ -43,12 +43,12 @@ class TextInputComponent(
     val textX = xPos + TEXT_PADDING - xOffset
     val textY = yPos + (height - fontSize) / 2
 
-    Skia.pushScissor(xPos, yPos, width, height)
+    SkiaRenderer.pushScissor(xPos, yPos, width, height)
 
     drawSelection(textX, textY)
 
-    Skia.text(
-      Skia.regularFont,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont,
       currentText,
       textX, textY,
       fontSize, textColor
@@ -56,15 +56,15 @@ class TextInputComponent(
 
     if (inputHandler.focused && (System.currentTimeMillis() / 500) % 2 == 0L) {
       val caretX = textX + caretOffset
-      Skia.rect(
+      SkiaRenderer.rect(
         caretX, textY,
         1.5f, fontSize,
         theme.textPrimary
       )
     }
 
-    Skia.popScissor()
-    Skia.roundedOutline(
+    SkiaRenderer.popScissor()
+    SkiaRenderer.roundedOutline(
       xPos, yPos,
       width, height,
       1f, 5f, theme.border
@@ -92,12 +92,12 @@ class TextInputComponent(
       inputHandler.text.substring(0, inputHandler.selectionEnd)
     }
 
-    val selStartX = textX + Skia.textWidth(Skia.regularFont, selStartPrefix, fontSize)
-    val selEndX = textX + Skia.textWidth(Skia.regularFont, selEndPrefix, fontSize)
+    val selStartX = textX + SkiaRenderer.textWidth(SkiaRenderer.regularFont, selStartPrefix, fontSize)
+    val selEndX = textX + SkiaRenderer.textWidth(SkiaRenderer.regularFont, selEndPrefix, fontSize)
     val selWidth = selEndX - selStartX
     val selectionColor = theme.textPrimary.updateAlpha(40)
 
-    Skia.rect(
+    SkiaRenderer.rect(
       selStartX, textY,
       selWidth, fontSize,
       selectionColor
@@ -123,11 +123,11 @@ class TextInputComponent(
       inputHandler.text.substring(0, inputHandler.caretIndex)
     }
 
-    return Skia.textWidth(Skia.regularFont, caretPrefix, fontSize)
+    return SkiaRenderer.textWidth(SkiaRenderer.regularFont, caretPrefix, fontSize)
   }
 
   private fun updateScrollOffset(currentText: String, maxTextWidth: Float, caretOffset: Float) {
-    val textWidth = Skia.textWidth(Skia.regularFont, currentText, fontSize)
+    val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, currentText, fontSize)
 
     if (textWidth <= maxTextWidth) {
       xOffset = 0f
@@ -141,7 +141,7 @@ class TextInputComponent(
   }
 
   override fun mouseClicked(button: Int): Boolean {
-    val relativeX = MouseUtils.mouseX - (xPos + TEXT_PADDING - xOffset)
+    val relativeX = Mouse.mouseX - (xPos + TEXT_PADDING - xOffset)
     return inputHandler.mouseClicked(button, relativeX) || super.mouseClicked(button)
   }
 
@@ -150,7 +150,7 @@ class TextInputComponent(
   }
 
   override fun mouseDragged(button: Int, offsetX: Double, offsetY: Double): Boolean {
-    val relativeX = MouseUtils.mouseX - (xPos + TEXT_PADDING - xOffset)
+    val relativeX = Mouse.mouseX - (xPos + TEXT_PADDING - xOffset)
     return inputHandler.mouseDragged(button, relativeX) || super.mouseDragged(button, offsetX, offsetY)
   }
 

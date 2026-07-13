@@ -3,8 +3,8 @@ package org.cobalt.module.impl.visual
 import kotlin.math.roundToInt
 import org.cobalt.module.ModuleCategory
 import org.cobalt.module.type.RenderableModule
-import org.cobalt.util.ServerUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.render.SkiaRenderer
+import org.cobalt.util.server.ConnectionTracker
 
 object PerformanceHUD : RenderableModule(
   name = "PerformanceHUD",
@@ -20,8 +20,8 @@ object PerformanceHUD : RenderableModule(
           width += PADDING + 2 * TEXT_SPACING
         }
 
-        width += Skia.textWidth(Skia.boldFont, stat.value, FONT_SIZE) + TEXT_SPACING
-        width += Skia.textWidth(Skia.boldFont, stat.unit, FONT_SIZE)
+        width += SkiaRenderer.textWidth(SkiaRenderer.boldFont, stat.value, FONT_SIZE) + TEXT_SPACING
+        width += SkiaRenderer.textWidth(SkiaRenderer.boldFont, stat.unit, FONT_SIZE)
       }
 
       return width
@@ -31,7 +31,7 @@ object PerformanceHUD : RenderableModule(
     get() = 50f
 
   override fun renderComponent() {
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos, width, height,
       5f, theme.backgroundPrimary
     )
@@ -45,7 +45,7 @@ object PerformanceHUD : RenderableModule(
         val dividerX = currentX + DIVIDER_GAP
         val midY = yPos + height / 2
 
-        Skia.line(
+        SkiaRenderer.line(
           dividerX, midY - DIVIDER_HALF_HEIGHT,
           dividerX, midY + DIVIDER_HALF_HEIGHT,
           2f, theme.border
@@ -56,30 +56,30 @@ object PerformanceHUD : RenderableModule(
 
       var textX = currentX
 
-      Skia.text(
-        Skia.boldFont,
+      SkiaRenderer.text(
+        SkiaRenderer.boldFont,
         stat.value,
         textX, textY,
         FONT_SIZE, theme.textPrimary
       )
 
-      textX += Skia.textWidth(Skia.boldFont, stat.value, FONT_SIZE) + TEXT_SPACING
+      textX += SkiaRenderer.textWidth(SkiaRenderer.boldFont, stat.value, FONT_SIZE) + TEXT_SPACING
 
-      Skia.text(
-        Skia.boldFont,
+      SkiaRenderer.text(
+        SkiaRenderer.boldFont,
         stat.unit,
         textX, textY,
         FONT_SIZE, theme.textDisabled
       )
 
-      currentX = textX + Skia.textWidth(Skia.boldFont, stat.unit, FONT_SIZE)
+      currentX = textX + SkiaRenderer.textWidth(SkiaRenderer.boldFont, stat.unit, FONT_SIZE)
     }
   }
 
   private fun getStats() = listOf(
     Stat(minecraft.fps.toString(), "FPS"),
-    Stat(ServerUtils.averageTps.roundToInt().toString(), "TPS"),
-    Stat(ServerUtils.averagePing.toString(), "MS"),
+    Stat(ConnectionTracker.averageTps.roundToInt().toString(), "TPS"),
+    Stat(ConnectionTracker.averagePing.toString(), "MS"),
   )
 
   private const val PADDING = 25f

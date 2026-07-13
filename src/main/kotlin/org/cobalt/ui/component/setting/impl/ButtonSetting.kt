@@ -2,12 +2,12 @@ package org.cobalt.ui.component.setting.impl
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
-import org.cobalt.dsl.updateAlpha
 import org.cobalt.ui.animation.ColorAnimation
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.setting.Setting
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.color.updateAlpha
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 class ButtonSetting(
   name: String,
@@ -24,14 +24,14 @@ class ButtonSetting(
   private var wasHovering = false
 
   private val buttonWidth =
-    Skia.textWidth(Skia.regularFont, buttonLabel, FONT_SIZE) + 30f
+    SkiaRenderer.textWidth(SkiaRenderer.regularFont, buttonLabel, FONT_SIZE) + 30f
 
   override fun renderSetting() {
     val buttonWidth = buttonWidth
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
 
-    val hovering = MouseUtils.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)
+    val hovering = Mouse.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)
 
     if (hovering != wasHovering) {
       colorAnim.start()
@@ -43,28 +43,28 @@ class ButtonSetting(
     val borderColor = colorAnim.get(theme.border, theme.accentPrimary, !hovering)
     val textColor = colorAnim.get(theme.textPrimary, theme.accentPrimary, !hovering)
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       startX, startY,
       buttonWidth, BUTTON_HEIGHT,
       5f, theme.backgroundPrimary
     )
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       startX, startY,
       buttonWidth, BUTTON_HEIGHT,
       5f, theme.accentPrimary.updateAlpha(alpha)
     )
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       startX, startY,
       buttonWidth, BUTTON_HEIGHT,
       1f, 5f, borderColor
     )
 
-    val textWidth = Skia.textWidth(Skia.regularFont, buttonLabel, FONT_SIZE)
+    val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, buttonLabel, FONT_SIZE)
 
-    Skia.text(
-      Skia.regularFont, buttonLabel,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, buttonLabel,
       startX + (buttonWidth - textWidth) / 2,
       startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
       FONT_SIZE, textColor
@@ -75,7 +75,7 @@ class ButtonSetting(
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
 
-    if (button == 0 && MouseUtils.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)) {
+    if (button == 0 && Mouse.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)) {
       onClick.run()
       return true
     }

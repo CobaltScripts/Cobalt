@@ -2,7 +2,7 @@ package org.cobalt.module.type
 
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
-import org.cobalt.util.ChatUtils
+import org.cobalt.util.chat.ChatUtils
 
 abstract class Script(
   name: String,

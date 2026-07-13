@@ -6,7 +6,7 @@ import net.minecraft.client.input.CharacterEvent
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
-import org.cobalt.util.skia.SkiaPIP
+import org.cobalt.util.render.skia.SkiaPIP
 
 abstract class UIScreen : Screen(Component.empty()) {
 

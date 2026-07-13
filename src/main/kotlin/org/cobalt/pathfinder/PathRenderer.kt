@@ -1,14 +1,14 @@
 package org.cobalt.pathfinder
 
-import org.cobalt.dsl.centerVec
-import org.cobalt.dsl.smallBox
-import org.cobalt.module.impl.misc.Debug
-import org.cobalt.ui.theme.ThemeManager
-import org.cobalt.util.PlayerUtils
-import org.cobalt.util.WorldRenderUtils
 import java.awt.Color
+import org.cobalt.module.impl.misc.Debug
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.ui.theme.Theme
+import org.cobalt.ui.theme.ThemeManager
+import org.cobalt.util.block.centerVec
+import org.cobalt.util.block.smallBox
+import org.cobalt.util.client.PlayerUtils
+import org.cobalt.util.render.GizmoRenderer
 
 object PathRenderer {
 
@@ -25,14 +25,14 @@ object PathRenderer {
     val playerPos = PlayerUtils.position.centerVec()
 
     if (Debug.enabled) {
-      WorldRenderUtils.drawBox(playerPos.smallBox(), Color.GREEN)
-      WorldRenderUtils.drawBox(targetNode.smallBox(), Color.RED)
+      GizmoRenderer.drawBox(playerPos.smallBox(), Color.GREEN)
+      GizmoRenderer.drawBox(targetNode.smallBox(), Color.RED)
     }
 
     for (index in keyNodes.indices) {
       val node = keyNodes[index]
 
-      WorldRenderUtils.drawBlockPos(
+      GizmoRenderer.drawBlockPos(
         if (node.useMovementFly) node.block else node.blockStandingOn,
         color = theme.accentPrimary
       )
@@ -41,7 +41,7 @@ object PathRenderer {
 
       val prev = keyNodes[index - 1]
 
-      WorldRenderUtils.drawLine(
+      GizmoRenderer.drawLine(
         if (prev.useMovementFly) prev.centerVec else prev.topCenterVec,
         if (node.useMovementFly) node.centerVec else node.topCenterVec,
         theme.accentSecondary

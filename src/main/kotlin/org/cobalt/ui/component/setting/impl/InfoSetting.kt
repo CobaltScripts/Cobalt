@@ -2,9 +2,9 @@ package org.cobalt.ui.component.setting.impl
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
-import org.cobalt.dsl.updateAlpha
 import org.cobalt.ui.component.setting.Setting
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.color.updateAlpha
+import org.cobalt.util.render.SkiaRenderer
 
 class InfoSetting(
   val text: String,
@@ -15,13 +15,13 @@ class InfoSetting(
   override fun write(): JsonElement = JsonPrimitive("")
 
   override fun renderSetting() {
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos + INNER_PADDING, yPos + INNER_PADDING,
       width - (INNER_PADDING * 2), height - (INNER_PADDING * 2),
       5f, color.updateAlpha(40)
     )
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       xPos + INNER_PADDING, yPos + INNER_PADDING,
       width - (INNER_PADDING * 2), height - (INNER_PADDING * 2),
       1f, 5f, color
@@ -29,7 +29,7 @@ class InfoSetting(
 
     val imageY = yPos + 1f + (height - ICON_SIZE) / 2
 
-    Skia.image(
+    SkiaRenderer.image(
       icon, xPos + PADDING, imageY,
       ICON_SIZE, ICON_SIZE,
       color = color
@@ -38,8 +38,8 @@ class InfoSetting(
     val textX = xPos + ICON_SIZE + PADDING + 10f
     val textY = yPos + (height - NAME_SIZE) / 2
 
-    Skia.text(
-      Skia.regularFont, text,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, text,
       textX, textY,
       NAME_SIZE, color
     )
@@ -52,7 +52,7 @@ class InfoSetting(
     Type.ERROR -> theme.error
   }
 
-  private val icon = Skia.createImage(
+  private val icon = SkiaRenderer.createImage(
     when (type) {
       Type.INFO -> "/assets/cobalt/ui/info.svg"
       Type.WARNING -> "/assets/cobalt/ui/warning.svg"

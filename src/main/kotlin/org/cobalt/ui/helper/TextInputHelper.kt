@@ -5,8 +5,8 @@ import kotlin.math.abs
 import net.minecraft.client.input.CharacterEvent
 import net.minecraft.client.input.KeyEvent
 import org.cobalt.ui.component.TextInputComponent
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 import org.lwjgl.glfw.GLFW
 
 class TextInputHelper(
@@ -79,7 +79,7 @@ class TextInputHelper(
       return false
     }
 
-    val hoveringOver = MouseUtils.isHoveringOver(xPos, yPos, width, height)
+    val hoveringOver = Mouse.isHoveringOver(xPos, yPos, width, height)
     focused = hoveringOver
 
     if (hoveringOver) {
@@ -110,7 +110,7 @@ class TextInputHelper(
       return false
     }
 
-    focused = MouseUtils.isHoveringOver(xPos, yPos, width, height)
+    focused = Mouse.isHoveringOver(xPos, yPos, width, height)
     return focused
   }
 
@@ -124,7 +124,7 @@ class TextInputHelper(
 
     for (i in 0..text.length) {
       val prefix = if (textInputType == TextInputComponent.Type.PASSWORD) "*".repeat(i) else text.substring(0, i)
-      val w = Skia.textWidth(Skia.regularFont, prefix, fontSize)
+      val w = SkiaRenderer.textWidth(SkiaRenderer.regularFont, prefix, fontSize)
       val diff = abs(w - relativeX)
 
       if (diff < minDiff) {

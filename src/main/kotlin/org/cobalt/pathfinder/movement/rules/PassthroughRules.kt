@@ -1,21 +1,6 @@
 package org.cobalt.pathfinder.movement.rules
 
-import net.minecraft.world.level.block.AbstractSkullBlock
-import net.minecraft.world.level.block.AirBlock
-import net.minecraft.world.level.block.AmethystClusterBlock
-import net.minecraft.world.level.block.AzaleaBlock
-import net.minecraft.world.level.block.BaseFireBlock
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.CarpetBlock
-import net.minecraft.world.level.block.CauldronBlock
-import net.minecraft.world.level.block.DoorBlock
-import net.minecraft.world.level.block.FenceGateBlock
-import net.minecraft.world.level.block.ShulkerBoxBlock
-import net.minecraft.world.level.block.SlabBlock
-import net.minecraft.world.level.block.SnowLayerBlock
-import net.minecraft.world.level.block.TrapDoorBlock
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.LilyPadBlock
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.WaterFluid
@@ -25,7 +10,7 @@ import org.cobalt.pathfinder.movement.rules.StandingRules.canStandOn
 import org.cobalt.pathfinder.movement.rules.data.BlockSetRule
 import org.cobalt.pathfinder.movement.rules.data.BlockTypeRule
 import org.cobalt.pathfinder.movement.rules.data.Ternary
-import org.cobalt.util.BlockUtils
+import org.cobalt.util.block.BlockUtils
 
 object PassthroughRules {
 

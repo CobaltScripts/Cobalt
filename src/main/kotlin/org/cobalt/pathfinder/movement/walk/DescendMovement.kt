@@ -3,9 +3,9 @@ package org.cobalt.pathfinder.movement.walk
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
-import org.cobalt.pathfinder.movement.MovementValidator
 import org.cobalt.pathfinder.movement.MovementResult
 import org.cobalt.pathfinder.movement.MovementType
+import org.cobalt.pathfinder.movement.MovementValidator
 
 // TODO: Handle ladder & vine climbing downwards & falling down multiple blocks
 class DescendMovement(

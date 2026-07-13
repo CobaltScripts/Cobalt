@@ -3,7 +3,7 @@ package org.cobalt.pathfinder.state.fly
 import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.pathing.PathingState
-import org.cobalt.util.PlayerUtils
+import org.cobalt.util.client.PlayerUtils
 
 class StartFlyState : ExecutorState() {
 

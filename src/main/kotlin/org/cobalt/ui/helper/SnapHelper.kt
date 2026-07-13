@@ -1,7 +1,7 @@
 package org.cobalt.ui.helper
 
 import kotlin.math.abs
-import org.cobalt.util.WindowUtils
+import org.cobalt.util.client.WindowUtils
 
 class SnapHelper(private val snapThreshold: Float = 5f) {
 

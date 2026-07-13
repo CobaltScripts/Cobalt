@@ -10,7 +10,7 @@ import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.goal.GoalBlock
 import org.cobalt.ui.screen.ConfigScreen
 import org.cobalt.ui.screen.HudEditorScreen
-import org.cobalt.util.helper.TickScheduler
+import org.cobalt.util.scheduling.TickScheduler
 
 object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
 

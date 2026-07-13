@@ -7,17 +7,22 @@ import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.RenderEvent
 import org.cobalt.module.impl.combat.AutoClicker
-import org.cobalt.module.impl.misc.*
+import org.cobalt.module.impl.misc.AutoHarp
+import org.cobalt.module.impl.misc.AutoSprint
+import org.cobalt.module.impl.misc.Debug
+import org.cobalt.module.impl.misc.DiscordRPC
+import org.cobalt.module.impl.misc.NickHider
+import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.module.impl.skills.Fishing
 import org.cobalt.module.impl.visual.PerformanceHUD
 import org.cobalt.module.type.RenderableModule
 import org.cobalt.module.type.Script
 import org.cobalt.ui.screen.HudEditorScreen
-import org.cobalt.util.ChatUtils
-import org.cobalt.util.WindowUtils.scaleX
-import org.cobalt.util.WindowUtils.scaleY
-import org.cobalt.util.skia.Skia
-import org.cobalt.util.skia.SkiaPIP
+import org.cobalt.util.chat.ChatUtils
+import org.cobalt.util.client.WindowUtils.scaleX
+import org.cobalt.util.client.WindowUtils.scaleY
+import org.cobalt.util.render.SkiaRenderer
+import org.cobalt.util.render.skia.SkiaPIP
 
 object ModuleManager {
 
@@ -132,19 +137,19 @@ object ModuleManager {
       modules.filterIsInstance<RenderableModule>()
         .filter { module -> module.enabled }
         .forEach { module ->
-          Skia.push()
+          SkiaRenderer.push()
 
           val renderX = module.xPos * scaleX
           val renderY = module.yPos * scaleY
           val finalScale = module.scale * scaleY
 
-          Skia.translate(renderX, renderY)
-          Skia.scale(finalScale, finalScale)
-          Skia.translate(-module.xPos, -module.yPos)
+          SkiaRenderer.translate(renderX, renderY)
+          SkiaRenderer.scale(finalScale, finalScale)
+          SkiaRenderer.translate(-module.xPos, -module.yPos)
 
           module.renderComponent()
 
-          Skia.pop()
+          SkiaRenderer.pop()
         }
     }
   }

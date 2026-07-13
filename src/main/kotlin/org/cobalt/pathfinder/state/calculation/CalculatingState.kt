@@ -9,8 +9,8 @@ import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.pathing.PathingState
-import org.cobalt.util.ChatUtils
-import org.cobalt.util.PlayerUtils
+import org.cobalt.util.chat.ChatUtils
+import org.cobalt.util.client.PlayerUtils
 
 class CalculatingState : ExecutorState() {
 
@@ -28,10 +28,10 @@ class CalculatingState : ExecutorState() {
 
     calculationJob = CoroutineScope(Dispatchers.Default).launch {
       val path = AStarPathfinder(
-          startPos.x, startPos.y, startPos.z,
-          goal, config.mode,
-          config.returnBestNode,
-          config.maxCalculationTime
+        startPos.x, startPos.y, startPos.z,
+        goal, config.mode,
+        config.returnBestNode,
+        config.maxCalculationTime
       ).findPath()
 
       if (!isActive) {

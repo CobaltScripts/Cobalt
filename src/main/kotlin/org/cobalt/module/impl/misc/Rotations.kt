@@ -10,12 +10,12 @@ import org.cobalt.event.impl.WorldEvent
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
 import org.cobalt.ui.component.setting.impl.SliderSetting
-import org.cobalt.util.MouseMode
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.PlayerUtils
-import org.cobalt.util.RotationUtils
-import org.cobalt.util.rotation.Rotation
-import org.cobalt.util.rotation.RotationTarget
+import org.cobalt.util.client.PlayerUtils
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.input.MouseMode
+import org.cobalt.util.rotation.RotationMath
+import org.cobalt.util.rotation.data.Rotation
+import org.cobalt.util.rotation.data.RotationTarget
 
 object Rotations : Module(
   name = "Rotations",
@@ -91,8 +91,8 @@ object Rotations : Module(
     lastFrameMs = System.currentTimeMillis()
     running = true
 
-    if (MouseUtils.mouseMode == MouseMode.DEFAULT) {
-      MouseUtils.mouseMode = MouseMode.LOCK_MOUSE
+    if (Mouse.mouseMode == MouseMode.DEFAULT) {
+      Mouse.mouseMode = MouseMode.LOCK_MOUSE
       returnMouseMode = true
     }
   }
@@ -102,8 +102,8 @@ object Rotations : Module(
     target = rotationTarget
     running = true
 
-    if (MouseUtils.mouseMode == MouseMode.DEFAULT) {
-      MouseUtils.mouseMode = MouseMode.LOCK_MOUSE
+    if (Mouse.mouseMode == MouseMode.DEFAULT) {
+      Mouse.mouseMode = MouseMode.LOCK_MOUSE
       returnMouseMode = true
     }
   }
@@ -113,7 +113,7 @@ object Rotations : Module(
     target = null
 
     if (returnMouseMode) {
-      MouseUtils.mouseMode = MouseMode.DEFAULT
+      Mouse.mouseMode = MouseMode.DEFAULT
       returnMouseMode = false
     }
   }
@@ -140,7 +140,7 @@ object Rotations : Module(
   }
 
   private fun handleRotate(current: Rotation, target: Rotation, deltaTime: Float) {
-    if (RotationUtils.approximatelyEquals(current, target, endTolerance.toFloat())) {
+    if (RotationMath.approximatelyEquals(current, target, endTolerance.toFloat())) {
       stop()
       return
     }
@@ -157,12 +157,12 @@ object Rotations : Module(
   }
 
   private fun handleTrack(current: Rotation, target: Rotation, deltaTime: Float) {
-    if (RotationUtils.approximatelyEquals(current, target, endTolerance.toFloat())) {
+    if (RotationMath.approximatelyEquals(current, target, endTolerance.toFloat())) {
       return
     }
 
-    var needYaw = RotationUtils.angleDifference(target.yaw, current.yaw)
-    var needPitch = RotationUtils.angleDifference(target.pitch, current.pitch)
+    var needYaw = RotationMath.angleDifference(target.yaw, current.yaw)
+    var needPitch = RotationMath.angleDifference(target.pitch, current.pitch)
     val distance = abs(needYaw) + abs(needPitch)
 
     val randomFactor = (0.8f + Random.nextFloat() * 0.4f)

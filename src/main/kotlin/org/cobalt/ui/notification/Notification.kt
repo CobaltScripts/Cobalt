@@ -4,9 +4,9 @@ import kotlin.time.Duration
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.animation.BounceAnimation
 import org.cobalt.ui.animation.EaseOutAnimation
-import org.cobalt.util.WindowUtils.windowWidth
-import org.cobalt.util.skia.Skia
-import org.cobalt.util.skia.helper.SkiaCorner
+import org.cobalt.util.client.WindowUtils.windowWidth
+import org.cobalt.util.render.SkiaRenderer
+import org.cobalt.util.render.skia.data.SkiaCorner
 
 class Notification(
   private val title: String,
@@ -60,7 +60,7 @@ class Notification(
     val resolvedY = targetY + slideDownAnim.get(previousY - targetY, 0f, false)
     updateBounds(resolvedX, resolvedY)
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos, width, height,
       CORNER_RADIUS, theme.backgroundPrimary
     )
@@ -72,18 +72,18 @@ class Notification(
   private fun drawText() {
     val contentWidth = width - CONTENT_PADDING * 2
 
-    Skia.wrappedText(
-      Skia.boldFont, title,
+    SkiaRenderer.wrappedText(
+      SkiaRenderer.boldFont, title,
       xPos + CONTENT_PADDING, yPos + CONTENT_PADDING,
       contentWidth, TITLE_FONT_SIZE, theme.textPrimary
     )
 
-    val titleHeight = Skia.wrappedTextHeight(
-      Skia.boldFont, title, contentWidth, TITLE_FONT_SIZE
+    val titleHeight = SkiaRenderer.wrappedTextHeight(
+      SkiaRenderer.boldFont, title, contentWidth, TITLE_FONT_SIZE
     )
 
-    Skia.wrappedText(
-      Skia.boldFont, description,
+    SkiaRenderer.wrappedText(
+      SkiaRenderer.boldFont, description,
       xPos + CONTENT_PADDING, yPos + CONTENT_PADDING + titleHeight + TITLE_DESCRIPTION_GAP,
       contentWidth, DESCRIPTION_FONT_SIZE, theme.textSecondary
     )
@@ -93,7 +93,7 @@ class Notification(
     val progress = calculateProgress(System.currentTimeMillis())
     val fillWidth = width * progress
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos + height - PROGRESS_BAR_HEIGHT,
       width, PROGRESS_BAR_HEIGHT,
       CORNER_RADIUS,
@@ -102,7 +102,7 @@ class Notification(
     )
 
     if (fillWidth > 0f) {
-      Skia.roundedRect(
+      SkiaRenderer.roundedRect(
         xPos, yPos + height - PROGRESS_BAR_HEIGHT,
         fillWidth, PROGRESS_BAR_HEIGHT,
         CORNER_RADIUS,
@@ -142,14 +142,14 @@ class Notification(
     private const val PROGRESS_BAR_HEIGHT: Float = 5f
 
     private fun calculateHeight(title: String, description: String): Float {
-      val titleHeight = Skia.wrappedTextHeight(
-        Skia.boldFont, title,
+      val titleHeight = SkiaRenderer.wrappedTextHeight(
+        SkiaRenderer.boldFont, title,
         DEFAULT_WIDTH - CONTENT_PADDING * 2,
         TITLE_FONT_SIZE
       )
 
-      val descHeight = Skia.wrappedTextHeight(
-        Skia.boldFont, description,
+      val descHeight = SkiaRenderer.wrappedTextHeight(
+        SkiaRenderer.boldFont, description,
         DEFAULT_WIDTH - CONTENT_PADDING * 2,
         DESCRIPTION_FONT_SIZE
       )

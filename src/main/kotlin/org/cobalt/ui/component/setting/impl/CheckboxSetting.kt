@@ -2,12 +2,12 @@ package org.cobalt.ui.component.setting.impl
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
-import org.cobalt.dsl.updateAlpha
 import org.cobalt.ui.animation.ColorAnimation
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.setting.Setting
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.color.updateAlpha
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 class CheckboxSetting(
   name: String,
@@ -34,19 +34,19 @@ class CheckboxSetting(
     val borderColor = colorAnimation.get(theme.border, theme.accentPrimary, !value)
     val bgColor = colorAnimation.get(theme.backgroundPrimary, theme.accentPrimary, !value)
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       startX, startY,
       SIZE, SIZE,
       5f, bgColor.updateAlpha(alpha)
     )
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       startX, startY,
       SIZE, SIZE,
       1f, 5f, borderColor
     )
 
-    Skia.circle(
+    SkiaRenderer.circle(
       startX + SIZE / 2,
       startY + SIZE / 2,
       2f, borderColor
@@ -54,7 +54,7 @@ class CheckboxSetting(
   }
 
   override fun mouseClicked(button: Int): Boolean {
-    if (!MouseUtils.isHoveringOver(xPos, yPos, width, height)) {
+    if (!Mouse.isHoveringOver(xPos, yPos, width, height)) {
       return false
     }
 

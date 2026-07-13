@@ -1,7 +1,6 @@
 package org.cobalt.pathfinder.calculate.path
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.calculate.PathMode
@@ -11,8 +10,8 @@ import org.cobalt.pathfinder.goal.Goal
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
-import org.cobalt.util.ChatUtils
-import org.cobalt.util.MessageType
+import org.cobalt.util.chat.ChatUtils
+import org.cobalt.util.chat.MessageType
 
 class AStarPathfinder(
   val startX: Int,
@@ -21,7 +20,7 @@ class AStarPathfinder(
   val goal: Goal,
   val mode: PathMode,
   val returnBestNode: Boolean = false,
-  val maxCalculationTime: Long = 10_000_000L
+  val maxCalculationTime: Long = 10_000_000L,
 ) {
 
   private val closedSet = Long2ObjectOpenHashMap<PathNode>()

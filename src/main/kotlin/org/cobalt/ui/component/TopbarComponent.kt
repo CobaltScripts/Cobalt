@@ -7,9 +7,9 @@ import org.cobalt.ui.page.impl.ScriptsPage
 import org.cobalt.ui.page.impl.ThemesPage
 import org.cobalt.ui.screen.ConfigScreen
 import org.cobalt.ui.screen.HudEditorScreen
-import org.cobalt.util.helper.TickScheduler
-import org.cobalt.util.skia.Skia
-import org.cobalt.util.skia.helper.SkiaCorner
+import org.cobalt.util.render.SkiaRenderer
+import org.cobalt.util.render.skia.data.SkiaCorner
+import org.cobalt.util.scheduling.TickScheduler
 
 object TopbarComponent : UIComponent() {
 
@@ -51,7 +51,7 @@ object TopbarComponent : UIComponent() {
   override fun renderComponent() {
     val currentPage = ConfigScreen.currentPage
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos,
       width, height,
       10f, theme.backgroundSecondary,
@@ -61,8 +61,8 @@ object TopbarComponent : UIComponent() {
     val textX = xPos + INNER_PADDING + 10f
     val textY = yPos + (height - CURRENT_PAGE_TITLE_FONT) / 2
 
-    Skia.text(
-      Skia.regularFont, currentPage.title,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, currentPage.title,
       textX, textY, CURRENT_PAGE_TITLE_FONT, theme.textPrimary
     )
 

@@ -3,9 +3,9 @@ package org.cobalt.pathfinder.movement.fly
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
-import org.cobalt.pathfinder.movement.MovementValidator
 import org.cobalt.pathfinder.movement.MovementResult
 import org.cobalt.pathfinder.movement.MovementType
+import org.cobalt.pathfinder.movement.MovementValidator
 
 class FlyAscendMovement : Movement(MovementType.FLY) {
 

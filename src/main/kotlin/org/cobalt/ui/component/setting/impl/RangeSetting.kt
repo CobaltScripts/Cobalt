@@ -4,8 +4,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import org.cobalt.ui.component.setting.Setting
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 class RangeSetting(
   name: String,
@@ -43,22 +43,22 @@ class RangeSetting(
     val boxX = xPos + width - PADDING - boxWidth
     val boxY = yPos + (BASE_HEIGHT - VALUE_BOX_HEIGHT) / 2
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       boxX, boxY,
       boxWidth, VALUE_BOX_HEIGHT,
       5f, theme.backgroundPrimary
     )
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       boxX, boxY,
       boxWidth, VALUE_BOX_HEIGHT,
       1f, 5f, theme.border
     )
 
-    val textWidth = Skia.textWidth(Skia.regularFont, text, FONT_SIZE)
+    val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, text, FONT_SIZE)
 
-    Skia.text(
-      Skia.regularFont, text,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, text,
       boxX + (boxWidth - textWidth) / 2,
       boxY + (VALUE_BOX_HEIGHT - FONT_SIZE) / 2,
       FONT_SIZE, theme.textPrimary
@@ -66,24 +66,24 @@ class RangeSetting(
 
     val geometry = trackGeometry()
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       geometry.startX, geometry.trackY - 2f,
       geometry.trackWidth, 4f,
       3f, theme.backgroundPrimary
     )
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       geometry.startKnobX, geometry.trackY - 2f,
       (geometry.endKnobX - geometry.startKnobX).coerceAtLeast(0f), 4f,
       3f, theme.accentPrimary
     )
 
-    Skia.circle(
+    SkiaRenderer.circle(
       geometry.startKnobX, geometry.trackY,
       KNOB_RADIUS, theme.textPrimary
     )
 
-    Skia.circle(
+    SkiaRenderer.circle(
       geometry.endKnobX, geometry.trackY,
       KNOB_RADIUS, theme.textPrimary
     )
@@ -97,14 +97,14 @@ class RangeSetting(
     val geometry = trackGeometry()
 
     dragging = when {
-      MouseUtils.isHoveringOver(
+      Mouse.isHoveringOver(
         geometry.startKnobX - KNOB_RADIUS,
         geometry.trackY - KNOB_RADIUS,
         KNOB_RADIUS * 2,
         KNOB_RADIUS * 2
       ) -> Knob.START
 
-      MouseUtils.isHoveringOver(
+      Mouse.isHoveringOver(
         geometry.endKnobX - KNOB_RADIUS,
         geometry.trackY - KNOB_RADIUS,
         KNOB_RADIUS * 2,
@@ -141,7 +141,7 @@ class RangeSetting(
 
   private fun updateValue() {
     val (startX, trackWidth) = trackGeometry()
-    val rel = ((MouseUtils.mouseX - startX) / trackWidth).coerceIn(0f, 1f)
+    val rel = ((Mouse.mouseX - startX) / trackWidth).coerceIn(0f, 1f)
     val raw = (min + rel * (max - min)).coerceIn(min.toFloat(), max.toFloat())
 
     when (dragging) {
@@ -191,7 +191,7 @@ class RangeSetting(
   }
 
   private fun boxWidth(text: String): Float =
-    Skia.textWidth(Skia.regularFont, text, FONT_SIZE) + VALUE_BOX_PADDING_X * 2f
+    SkiaRenderer.textWidth(SkiaRenderer.regularFont, text, FONT_SIZE) + VALUE_BOX_PADDING_X * 2f
 
   private data class TrackGeometry(
     val startX: Float,
