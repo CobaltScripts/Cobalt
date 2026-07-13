@@ -11,18 +11,17 @@ import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
 
 class AStarPathfinder(
-    val startX: Int,
-    val startY: Int,
-    val startZ: Int,
-    val goal: Goal,
-    val movements: Array<out Movement>,
-    val returnBestNode: Boolean,
+  val startX: Int,
+  val startY: Int,
+  val startZ: Int,
+  val goal: Goal,
+  val movements: Array<out Movement>,
+  val returnBestNode: Boolean,
 ) {
 
   private val closedSet = Long2ObjectOpenHashMap<PathNode>()
   private var startTime = 0L
 
-  @Suppress("CognitiveComplexMethod")
   fun findPath(): Path? {
     val ctx = CalculationContext()
     val openSet = BinaryHeapOpenSet()
@@ -59,39 +58,48 @@ class AStarPathfinder(
         return reconstruct(currentNode)
       }
 
-      for (move in movements) {
-        res.reset()
-        move.calculateCost(ctx, currentNode, res)
-
-        if (res.cost >= ctx.infCost) {
-          continue
-        }
-
-        val neighborCostSoFar = currentNode.costSoFar + res.cost
-        val neighborNode = getNode(
-          res.x, res.y, res.z,
-          PathNode.longHash(res.x, res.y, res.z)
-        )
-
-        if (neighborCostSoFar < neighborNode.costSoFar) {
-          neighborNode.parent = currentNode
-          neighborNode.costSoFar = neighborCostSoFar
-          neighborNode.totalCost = neighborCostSoFar + neighborNode.costToEnd
-          neighborNode.type = move.type
-
-          if (neighborNode.heapPosition == -1) {
-            openSet.add(neighborNode)
-          } else {
-            openSet.relocate(neighborNode)
-          }
-        }
-      }
+      evaluateMovements(currentNode, ctx, res, openSet)
     }
 
     return if (returnBestNode) {
       reconstruct(bestNode)
     } else {
       null
+    }
+  }
+
+  private fun evaluateMovements(
+    currentNode: PathNode,
+    ctx: CalculationContext,
+    res: MovementResult,
+    openSet: BinaryHeapOpenSet,
+  ) {
+    for (move in movements) {
+      res.reset()
+      move.calculateCost(ctx, currentNode, res)
+
+      if (res.cost >= ctx.infCost) {
+        continue
+      }
+
+      val neighborCostSoFar = currentNode.costSoFar + res.cost
+      val neighborNode = getNode(
+        res.x, res.y, res.z,
+        PathNode.longHash(res.x, res.y, res.z)
+      )
+
+      if (neighborCostSoFar < neighborNode.costSoFar) {
+        neighborNode.parent = currentNode
+        neighborNode.costSoFar = neighborCostSoFar
+        neighborNode.totalCost = neighborCostSoFar + neighborNode.costToEnd
+        neighborNode.type = move.type
+
+        if (neighborNode.heapPosition == -1) {
+          openSet.add(neighborNode)
+        } else {
+          openSet.relocate(neighborNode)
+        }
+      }
     }
   }
 
