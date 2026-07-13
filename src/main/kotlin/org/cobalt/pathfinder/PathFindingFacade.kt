@@ -1,29 +1,22 @@
 package org.cobalt.pathfinder
 
-import java.awt.Color
 import net.minecraft.client.player.KeyboardInput
 import org.cobalt.Cobalt.minecraft
-import org.cobalt.dsl.centerVec
-import org.cobalt.dsl.smallBox
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
 import org.cobalt.event.impl.WorldEvent
-import org.cobalt.module.impl.misc.Debug
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.goal.Goal
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.impl.CalculatingState
-import org.cobalt.ui.theme.ThemeManager
 import org.cobalt.util.ChatUtils
 import org.cobalt.util.MessageType
 import org.cobalt.util.PlayerUtils
-import org.cobalt.util.WorldRenderUtils
 
-object PathExecutor {
-
+object PathFindingFacade {
   var state: ExecutorState? = null
 
   var currentGoal: Goal? = null
@@ -129,40 +122,7 @@ object PathExecutor {
 
     state?.onRender()
 
-    if (state is CalculatingState) {
-      return
-    }
-
-    val theme = ThemeManager.activeTheme
-    val nodes = path?.nodes ?: return
-    val keyNodes = path?.keyNodes ?: return
-
-    val targetNode = nodes[pathIndex].centerVec
-    val playerPos = PlayerUtils.position.centerVec()
-
-    if (Debug.enabled) {
-      WorldRenderUtils.drawBox(playerPos.smallBox(), Color.GREEN)
-      WorldRenderUtils.drawBox(targetNode.smallBox(), Color.RED)
-    }
-
-    for (index in keyNodes.indices) {
-      val node = keyNodes[index]
-
-      WorldRenderUtils.drawBlockPos(
-        if (node.isFly) node.block else node.blockStandingOn,
-        color = theme.accentPrimary
-      )
-
-      if (index > 0) {
-        val prev = keyNodes[index - 1]
-
-        WorldRenderUtils.drawLine(
-          if (prev.isFly) prev.centerVec else prev.topCenterVec,
-          if (node.isFly) node.centerVec else node.topCenterVec,
-          theme.accentSecondary
-        )
-      }
-    }
+//    PathRenderer.render()
   }
 
 }

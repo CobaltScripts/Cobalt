@@ -1,6 +1,6 @@
 package org.cobalt.pathfinder.state.impl
 
-import org.cobalt.pathfinder.PathExecutor
+import org.cobalt.pathfinder.PathFindingFacade
 import org.cobalt.pathfinder.PathFinderConfig
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
@@ -13,18 +13,18 @@ class CalculatingState : ExecutorState() {
 
   override fun enter() {
     val startPos = PlayerUtils.position
-    val goal = PathExecutor.currentGoal
-    val availableMovements = PathExecutor.availableMovements
+    val goal = PathFindingFacade.currentGoal
+    val availableMovements = PathFindingFacade.availableMovements
 
     if (goal == null) {
       ChatUtils.sendSystemMessage("<red>Cannot calculate path, no goal set!</red>")
-      PathExecutor.stop()
+      PathFindingFacade.stop()
       return
     }
 
     if (availableMovements == null) {
       ChatUtils.sendSystemMessage("<red>Cannot calculate path, no movements set!</red>")
-      PathExecutor.stop()
+      PathFindingFacade.stop()
       return
     }
 
@@ -40,12 +40,12 @@ class CalculatingState : ExecutorState() {
 
       if (path == null) {
         ChatUtils.sendSystemMessage("<red>Unable to find a path</red>")
-        PathExecutor.stop()
+        PathFindingFacade.stop()
         return@runAsync
       }
 
-      PathExecutor.path = path
-      PathExecutor.changeState(PathingState())
+      PathFindingFacade.path = path
+      PathFindingFacade.changeState(PathingState())
 
       ChatUtils.sendSystemMessage(
         "Found ${path.nodes.size} node path in ${path.timeElapsed.inWholeMilliseconds}ms",

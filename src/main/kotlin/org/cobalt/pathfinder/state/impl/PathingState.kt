@@ -9,9 +9,10 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.dsl.centerVec
 import org.cobalt.module.impl.misc.Debug
 import org.cobalt.module.impl.misc.Rotations
-import org.cobalt.pathfinder.PathExecutor
+import org.cobalt.pathfinder.PathFindingFacade
 import org.cobalt.pathfinder.PathFinderConfig
 import org.cobalt.pathfinder.calculate.PathNode
+import org.cobalt.pathfinder.helper.PathRenderer
 import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.movement.MovementHelper
 import org.cobalt.pathfinder.movement.impl.fly.FlyAscendMovement
@@ -24,12 +25,12 @@ import org.cobalt.util.rotation.RotationTarget
 
 class PathingState : ExecutorState() {
 
-  private val path = PathExecutor.path
-  private val movements = PathExecutor.availableMovements
+  private val path = PathFindingFacade.path
+  private val movements = PathFindingFacade.availableMovements
   private val jumpDelay = Clock()
 
   private inline val pathIndex: Int
-    get() = PathExecutor.pathIndex
+    get() = PathFindingFacade.pathIndex
 
   override fun exit() {
     input.stopMovement()
@@ -38,7 +39,7 @@ class PathingState : ExecutorState() {
 
   override fun onTick() {
     if (path == null || movements == null) {
-      PathExecutor.stop()
+      PathFindingFacade.stop()
       return
     }
 
@@ -66,9 +67,11 @@ class PathingState : ExecutorState() {
 
   override fun onRender() {
     if (path == null || movements == null) {
-      PathExecutor.stop()
+      PathFindingFacade.stop()
       return
     }
+
+    PathRenderer.render()
 
     if (!Debug.enabled) {
       return
@@ -96,11 +99,11 @@ class PathingState : ExecutorState() {
       pathIndex + 1 < nodes.size &&
       hasReached(playerPos, nodes, pathIndex)
     ) {
-      PathExecutor.pathIndex++
+      PathFindingFacade.pathIndex++
     }
 
     if (pathIndex + 1 >= nodes.size) {
-      PathExecutor.stop()
+      PathFindingFacade.stop()
     }
 
     return true
@@ -118,7 +121,7 @@ class PathingState : ExecutorState() {
       return false
     }
 
-    PathExecutor.changeState(StartFlyState())
+    PathFindingFacade.changeState(StartFlyState())
     return true
   }
 
