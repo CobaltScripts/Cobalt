@@ -309,13 +309,13 @@ object MovementHelper {
     val diff = Mth.wrapDegrees(idealYaw - playerYaw)
 
     return when {
-      diff >= -45f && diff < 45f -> PlayerInput(forward = true)
-      diff in 45f..<75f -> PlayerInput(forward = true, right = true)
-      diff in 75f..<105f -> PlayerInput(right = true)
-      diff in 105f..<150f -> PlayerInput(backward = true, right = true)
-      diff >= 150f || diff < -150f -> PlayerInput(backward = true)
-      diff in -150f..<(-105f) -> PlayerInput(backward = true, left = true)
-      diff in -105f..<(-75f) -> PlayerInput(left = true)
+      diff >= -22.5f && diff < 22.5f -> PlayerInput(forward = true)
+      diff in 22.5f..<67.5f -> PlayerInput(forward = true, right = true)
+      diff in 67.5f..<112.5f -> PlayerInput(right = true)
+      diff in 112.5f..<157.5f -> PlayerInput(backward = true, right = true)
+      diff >= 157.5f || diff < -157.5f -> PlayerInput(backward = true)
+      diff >= -157.5f && diff < -112.5f -> PlayerInput(backward = true, left = true)
+      diff >= -112.5f && diff < -67.5f -> PlayerInput(left = true)
       else -> PlayerInput(forward = true, left = true)
     }
   }
