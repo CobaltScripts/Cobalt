@@ -10,26 +10,25 @@ import org.cobalt.pathfinder.goal.Goal
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.util.PlayerUtils
 
-class AStarPathfinder(
-  val startX: Int,
-  val startY: Int,
-  val startZ: Int,
-  val goal: Goal,
-  val movements: Array<out Movement>,
-  val returnBestNode: Boolean,
-) {
-
+object AStarPathfinder {
   private val nodeCache = Long2ObjectOpenHashMap<PathNode>()
+  private var goal: Goal? = null // This can't be null after findPath is called.
+  private var availableMovements: Array<out Movement>? = null // This can't be null after findPath is called.
 
-  fun findPath(): Path? {
+  fun findPath(goal: Goal, movements: Array<out Movement>, returnBestNode: Boolean): Path? {
+    val startPos = PlayerUtils.position
     val calculationContext = CalculationContext()
     val openSet = BinaryHeapOpenSet()
     val movementResult = MovementResult()
 
-    val startNode = PathNode(
-      startX, startY, startZ, goal
-    )
+    // After this, goal and movements should never be null again, so we can do !! in private functions safely.
+    // If they are null, someone nuked the code, and we should get angry at them.
+    AStarPathfinder.goal = goal
+    availableMovements = movements
+
+    val startNode = PathNode(startPos.x, startPos.y, startPos.z, goal)
 
     startNode.costSoFar = 0.0
     startNode.totalCost = startNode.costToEnd
@@ -66,11 +65,13 @@ class AStarPathfinder(
     movementResult: MovementResult,
     openSet: BinaryHeapOpenSet,
   ) {
-    for (move in movements) {
+    for (move in availableMovements!!) {
       movementResult.reset()
       move.calculateCost(calculationContext, currentNode, movementResult)
 
-      if (movementResult.cost < calculationContext.infCost) relaxNeighbor(currentNode, move, movementResult, openSet)
+      if (movementResult.cost < calculationContext.infCost) {
+        relaxNeighbor(currentNode, move, movementResult, openSet)
+      }
     }
   }
 
@@ -81,7 +82,7 @@ class AStarPathfinder(
     openSet: BinaryHeapOpenSet
   ) {
     val neighborCostSoFar = currentNode.costSoFar + movementResult.cost
-    val neighborNode = getNode(
+    val neighborNode = getOrCacheNode(
       movementResult.x, movementResult.y, movementResult.z,
       PathNode.longHash(movementResult.x, movementResult.y, movementResult.z)
     )
@@ -100,11 +101,11 @@ class AStarPathfinder(
     }
   }
 
-  fun getNode(x: Int, y: Int, z: Int, hash: Long): PathNode {
+  fun getOrCacheNode(x: Int, y: Int, z: Int,hash: Long): PathNode {
     var node: PathNode? = nodeCache.get(hash)
 
     if (node == null) {
-      node = PathNode(x, y, z, goal)
+      node = PathNode(x, y, z, goal!!)
       nodeCache.put(hash, node)
     }
 
@@ -123,7 +124,7 @@ class AStarPathfinder(
     return Path(
       nodes = path,
       timeElapsed = (System.nanoTime() - startTime).milliseconds,
-      goal = goal
+      goal = goal!!
     )
   }
 

@@ -12,7 +12,6 @@ import org.cobalt.util.helper.Multithreading
 class CalculatingState : ExecutorState() {
 
   override fun enter() {
-    val startPos = PlayerUtils.position
     val goal = PathFindingFacade.currentGoal
     val availableMovements = PathFindingFacade.availableMovements
 
@@ -28,15 +27,8 @@ class CalculatingState : ExecutorState() {
       return
     }
 
-    val pathFinder = AStarPathfinder(
-      startPos.x, startPos.y, startPos.z,
-      goal,
-      availableMovements,
-      PathFindingConfig.returnBestNode
-    )
-
     Multithreading.runAsync {
-      val path = pathFinder.findPath()
+      val path = AStarPathfinder.findPath(goal, availableMovements, PathFindingConfig.returnBestNode)
 
       if (path == null) {
         ChatUtils.sendSystemMessage("<red>Unable to find a path</red>")
