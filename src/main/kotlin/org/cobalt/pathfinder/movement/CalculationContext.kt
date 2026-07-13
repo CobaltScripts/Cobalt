@@ -15,4 +15,5 @@ class CalculationContext {
   val jumpAmplifier = player.getEffect(MobEffects.JUMP_BOOST)?.amplifier ?: -1
 
   val blockStateAccessor = BlockStateAccessor(level)
+
 }

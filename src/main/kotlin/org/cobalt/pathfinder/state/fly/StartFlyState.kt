@@ -1,7 +1,6 @@
 package org.cobalt.pathfinder.state.fly
 
-import org.cobalt.pathfinder.PathFindingFacade
-import org.cobalt.pathfinder.helper.PathRenderer
+import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.pathing.PathingState
 import org.cobalt.util.PlayerUtils
@@ -19,11 +18,7 @@ class StartFlyState : ExecutorState() {
       return
     }
 
-    PathFindingFacade.changeState(PathingState())
-  }
-
-  override fun onRender() {
-    PathRenderer.render()
+    PathExecutor.changeState(PathingState())
   }
 
   private fun handleFlyStart(): Boolean {
@@ -68,4 +63,5 @@ class StartFlyState : ExecutorState() {
     SECOND_JUMP,
     RELEASE_SECOND_JUMP,
   }
+
 }

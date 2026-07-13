@@ -16,6 +16,7 @@ data class PathNode(
   val costToEnd = goal.heuristic(x, y, z)
   var totalCost = 1.0
   var heapPosition = -1
+
   var movementType = MovementType.WALK
   var parent: PathNode? = null
 
@@ -24,7 +25,7 @@ data class PathNode(
   val centerVec: Vec3 = Vec3(x + 0.5, y + 0.5, z + 0.5)
   val topCenterVec: Vec3 = Vec3(x + 0.5, y.toDouble(), z + 0.5)
 
-  val isFly: Boolean
+  val useMovementFly: Boolean
     get() = movementType == MovementType.FLY
 
   override fun compareTo(other: PathNode): Int {

@@ -1,9 +1,8 @@
-package org.cobalt.pathfinder
+package org.cobalt.pathfinder.helper
 
 import net.minecraft.client.player.ClientInput
 import net.minecraft.world.entity.player.Input
 import net.minecraft.world.phys.Vec2
-import org.cobalt.pathfinder.helper.PlayerInput
 
 class PathInput : ClientInput() {
 
@@ -31,13 +30,13 @@ class PathInput : ClientInput() {
 
   override fun tick() {
     this.keyPresses = Input(
-      forward,
-      backward,
-      left,
-      right,
-      jump,
-      shift,
-      sprint
+        forward,
+        backward,
+        left,
+        right,
+        jump,
+        shift,
+        sprint
     )
 
     val forwardImpulse = calculateImpulse(forward, backward)

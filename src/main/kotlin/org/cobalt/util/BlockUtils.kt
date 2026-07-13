@@ -1,14 +1,23 @@
-package org.cobalt.pathfinder.movement.rules
+package org.cobalt.util
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.EmptyBlockGetter
-import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.AmethystClusterBlock
+import net.minecraft.world.level.block.BambooStalkBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.PointedDripstoneBlock
+import net.minecraft.world.level.block.ScaffoldingBlock
+import net.minecraft.world.level.block.ShulkerBoxBlock
+import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.block.piston.MovingPistonBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.SlabType
+import net.minecraft.world.level.material.FlowingFluid
 import net.minecraft.world.level.material.Fluids
+import org.cobalt.pathfinder.helper.BlockStateAccessor
 
-object BlockSupportRules {
+object BlockUtils {
+
   @JvmStatic
   fun isWater(state: BlockState): Boolean {
     val fluid = state.fluidState.type
@@ -53,4 +62,31 @@ object BlockSupportRules {
       false
     }
   }
+
+  @JvmStatic
+  fun isFlowing(x: Int, y: Int, z: Int, state: BlockState, bsa: BlockStateAccessor): Boolean {
+    val fluidState = state.fluidState
+
+    if (fluidState.type !is FlowingFluid) {
+      return false
+    }
+
+    if (fluidState.type.getAmount(fluidState) != 8) {
+      return true
+    }
+
+    return possiblyFlowing(bsa.get(x + 1, y, z))
+      || possiblyFlowing(bsa.get(x - 1, y, z))
+      || possiblyFlowing(bsa.get(x, y, z + 1))
+      || possiblyFlowing(bsa.get(x, y, z - 1))
+  }
+
+  @JvmStatic
+  fun possiblyFlowing(state: BlockState): Boolean {
+    val fluidState = state.fluidState
+
+    return fluidState.type is FlowingFluid &&
+      fluidState.type.getAmount(fluidState) != 8
+  }
+
 }

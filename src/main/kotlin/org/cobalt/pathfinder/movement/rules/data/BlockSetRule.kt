@@ -7,6 +7,8 @@ class BlockSetRule(
   private val blocks: Set<Block>,
   override val result: Ternary,
 ) : BlockRule {
+
   override fun matches(state: BlockState): Boolean =
     state.block in blocks
+
 }

@@ -21,11 +21,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.WaterFluid
 import net.minecraft.world.level.pathfinder.PathComputationType
 import org.cobalt.pathfinder.helper.BlockStateAccessor
-import org.cobalt.pathfinder.movement.FlowingCheck
-import org.cobalt.pathfinder.movement.rules.StandOnRules.canStandOn
+import org.cobalt.pathfinder.movement.rules.StandingRules.canStandOn
 import org.cobalt.pathfinder.movement.rules.data.BlockSetRule
 import org.cobalt.pathfinder.movement.rules.data.BlockTypeRule
 import org.cobalt.pathfinder.movement.rules.data.Ternary
+import org.cobalt.util.BlockUtils
 
 object PassthroughRules {
 
@@ -152,7 +152,7 @@ object PassthroughRules {
       !state.fluidState.isEmpty -> {
         val fluidState = state.fluidState
 
-        if (FlowingCheck.isFlowing(x, y, z, state, bsa)) {
+        if (BlockUtils.isFlowing(x, y, z, state, bsa)) {
           false
         } else {
           val upState = bsa.get(x, y + 1, z)
