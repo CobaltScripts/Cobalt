@@ -17,6 +17,7 @@ import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.movement.MovementHelper
 import org.cobalt.pathfinder.movement.impl.fly.FlyAscendMovement
 import org.cobalt.pathfinder.state.ExecutorState
+import org.cobalt.util.ChatUtils
 import org.cobalt.util.PlayerUtils
 import org.cobalt.util.RotationUtils
 import org.cobalt.util.WorldRenderUtils
@@ -132,17 +133,31 @@ class PathingState : ExecutorState() {
     val index = pathIndex
     val input = PlayerInput()
 
-    if (!node.isFly || !sameXZ) {
+    if (node.isFly && sameXZ) {
+      val diffY = node.block.y - playerPos.y
+      when {
+        diffY > 0 -> input.jump = true
+        diffY < 0 -> input.sneak = true
+      }
+
+      ChatUtils.sendSystemMessage("Input: $input")
+      if (input.jump || input.sneak) return input
+      ChatUtils.sendSystemMessage("Next")
+    }
+
+    if (!sameXZ) {
       val neededKeys = MovementHelper.getNeededKeys(
         PlayerUtils.rotation.yaw,
         RotationUtils.getRotation(node.centerVec).yaw
       )
 
+      ChatUtils.sendSystemMessage("Need keys: $neededKeys")
       input.apply(neededKeys)
     }
 
+    if (PathFinderConfig.shouldSprint) input.sprint = true
+
     if (!node.isFly) {
-      if (PathFinderConfig.shouldSprint) input.sprint = true
       if (shouldJump(playerPos, nodes, index)) input.jump = true
     }
 
@@ -162,27 +177,24 @@ class PathingState : ExecutorState() {
     nodes: List<PathNode>,
     currentIndex: Int,
   ): Boolean {
-    val level = minecraft.level ?: return false
     val node = nodes[currentIndex]
 
-    if (node.isFly) {
-      return false
-    }
+//    if (node.isFly) return false
 
     val nodeCenter = node.centerVec
     val playerVec = playerPos.centerVec()
 
-    if (playerVec.distanceToSqr(nodeCenter) < 0.3 * 0.3) {
-      return true
-    }
+    if (playerVec.distanceToSqr(nodeCenter) < PathFinderConfig.hasReachedThreshold) return true
 
-    if (currentIndex + 1 >= nodes.size) {
-      return false
-    }
+    if (currentIndex + 1 >= nodes.size) return false
 
-    val isSlab = MovementHelper.isBottomSlab(level.getBlockState(node.blockStandingOn))
+    val level = minecraft.level
+    requireNotNull(level)
 
-    if (!isSlab && (node.block.y > playerPos.y || !PlayerUtils.onGround)) {
+    if (
+      !MovementHelper.isBottomSlab(level.getBlockState(node.blockStandingOn)) &&
+      (node.block.y > playerPos.y || !PlayerUtils.onGround)
+    ) {
       return false
     }
 
@@ -193,8 +205,8 @@ class PathingState : ExecutorState() {
       return false
     }
 
-    val perpDistSq = toPlayer.cross(segment).lengthSqr() / segment.lengthSqr()
-    return perpDistSq < 1.0
+    val squaredPerpendicularDistance = toPlayer.cross(segment).lengthSqr() / segment.lengthSqr()
+    return squaredPerpendicularDistance < 1.0
   }
 
   private fun shouldJump(

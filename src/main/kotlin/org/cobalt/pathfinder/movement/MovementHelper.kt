@@ -21,6 +21,39 @@ import org.cobalt.pathfinder.precompute.Ternary
 import org.cobalt.pathfinder.precompute.Ternary.*
 
 object MovementHelper {
+  private const val DIRECTIONS_COUNT = 8
+  private const val FULL_CIRCLE_DEGREES = 360f
+  private const val SECTOR_WIDTH_DEGREES = FULL_CIRCLE_DEGREES / DIRECTIONS_COUNT           // 45f
+  private const val SECTOR_HALF_WIDTH_DEGREES = SECTOR_WIDTH_DEGREES / 2f                   // 22.5f
+
+  private const val DEAD_BAND_DEGREES = 0.05f
+  private const val SWITCH_THRESHOLD_DEGREES = SECTOR_HALF_WIDTH_DEGREES + DEAD_BAND_DEGREES // 27.5f
+
+  private const val FORWARD_RIGHT_START_DEGREES = SECTOR_HALF_WIDTH_DEGREES                              // 22.5f
+  private const val RIGHT_START_DEGREES = FORWARD_RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES             // 67.5f
+  private const val BACK_RIGHT_START_DEGREES = RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES                // 112.5f
+  private const val BACKWARD_START_DEGREES = BACK_RIGHT_START_DEGREES + SECTOR_WIDTH_DEGREES             // 157.5f
+
+  private const val FORWARD_LEFT_START_DEGREES = -FORWARD_RIGHT_START_DEGREES   // -22.5f
+  private const val LEFT_START_DEGREES = -RIGHT_START_DEGREES                   // -67.5f
+  private const val BACK_LEFT_START_DEGREES = -BACK_RIGHT_START_DEGREES         // -112.5f
+  private const val BACKWARD_NEG_START_DEGREES = -BACKWARD_START_DEGREES        // -157.5f
+
+  private const val FORWARD_RIGHT_HOLD_DEGREES = FORWARD_RIGHT_START_DEGREES + DEAD_BAND_DEGREES
+  private const val RIGHT_HOLD_DEGREES = RIGHT_START_DEGREES + DEAD_BAND_DEGREES
+  private const val BACK_RIGHT_HOLD_DEGREES = BACK_RIGHT_START_DEGREES + DEAD_BAND_DEGREES
+  private const val BACKWARD_HOLD_DEGREES = BACKWARD_START_DEGREES + DEAD_BAND_DEGREES
+
+  private const val FORWARD_LEFT_HOLD_DEGREES = FORWARD_LEFT_START_DEGREES - DEAD_BAND_DEGREES
+  private const val LEFT_HOLD_DEGREES = LEFT_START_DEGREES - DEAD_BAND_DEGREES
+  private const val BACK_LEFT_HOLD_DEGREES = BACK_LEFT_START_DEGREES - DEAD_BAND_DEGREES
+  private const val BACKWARD_NEG_HOLD_DEGREES = BACKWARD_NEG_START_DEGREES - DEAD_BAND_DEGREES
+
+  // --- Sector identity ----------------------------------------------------
+  private enum class Sector { FORWARD, FORWARD_RIGHT, RIGHT, BACK_RIGHT, BACKWARD, BACK_LEFT, LEFT, FORWARD_LEFT }
+
+  // Persists between calls so we can apply hysteresis.
+  private var lastSector: Sector = Sector.FORWARD
 
   @JvmStatic
   fun canWalkOn(
@@ -308,16 +341,46 @@ object MovementHelper {
   fun getNeededKeys(playerYaw: Float, idealYaw: Float): PlayerInput {
     val diff = Mth.wrapDegrees(idealYaw - playerYaw)
 
-    return when {
-      diff >= -22.5f && diff < 22.5f -> PlayerInput(forward = true)
-      diff in 22.5f..<67.5f -> PlayerInput(forward = true, right = true)
-      diff in 67.5f..<112.5f -> PlayerInput(right = true)
-      diff in 112.5f..<157.5f -> PlayerInput(backward = true, right = true)
-      diff >= 157.5f || diff < -157.5f -> PlayerInput(backward = true)
-      diff >= -157.5f && diff < -112.5f -> PlayerInput(backward = true, left = true)
-      diff >= -112.5f && diff < -67.5f -> PlayerInput(left = true)
-      else -> PlayerInput(forward = true, left = true)
+    if (staysInSector(lastSector, diff)) {
+      return sectorToInput(lastSector)
     }
+
+    val newSector = classify(diff)
+    lastSector = newSector
+    return sectorToInput(newSector)
+  }
+
+  private fun staysInSector(sector: Sector, diff: Float): Boolean = when (sector) {
+    Sector.FORWARD -> diff in FORWARD_LEFT_HOLD_DEGREES..<FORWARD_RIGHT_HOLD_DEGREES
+    Sector.FORWARD_RIGHT -> diff >= FORWARD_RIGHT_START_DEGREES - DEAD_BAND_DEGREES && diff < RIGHT_HOLD_DEGREES
+    Sector.RIGHT -> diff >= RIGHT_START_DEGREES - DEAD_BAND_DEGREES && diff < BACK_RIGHT_HOLD_DEGREES
+    Sector.BACK_RIGHT -> diff >= BACK_RIGHT_START_DEGREES - DEAD_BAND_DEGREES && diff < BACKWARD_HOLD_DEGREES
+    Sector.BACKWARD -> diff >= BACKWARD_START_DEGREES - DEAD_BAND_DEGREES || diff < BACKWARD_NEG_HOLD_DEGREES
+    Sector.BACK_LEFT -> diff >= BACKWARD_NEG_START_DEGREES - DEAD_BAND_DEGREES && diff < BACK_LEFT_HOLD_DEGREES
+    Sector.LEFT -> diff >= BACK_LEFT_START_DEGREES - DEAD_BAND_DEGREES && diff < LEFT_HOLD_DEGREES
+    Sector.FORWARD_LEFT -> diff >= LEFT_START_DEGREES - DEAD_BAND_DEGREES && diff < FORWARD_LEFT_HOLD_DEGREES
+  }
+
+  private fun classify(diff: Float): Sector = when {
+    diff in FORWARD_LEFT_START_DEGREES..<FORWARD_RIGHT_START_DEGREES -> Sector.FORWARD
+    diff in FORWARD_RIGHT_START_DEGREES..<RIGHT_START_DEGREES -> Sector.FORWARD_RIGHT
+    diff in RIGHT_START_DEGREES..<BACK_RIGHT_START_DEGREES -> Sector.RIGHT
+    diff in BACK_RIGHT_START_DEGREES..<BACKWARD_START_DEGREES -> Sector.BACK_RIGHT
+    diff !in BACKWARD_NEG_START_DEGREES..<BACKWARD_START_DEGREES -> Sector.BACKWARD
+    diff in BACKWARD_NEG_START_DEGREES..<BACK_LEFT_START_DEGREES -> Sector.BACK_LEFT
+    diff in BACK_LEFT_START_DEGREES..<LEFT_START_DEGREES -> Sector.LEFT
+    else -> Sector.FORWARD_LEFT
+  }
+
+  private fun sectorToInput(sector: Sector): PlayerInput = when (sector) {
+    Sector.FORWARD -> PlayerInput(forward = true)
+    Sector.FORWARD_RIGHT -> PlayerInput(forward = true, right = true)
+    Sector.RIGHT -> PlayerInput(right = true)
+    Sector.BACK_RIGHT -> PlayerInput(backward = true, right = true)
+    Sector.BACKWARD -> PlayerInput(backward = true)
+    Sector.BACK_LEFT -> PlayerInput(backward = true, left = true)
+    Sector.LEFT -> PlayerInput(left = true)
+    Sector.FORWARD_LEFT -> PlayerInput(forward = true, left = true)
   }
 
   @JvmStatic
