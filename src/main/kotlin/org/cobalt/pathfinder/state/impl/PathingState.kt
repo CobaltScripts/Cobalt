@@ -10,9 +10,12 @@ import org.cobalt.dsl.centerVec
 import org.cobalt.module.impl.misc.Debug
 import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.pathfinder.PathExecutor
+import org.cobalt.pathfinder.PathExecutor.config
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.movement.MovementHelper
+import org.cobalt.pathfinder.movement.MovementType
+import org.cobalt.pathfinder.movement.impl.fly.FlyAscendMovement
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.PlayerUtils
 import org.cobalt.util.RotationUtils
@@ -23,7 +26,7 @@ import org.cobalt.util.rotation.RotationTarget
 class PathingState : ExecutorState() {
 
   private val path = PathExecutor.path
-  private val config = PathExecutor.config
+  private val movements = PathExecutor.availableMovements
   private val jumpDelay = Clock()
 
   private inline val pathIndex: Int
@@ -35,7 +38,7 @@ class PathingState : ExecutorState() {
   }
 
   override fun onTick() {
-    if (path == null || config == null) {
+    if (path == null || movements == null) {
       PathExecutor.stop()
       return
     }
@@ -63,7 +66,7 @@ class PathingState : ExecutorState() {
   }
 
   override fun onRender() {
-    if (path == null || config == null) {
+    if (path == null || movements == null) {
       PathExecutor.stop()
       return
     }
@@ -105,9 +108,11 @@ class PathingState : ExecutorState() {
   }
 
   private fun shouldStartFlying(node: PathNode): Boolean {
+    requireNotNull(movements)
+
     if (
       !node.isFly ||
-      !config!!.useFlyMovement ||
+      !movements.contains(FlyAscendMovement.DEFAULT) ||
       !PlayerUtils.canFly ||
       PlayerUtils.isFlying
     ) {
@@ -137,7 +142,7 @@ class PathingState : ExecutorState() {
     }
 
     if (!node.isFly) {
-      if (config!!.shouldSprint) input.sprint = true
+      if (config.shouldSprint) input.sprint = true
       if (shouldJump(playerPos, nodes, index)) input.jump = true
     }
 

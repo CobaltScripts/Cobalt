@@ -5,11 +5,12 @@ import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementHelper
 import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.pathfinder.movement.MovementType
 
 class DiagonalMovement(
   val dx: Int,
   val dz: Int,
-) : Movement(Type.WALK) {
+) : Movement(MovementType.WALK) {
 
   override fun calculateCost(
     ctx: CalculationContext,

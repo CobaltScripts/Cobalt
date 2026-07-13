@@ -11,6 +11,10 @@ import org.cobalt.event.impl.TickEvent
 import org.cobalt.event.impl.WorldEvent
 import org.cobalt.module.impl.misc.Debug
 import org.cobalt.pathfinder.calculate.Path
+import org.cobalt.pathfinder.calculate.PathMode
+import org.cobalt.pathfinder.goal.Goal
+import org.cobalt.pathfinder.goal.GoalBlock
+import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.impl.CalculatingState
 import org.cobalt.ui.theme.ThemeManager
@@ -22,7 +26,10 @@ import org.cobalt.util.WorldRenderUtils
 object PathExecutor {
 
   var state: ExecutorState? = null
-  var config: PathConfig? = null
+  var config: PathConfig = PathConfig()
+
+  var currentGoal: Goal? = null
+  var availableMovements: Array<out Movement>? = null
 
   var path: Path? = null
   var pathIndex: Int = 0
@@ -34,24 +41,37 @@ object PathExecutor {
     EventBus.register(this)
   }
 
-  fun goTo(config: PathConfig) {
-    stop()
+  fun goTo(goal: Goal, fly: Boolean = false) {
+    // Are we sure we want to do this? There's no warning or anything.
+    // I've kept it but with a debug message
+    if (running) {
+      ChatUtils.sendSystemMessage(
+        "Stopping current pathfinder because a new one started.",
+        MessageType.DEBUG
+      )
+      stop()
+    }
 
-    if (config.useFlyMovement && !PlayerUtils.canFly) {
+    if (fly && !PlayerUtils.canFly) {
       ChatUtils.sendSystemMessage("<red>Invalid path config, since player cannot fly!</red>")
       return
     }
 
-
     val player = minecraft.player
 
-    if (player != null) {
-      player.input = pathInput
-    } else {
+    if (player == null) {
+      ChatUtils.sendSystemMessage(
+        "Tried running pathfinder, but minecraft.player is null!",
+        MessageType.DEBUG
+      )
       return
+    } else {
+      player.input = pathInput
     }
 
-    this.config = config
+    availableMovements = if (fly) PathMode.FLY.movements else PathMode.WALK.movements
+    currentGoal = goal
+
     this.running = true
 
     changeState(CalculatingState())
@@ -68,7 +88,6 @@ object PathExecutor {
     }
 
     running = false
-    config = null
 
     path = null
     pathIndex = 0

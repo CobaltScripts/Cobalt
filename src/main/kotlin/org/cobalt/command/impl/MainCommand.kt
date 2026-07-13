@@ -32,13 +32,7 @@ object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
 
   @SubCommand
   fun goTo(x: Int, y: Int, z: Int, fly: Boolean) {
-    val mode = if (fly) PathMode.FLY else PathMode.WALK
-    val config = PathConfig(
-      goal = GoalBlock(x, y, z),
-      movements = mode.movements
-    )
-
-    PathExecutor.goTo(config)
+    PathExecutor.goTo(GoalBlock(x, y, z), fly)
   }
 
 }

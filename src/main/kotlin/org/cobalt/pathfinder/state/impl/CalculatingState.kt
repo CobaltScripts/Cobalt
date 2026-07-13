@@ -13,10 +13,25 @@ class CalculatingState : ExecutorState() {
   override fun enter() {
     val config = PathExecutor.config ?: return
     val startPos = PlayerUtils.position
+    val goal = PathExecutor.currentGoal
+    val availableMovements = PathExecutor.availableMovements
+
+    if (goal == null) {
+      ChatUtils.sendSystemMessage("<red>Cannot calculate path, no goal set!</red>")
+      PathExecutor.stop()
+      return
+    }
+
+    if (availableMovements == null) {
+      ChatUtils.sendSystemMessage("<red>Cannot calculate path, no movements set!</red>")
+      PathExecutor.stop()
+      return
+    }
 
     val pathFinder = AStarPathfinder(
       startPos.x, startPos.y, startPos.z,
-      config.goal, config.movements,
+      goal,
+      availableMovements,
       config.returnBestNode
     )
 

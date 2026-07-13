@@ -5,8 +5,9 @@ import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementHelper
 import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.pathfinder.movement.MovementType
 
-class FlyAscendMovement : Movement(Type.FLY) {
+class FlyAscendMovement : Movement(MovementType.FLY) {
 
   override fun calculateCost(
     ctx: CalculationContext,

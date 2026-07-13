@@ -5,12 +5,13 @@ import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementHelper
 import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.pathfinder.movement.MovementType
 
 // TODO: Handle ladder & vine climbing & jump boost
 class AscendMovement(
   val dx: Int,
   val dz: Int,
-) : Movement(Type.WALK) {
+) : Movement(MovementType.WALK) {
 
   override fun calculateCost(
     ctx: CalculationContext,
