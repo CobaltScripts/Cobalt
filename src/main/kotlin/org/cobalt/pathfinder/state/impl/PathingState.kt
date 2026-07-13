@@ -114,8 +114,6 @@ class PathingState : ExecutorState() {
 
     if (
       !node.isFly ||
-      !movements.contains(FlyAscendMovement.DEFAULT) ||
-      !PlayerUtils.canFly ||
       PlayerUtils.isFlying
     ) {
       return false
