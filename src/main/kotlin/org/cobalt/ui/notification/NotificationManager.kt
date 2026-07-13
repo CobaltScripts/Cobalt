@@ -40,17 +40,25 @@ object NotificationManager {
 
     while (activeNotifications.size < 3 && notifQueue.isNotEmpty()) {
       val notif = notifQueue.removeAt(0)
-      val targetY = computeTargetY(windowHeight, activeNotifications.size, notif.height)
-
-      notif.targetY = targetY
-      notif.previousY = targetY
       notif.start(currentTime)
-
       activeNotifications.add(notif)
     }
 
-    activeNotifications.forEachIndexed { index, notification ->
-      notification.moveTo(computeTargetY(windowHeight, index, notification.height))
+    var currentY = windowHeight - SCREEN_MARGIN
+
+    for (i in activeNotifications.size - 1 downTo 0) {
+      val notif = activeNotifications[i]
+      currentY -= notif.height
+      val targetY = currentY
+
+      if (notif.targetY == 0f) {
+        notif.targetY = targetY
+        notif.previousY = targetY
+      } else {
+        notif.moveTo(targetY)
+      }
+
+      currentY -= SCREEN_MARGIN
     }
 
     SkiaPIP.drawSkia(event.graphics) {
@@ -60,8 +68,6 @@ object NotificationManager {
     }
   }
 
-  private fun computeTargetY(screenHeight: Float, index: Int, notifHeight: Float): Float {
-    return screenHeight - (index + 1) * (notifHeight + 10f) - 10f
-  }
+  private const val SCREEN_MARGIN: Float = 10f
 
 }

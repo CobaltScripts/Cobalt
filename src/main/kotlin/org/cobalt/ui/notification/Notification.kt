@@ -71,22 +71,24 @@ class Notification(
 
   private fun drawText() {
     val contentWidth = width - CONTENT_PADDING * 2
+    val hasDescription = description.isNotBlank()
+    val titleFontSize = if (hasDescription) TITLE_FONT_SIZE else TITLE_FONT_SIZE_ALONE
+
+    val titleHeight = Skia.wrappedTextHeight(Skia.boldFont, title, contentWidth, titleFontSize)
 
     Skia.wrappedText(
       Skia.boldFont, title,
       xPos + CONTENT_PADDING, yPos + CONTENT_PADDING,
-      contentWidth, TITLE_FONT_SIZE, theme.textPrimary
+      contentWidth, titleFontSize, theme.textPrimary,
     )
 
-    val titleHeight = Skia.wrappedTextHeight(
-      Skia.boldFont, title, contentWidth, TITLE_FONT_SIZE
-    )
-
-    Skia.wrappedText(
-      Skia.boldFont, description,
-      xPos + CONTENT_PADDING, yPos + CONTENT_PADDING + titleHeight + TITLE_DESCRIPTION_GAP,
-      contentWidth, DESCRIPTION_FONT_SIZE, theme.textSecondary
-    )
+    if (hasDescription) {
+      Skia.wrappedText(
+        Skia.boldFont, description,
+        xPos + CONTENT_PADDING, yPos + CONTENT_PADDING + titleHeight + TITLE_DESCRIPTION_GAP,
+        contentWidth, DESCRIPTION_FONT_SIZE, theme.textSecondary,
+      )
+    }
   }
 
   private fun drawProgressBar() {
@@ -129,7 +131,6 @@ class Notification(
 
   companion object {
     private const val DEFAULT_WIDTH: Float = 350f
-    private const val MIN_HEIGHT: Float = 100f
 
     private const val SCREEN_MARGIN: Float = 10f
     private const val CONTENT_PADDING: Float = 15f
@@ -137,27 +138,35 @@ class Notification(
     private const val CORNER_RADIUS: Float = 5f
 
     private const val TITLE_FONT_SIZE: Float = 16f
+    private const val TITLE_FONT_SIZE_ALONE: Float = 18f
     private const val DESCRIPTION_FONT_SIZE: Float = 14f
 
     private const val PROGRESS_BAR_HEIGHT: Float = 5f
 
     private fun calculateHeight(title: String, description: String): Float {
+      val titleFontSize = if (description.isNotBlank()) TITLE_FONT_SIZE else TITLE_FONT_SIZE_ALONE
+
       val titleHeight = Skia.wrappedTextHeight(
         Skia.boldFont, title,
         DEFAULT_WIDTH - CONTENT_PADDING * 2,
-        TITLE_FONT_SIZE
+        titleFontSize
       )
 
-      val descHeight = Skia.wrappedTextHeight(
-        Skia.boldFont, description,
-        DEFAULT_WIDTH - CONTENT_PADDING * 2,
-        DESCRIPTION_FONT_SIZE
-      )
+      var descHeight = 0f
 
-      val verticalOverhead =
-        CONTENT_PADDING * 2 + TITLE_DESCRIPTION_GAP + PROGRESS_BAR_HEIGHT
+      if (description.isNotBlank()) {
+        descHeight = Skia.wrappedTextHeight(
+          Skia.boldFont, description,
+          DEFAULT_WIDTH - CONTENT_PADDING * 2,
+          DESCRIPTION_FONT_SIZE
+        )
+      }
 
-      return maxOf(MIN_HEIGHT, titleHeight + descHeight + verticalOverhead)
+      val verticalOverhead = CONTENT_PADDING * 2 +
+        TITLE_DESCRIPTION_GAP +
+        PROGRESS_BAR_HEIGHT
+
+      return titleHeight + descHeight + verticalOverhead
     }
   }
 
