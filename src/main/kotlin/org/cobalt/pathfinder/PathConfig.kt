@@ -4,4 +4,5 @@ class PathConfig(
   val shouldSprint: Boolean = true,
   val preferShifting: Boolean = false,
   val returnBestNode: Boolean = false,
+  val maxCalculationTime: Long = 5_000,
 )
