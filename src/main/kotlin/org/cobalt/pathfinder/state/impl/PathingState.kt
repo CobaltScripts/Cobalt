@@ -10,14 +10,12 @@ import org.cobalt.dsl.centerVec
 import org.cobalt.module.impl.misc.Debug
 import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.pathfinder.PathFindingFacade
-import org.cobalt.pathfinder.PathFinderConfig
+import org.cobalt.pathfinder.PathFindingConfig
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.helper.PathRenderer
 import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.movement.MovementHelper
-import org.cobalt.pathfinder.movement.impl.fly.FlyAscendMovement
 import org.cobalt.pathfinder.state.ExecutorState
-import org.cobalt.util.ChatUtils
 import org.cobalt.util.PlayerUtils
 import org.cobalt.util.RotationUtils
 import org.cobalt.util.WorldRenderUtils
@@ -152,7 +150,7 @@ class PathingState : ExecutorState() {
       input.apply(neededKeys)
     }
 
-    if (PathFinderConfig.shouldSprint) input.sprint = true
+    if (PathFindingConfig.shouldSprint) input.sprint = true
 
     if (!node.isFly) {
       if (shouldJump(playerPos, nodes, index)) input.jump = true
@@ -179,7 +177,7 @@ class PathingState : ExecutorState() {
     val nodeCenter = node.centerVec
     val playerVec = playerPos.centerVec()
 
-    if (playerVec.distanceToSqr(nodeCenter) < PathFinderConfig.hasReachedThreshold) return true
+    if (playerVec.distanceToSqr(nodeCenter) < PathFindingConfig.hasReachedThreshold) return true
 
     if (currentIndex + 1 >= nodes.size) return false
 

@@ -1,7 +1,7 @@
 package org.cobalt.pathfinder.state.impl
 
 import org.cobalt.pathfinder.PathFindingFacade
-import org.cobalt.pathfinder.PathFinderConfig
+import org.cobalt.pathfinder.PathFindingConfig
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.ChatUtils
@@ -32,7 +32,7 @@ class CalculatingState : ExecutorState() {
       startPos.x, startPos.y, startPos.z,
       goal,
       availableMovements,
-      PathFinderConfig.returnBestNode
+      PathFindingConfig.returnBestNode
     )
 
     Multithreading.runAsync {

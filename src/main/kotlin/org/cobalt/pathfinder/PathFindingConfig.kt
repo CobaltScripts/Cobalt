@@ -1,6 +1,6 @@
 package org.cobalt.pathfinder
 
-object PathFinderConfig {
+object PathFindingConfig {
   var shouldSprint: Boolean = true
   var preferShifting: Boolean = false
   var returnBestNode: Boolean = false
