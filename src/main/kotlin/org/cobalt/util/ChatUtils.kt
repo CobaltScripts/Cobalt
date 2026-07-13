@@ -12,10 +12,21 @@ object ChatUtils {
 
   private val logger = LoggerFactory.getLogger(this::class.java)
 
+  private const val DARK_GRAY = "<dark_gray>"
+  private const val RESET = "<reset>"
+  private const val GRADIENT_END = "</gradient>"
+
+  private const val DEFAULT_GRADIENT = "<gradient:#4CADD0:#B2F9FF>"
+  private const val DEBUG_GRADIENT = "<gradient:#369876:#71FF9E>"
+
+  private const val PREFIX_START = "$DARK_GRAY[$DARK_GRAY]"
+  private const val PREFIX_END = "$DARK_GRAY] $RESET"
+
   private val defaultPrefix =
-    "<dark_gray>[</dark_gray><gradient:#4CADD0:#B2F9FF>${Cobalt.MOD_NAME}</gradient><dark_gray>] </dark_gray><reset>"
+    "$PREFIX_START$DEFAULT_GRADIENT${Cobalt.MOD_NAME}$GRADIENT_END$PREFIX_END"
+
   private val debugPrefix =
-    "<dark_gray>[</dark_gray><gradient:#369876:#71FF9E>${Cobalt.MOD_NAME} Debug</gradient><dark_gray>] </dark_gray><reset>"
+    "$PREFIX_START$DEBUG_GRADIENT${Cobalt.MOD_NAME} Debug$GRADIENT_END$PREFIX_END"
 
   private var lastDebugMessage: String? = null
 
