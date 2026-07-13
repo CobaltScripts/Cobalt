@@ -140,9 +140,7 @@ class PathingState : ExecutorState() {
         diffY < 0 -> input.sneak = true
       }
 
-      ChatUtils.sendSystemMessage("Input: $input")
       if (input.jump || input.sneak) return input
-      ChatUtils.sendSystemMessage("Next")
     }
 
     if (!sameXZ) {
@@ -151,7 +149,6 @@ class PathingState : ExecutorState() {
         RotationUtils.getRotation(node.centerVec).yaw
       )
 
-      ChatUtils.sendSystemMessage("Need keys: $neededKeys")
       input.apply(neededKeys)
     }
 
@@ -178,8 +175,6 @@ class PathingState : ExecutorState() {
     currentIndex: Int,
   ): Boolean {
     val node = nodes[currentIndex]
-
-//    if (node.isFly) return false
 
     val nodeCenter = node.centerVec
     val playerVec = playerPos.centerVec()
