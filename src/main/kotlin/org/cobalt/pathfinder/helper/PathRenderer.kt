@@ -32,15 +32,15 @@ object PathRenderer {
         color = theme.accentPrimary
       )
 
-      if (index > 0) {
-        val prev = keyNodes[index - 1]
+      if (index <= 0) continue
 
-        WorldRenderUtils.drawLine(
-          if (prev.isFly) prev.centerVec else prev.topCenterVec,
-          if (node.isFly) node.centerVec else node.topCenterVec,
-          theme.accentSecondary
-        )
-      }
+      val prev = keyNodes[index - 1]
+
+      WorldRenderUtils.drawLine(
+        if (prev.isFly) prev.centerVec else prev.topCenterVec,
+        if (node.isFly) node.centerVec else node.topCenterVec,
+        theme.accentSecondary
+      )
     }
   }
 }
