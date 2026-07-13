@@ -1,12 +1,11 @@
 package org.cobalt.pathfinder.state.impl
 
-import org.cobalt.pathfinder.PathFindingFacade
 import org.cobalt.pathfinder.PathFindingConfig
+import org.cobalt.pathfinder.PathFindingFacade
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.ChatUtils
 import org.cobalt.util.MessageType
-import org.cobalt.util.PlayerUtils
 import org.cobalt.util.helper.Multithreading
 
 class CalculatingState : ExecutorState() {

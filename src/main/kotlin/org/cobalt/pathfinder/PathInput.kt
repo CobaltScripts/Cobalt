@@ -3,7 +3,6 @@ package org.cobalt.pathfinder
 import net.minecraft.client.player.ClientInput
 import net.minecraft.world.entity.player.Input
 import net.minecraft.world.phys.Vec2
-import org.cobalt.Cobalt.minecraft
 import org.cobalt.pathfinder.helper.PlayerInput
 
 class PathInput : ClientInput() {

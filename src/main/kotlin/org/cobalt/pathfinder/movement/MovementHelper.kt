@@ -49,6 +49,7 @@ object MovementHelper {
   private const val BACKWARD_NEG_HOLD_DEGREES = BACKWARD_NEG_START_DEGREES - DEAD_BAND_DEGREES
 
   private enum class Sector { FORWARD, FORWARD_RIGHT, RIGHT, BACK_RIGHT, BACKWARD, BACK_LEFT, LEFT, FORWARD_LEFT }
+
   private var lastSector: Sector = Sector.FORWARD
 
   @JvmStatic

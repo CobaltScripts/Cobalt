@@ -9,8 +9,8 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.dsl.centerVec
 import org.cobalt.module.impl.misc.Debug
 import org.cobalt.module.impl.misc.Rotations
-import org.cobalt.pathfinder.PathFindingFacade
 import org.cobalt.pathfinder.PathFindingConfig
+import org.cobalt.pathfinder.PathFindingFacade
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.helper.PathRenderer
 import org.cobalt.pathfinder.helper.PlayerInput

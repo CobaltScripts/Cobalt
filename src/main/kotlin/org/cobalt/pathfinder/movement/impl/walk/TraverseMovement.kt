@@ -1,11 +1,7 @@
 package org.cobalt.pathfinder.movement.impl.walk
 
 import org.cobalt.pathfinder.calculate.PathNode
-import org.cobalt.pathfinder.movement.CalculationContext
-import org.cobalt.pathfinder.movement.Movement
-import org.cobalt.pathfinder.movement.MovementHelper
-import org.cobalt.pathfinder.movement.MovementResult
-import org.cobalt.pathfinder.movement.MovementType
+import org.cobalt.pathfinder.movement.*
 
 class TraverseMovement(
   val dx: Int,

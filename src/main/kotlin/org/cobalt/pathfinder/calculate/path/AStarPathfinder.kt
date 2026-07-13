@@ -79,7 +79,7 @@ object AStarPathfinder {
     currentNode: PathNode,
     movement: Movement,
     movementResult: MovementResult,
-    openSet: BinaryHeapOpenSet
+    openSet: BinaryHeapOpenSet,
   ) {
     val neighborCostSoFar = currentNode.costSoFar + movementResult.cost
     val neighborNode = getOrCacheNode(
@@ -101,7 +101,7 @@ object AStarPathfinder {
     }
   }
 
-  fun getOrCacheNode(x: Int, y: Int, z: Int,hash: Long): PathNode {
+  fun getOrCacheNode(x: Int, y: Int, z: Int, hash: Long): PathNode {
     var node: PathNode? = nodeCache.get(hash)
 
     if (node == null) {
