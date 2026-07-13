@@ -10,11 +10,10 @@ import org.cobalt.dsl.centerVec
 import org.cobalt.module.impl.misc.Debug
 import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.pathfinder.PathExecutor
-import org.cobalt.pathfinder.PathExecutor.config
+import org.cobalt.pathfinder.PathFinderConfig
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.movement.MovementHelper
-import org.cobalt.pathfinder.movement.MovementType
 import org.cobalt.pathfinder.movement.impl.fly.FlyAscendMovement
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.PlayerUtils
@@ -142,7 +141,7 @@ class PathingState : ExecutorState() {
     }
 
     if (!node.isFly) {
-      if (config.shouldSprint) input.sprint = true
+      if (PathFinderConfig.shouldSprint) input.sprint = true
       if (shouldJump(playerPos, nodes, index)) input.jump = true
     }
 

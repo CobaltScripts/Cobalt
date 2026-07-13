@@ -1,6 +1,7 @@
 package org.cobalt.pathfinder.state.impl
 
 import org.cobalt.pathfinder.PathExecutor
+import org.cobalt.pathfinder.PathFinderConfig
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.ChatUtils
@@ -11,7 +12,6 @@ import org.cobalt.util.helper.Multithreading
 class CalculatingState : ExecutorState() {
 
   override fun enter() {
-    val config = PathExecutor.config ?: return
     val startPos = PlayerUtils.position
     val goal = PathExecutor.currentGoal
     val availableMovements = PathExecutor.availableMovements
@@ -32,7 +32,7 @@ class CalculatingState : ExecutorState() {
       startPos.x, startPos.y, startPos.z,
       goal,
       availableMovements,
-      config.returnBestNode
+      PathFinderConfig.returnBestNode
     )
 
     Multithreading.runAsync {

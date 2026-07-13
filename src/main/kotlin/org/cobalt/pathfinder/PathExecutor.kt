@@ -13,7 +13,6 @@ import org.cobalt.module.impl.misc.Debug
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.goal.Goal
-import org.cobalt.pathfinder.goal.GoalBlock
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.impl.CalculatingState
@@ -26,7 +25,6 @@ import org.cobalt.util.WorldRenderUtils
 object PathExecutor {
 
   var state: ExecutorState? = null
-  var config: PathConfig = PathConfig()
 
   var currentGoal: Goal? = null
   var availableMovements: Array<out Movement>? = null

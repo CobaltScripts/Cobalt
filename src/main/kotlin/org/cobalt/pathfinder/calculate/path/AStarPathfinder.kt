@@ -3,6 +3,7 @@ package org.cobalt.pathfinder.calculate.path
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import kotlin.time.Duration.Companion.milliseconds
 import org.cobalt.pathfinder.PathExecutor
+import org.cobalt.pathfinder.PathFinderConfig
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.calculate.openset.BinaryHeapOpenSet
@@ -41,7 +42,7 @@ class AStarPathfinder(
     var bestNode = startNode
 
     while (!openSet.isEmpty()) {
-      if (System.currentTimeMillis() - startTime >= PathExecutor.config.maxCalculationTime) {
+      if (System.currentTimeMillis() - startTime >= PathFinderConfig.maxCalculationTime) {
         break
       }
 

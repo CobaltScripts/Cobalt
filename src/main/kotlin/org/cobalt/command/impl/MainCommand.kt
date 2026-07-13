@@ -4,9 +4,7 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.command.Command
 import org.cobalt.command.annotation.DefaultHandler
 import org.cobalt.command.annotation.SubCommand
-import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.PathExecutor
-import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.goal.GoalBlock
 import org.cobalt.ui.screen.ConfigScreen
 import org.cobalt.ui.screen.HudEditorScreen
