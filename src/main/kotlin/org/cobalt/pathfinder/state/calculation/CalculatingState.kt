@@ -1,14 +1,19 @@
-package org.cobalt.pathfinder.state.impl
+package org.cobalt.pathfinder.state.calculation
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.cobalt.pathfinder.PathFindingConfig
 import org.cobalt.pathfinder.PathFindingFacade
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
+import org.cobalt.pathfinder.state.pathing.PathingState
 import org.cobalt.util.ChatUtils
-import org.cobalt.util.MessageType
-import org.cobalt.util.helper.Multithreading
 
 class CalculatingState : ExecutorState() {
+  private var calculationJob: Job? = null
 
   override fun enter() {
     val goal = PathFindingFacade.currentGoal
@@ -26,23 +31,28 @@ class CalculatingState : ExecutorState() {
       return
     }
 
-    Multithreading.runAsync {
-      val path = AStarPathfinder.findPath(goal, availableMovements, PathFindingConfig.returnBestNode)
+    calculationJob = CoroutineScope(Dispatchers.Default).launch {
+      val path = AStarPathfinder.findPath(
+        goal,
+        availableMovements,
+        PathFindingConfig.returnBestNode
+      )
+
+      if (!isActive) return@launch
 
       if (path == null) {
         ChatUtils.sendSystemMessage("<red>Unable to find a path</red>")
         PathFindingFacade.stop()
-        return@runAsync
+        return@launch
       }
 
       PathFindingFacade.path = path
       PathFindingFacade.changeState(PathingState())
-
-      ChatUtils.sendSystemMessage(
-        "Found ${path.nodes.size} node path in ${path.timeElapsed.inWholeMilliseconds}ms",
-        MessageType.DEBUG
-      )
     }
   }
 
+  override fun exit() {
+    calculationJob?.cancel()
+    calculationJob = null
+  }
 }

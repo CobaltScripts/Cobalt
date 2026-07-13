@@ -1,14 +1,14 @@
 package org.cobalt.pathfinder.calculate
 
 import org.cobalt.pathfinder.movement.Movement
-import org.cobalt.pathfinder.movement.impl.fly.FlyAscendMovement
-import org.cobalt.pathfinder.movement.impl.fly.FlyDescendMovement
-import org.cobalt.pathfinder.movement.impl.fly.FlyDiagonalMovement
-import org.cobalt.pathfinder.movement.impl.fly.FlyTraverseMovement
-import org.cobalt.pathfinder.movement.impl.walk.AscendMovement
-import org.cobalt.pathfinder.movement.impl.walk.DescendMovement
-import org.cobalt.pathfinder.movement.impl.walk.DiagonalMovement
-import org.cobalt.pathfinder.movement.impl.walk.TraverseMovement
+import org.cobalt.pathfinder.movement.fly.FlyAscendMovement
+import org.cobalt.pathfinder.movement.fly.FlyDescendMovement
+import org.cobalt.pathfinder.movement.fly.FlyDiagonalMovement
+import org.cobalt.pathfinder.movement.fly.FlyTraverseMovement
+import org.cobalt.pathfinder.movement.walk.AscendMovement
+import org.cobalt.pathfinder.movement.walk.DescendMovement
+import org.cobalt.pathfinder.movement.walk.DiagonalMovement
+import org.cobalt.pathfinder.movement.walk.TraverseMovement
 
 enum class PathMode(vararg val movements: Movement) {
   WALK(

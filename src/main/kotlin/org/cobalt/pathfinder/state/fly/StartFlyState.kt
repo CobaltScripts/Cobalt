@@ -1,16 +1,17 @@
-package org.cobalt.pathfinder.state.impl
+package org.cobalt.pathfinder.state.fly
 
 import org.cobalt.pathfinder.PathFindingFacade
 import org.cobalt.pathfinder.helper.PathRenderer
 import org.cobalt.pathfinder.state.ExecutorState
+import org.cobalt.pathfinder.state.pathing.PathingState
 import org.cobalt.util.PlayerUtils
 
 class StartFlyState : ExecutorState() {
 
-  private var flyStage = 0
+  private var flyStage = FlyStage.INITIAL_JUMP
 
   override fun enter() {
-    flyStage = 0
+    flyStage = FlyStage.INITIAL_JUMP
   }
 
   override fun onTick() {
@@ -27,33 +28,33 @@ class StartFlyState : ExecutorState() {
 
   private fun handleFlyStart(): Boolean {
     if (PlayerUtils.isFlying) {
-      flyStage = 0
+      flyStage = FlyStage.INITIAL_JUMP
       return false
     }
 
     if (PlayerUtils.onGround) {
-      flyStage = 0
+      flyStage = FlyStage.INITIAL_JUMP
     }
 
     input.stopMovement()
 
     when (flyStage) {
-      0 -> {
+      FlyStage.INITIAL_JUMP -> {
         input.jump = true
-        flyStage = 1
+        flyStage = FlyStage.RELEASE_INITIAL_JUMP
       }
 
-      1 -> {
+      FlyStage.RELEASE_INITIAL_JUMP -> {
         input.jump = false
-        flyStage = 2
+        flyStage = FlyStage.SECOND_JUMP
       }
 
-      2 -> {
+      FlyStage.SECOND_JUMP -> {
         input.jump = true
-        flyStage = 3
+        flyStage = FlyStage.RELEASE_SECOND_JUMP
       }
 
-      3 -> {
+      FlyStage.RELEASE_SECOND_JUMP -> {
         input.jump = false
       }
     }
@@ -61,4 +62,10 @@ class StartFlyState : ExecutorState() {
     return true
   }
 
+  private enum class FlyStage {
+    INITIAL_JUMP,
+    RELEASE_INITIAL_JUMP,
+    SECOND_JUMP,
+    RELEASE_SECOND_JUMP,
+  }
 }

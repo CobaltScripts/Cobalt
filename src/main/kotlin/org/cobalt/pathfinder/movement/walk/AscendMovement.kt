@@ -1,7 +1,8 @@
-package org.cobalt.pathfinder.movement.impl.walk
+package org.cobalt.pathfinder.movement.walk
 
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.movement.*
+import org.cobalt.pathfinder.movement.rules.BlockTraversalRules
 
 // TODO: Handle ladder & vine climbing & jump boost
 class AscendMovement(
@@ -18,11 +19,11 @@ class AscendMovement(
     val y = currNode.y + 1
     val z = currNode.z + dz
 
-    if (!MovementHelper.canWalkOn(ctx, x, y - 1, z)) {
+    if (!BlockTraversalRules.canWalkOn(ctx, x, y - 1, z)) {
       return
     }
 
-    if (!MovementHelper.canWalkThrough(ctx, currNode.x, currNode.y + 1, currNode.z)) {
+    if (!BlockTraversalRules.canWalkThrough(ctx, currNode.x, currNode.y + 1, currNode.z)) {
       return
     }
 

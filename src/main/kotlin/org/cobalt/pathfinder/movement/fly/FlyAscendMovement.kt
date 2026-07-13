@@ -1,7 +1,8 @@
-package org.cobalt.pathfinder.movement.impl.fly
+package org.cobalt.pathfinder.movement.fly
 
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.movement.*
+import org.cobalt.pathfinder.movement.rules.BlockTraversalRules
 
 class FlyAscendMovement : Movement(MovementType.FLY) {
 
@@ -14,7 +15,7 @@ class FlyAscendMovement : Movement(MovementType.FLY) {
     val y = currNode.y + 1
     val z = currNode.z
 
-    if (!MovementHelper.canWalkThrough(ctx, x, y, z)) {
+    if (!BlockTraversalRules.canWalkThrough(ctx, x, y, z)) {
       return
     }
 

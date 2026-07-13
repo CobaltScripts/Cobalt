@@ -19,7 +19,7 @@ object ChatUtils {
   private const val DEFAULT_GRADIENT = "<gradient:#4CADD0:#B2F9FF>"
   private const val DEBUG_GRADIENT = "<gradient:#369876:#71FF9E>"
 
-  private const val PREFIX_START = "$DARK_GRAY[$DARK_GRAY]"
+  private const val PREFIX_START = "$DARK_GRAY[$DARK_GRAY"
   private const val PREFIX_END = "$DARK_GRAY] $RESET"
 
   private val defaultPrefix =

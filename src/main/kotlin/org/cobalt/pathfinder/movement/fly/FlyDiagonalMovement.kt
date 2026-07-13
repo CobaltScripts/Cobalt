@@ -1,7 +1,8 @@
-package org.cobalt.pathfinder.movement.impl.fly
+package org.cobalt.pathfinder.movement.fly
 
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.movement.*
+import org.cobalt.pathfinder.movement.rules.BlockTraversalRules
 
 class FlyDiagonalMovement(
   val dx: Int,
@@ -17,15 +18,15 @@ class FlyDiagonalMovement(
     val y = currNode.y
     val z = currNode.z + dz
 
-    if (!MovementHelper.canWalkThrough(ctx, x, y, z)) {
+    if (!BlockTraversalRules.canWalkThrough(ctx, x, y, z)) {
       return
     }
 
-    if (!MovementHelper.canWalkThrough(ctx, currNode.x + dx, y, currNode.z)) {
+    if (!BlockTraversalRules.canWalkThrough(ctx, currNode.x + dx, y, currNode.z)) {
       return
     }
 
-    if (!MovementHelper.canWalkThrough(ctx, currNode.x, y, currNode.z + dz)) {
+    if (!BlockTraversalRules.canWalkThrough(ctx, currNode.x, y, currNode.z + dz)) {
       return
     }
 

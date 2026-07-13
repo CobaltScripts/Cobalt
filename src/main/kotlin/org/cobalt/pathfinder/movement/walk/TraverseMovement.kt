@@ -1,7 +1,8 @@
-package org.cobalt.pathfinder.movement.impl.walk
+package org.cobalt.pathfinder.movement.walk
 
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.movement.*
+import org.cobalt.pathfinder.movement.rules.BlockTraversalRules
 
 class TraverseMovement(
   val dx: Int,
@@ -17,7 +18,7 @@ class TraverseMovement(
     val y = currNode.y
     val z = currNode.z + dz
 
-    if (!MovementHelper.canWalkOn(ctx, x, y - 1, z)) {
+    if (!BlockTraversalRules.canWalkOn(ctx, x, y - 1, z)) {
       return
     }
 

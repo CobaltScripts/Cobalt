@@ -11,7 +11,7 @@ import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.goal.Goal
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.state.ExecutorState
-import org.cobalt.pathfinder.state.impl.CalculatingState
+import org.cobalt.pathfinder.state.calculation.CalculatingState
 import org.cobalt.util.ChatUtils
 import org.cobalt.util.MessageType
 import org.cobalt.util.PlayerUtils
@@ -121,8 +121,6 @@ object PathFindingFacade {
     }
 
     state?.onRender()
-
-//    PathRenderer.render()
   }
 
 }

@@ -1,7 +1,7 @@
 package org.cobalt.pathfinder.calculate.path
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.nanoseconds
 import org.cobalt.pathfinder.PathFindingConfig
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.calculate.PathNode
@@ -10,6 +10,8 @@ import org.cobalt.pathfinder.goal.Goal
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.util.ChatUtils
+import org.cobalt.util.MessageType
 import org.cobalt.util.PlayerUtils
 
 object AStarPathfinder {
@@ -39,8 +41,14 @@ object AStarPathfinder {
     var bestNode = startNode
 
     val deadline = startTime + PathFindingConfig.maxCalculationTime
+    ChatUtils.sendSystemMessage(
+      "Starting pathfinding from ${startNode.block}",
+      MessageType.DEBUG
+    )
 
-    while (!openSet.isEmpty() && System.nanoTime() < deadline) {
+    while (!openSet.isEmpty()
+      && System.nanoTime() < deadline
+    ) {
       val currentNode = openSet.poll()
 
       if (currentNode < bestNode) bestNode = currentNode
@@ -123,7 +131,7 @@ object AStarPathfinder {
 
     return Path(
       nodes = path,
-      timeElapsed = (System.nanoTime() - startTime).milliseconds,
+      timeElapsed = (System.nanoTime() - startTime).nanoseconds,
       goal = goal!!
     )
   }

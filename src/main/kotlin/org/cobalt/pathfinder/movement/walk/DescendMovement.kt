@@ -1,7 +1,8 @@
-package org.cobalt.pathfinder.movement.impl.walk
+package org.cobalt.pathfinder.movement.walk
 
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.movement.*
+import org.cobalt.pathfinder.movement.rules.BlockTraversalRules
 
 // TODO: Handle ladder & vine climbing downwards & falling down multiple blocks
 class DescendMovement(
@@ -18,11 +19,11 @@ class DescendMovement(
     val y = currNode.y - 1
     val z = currNode.z + dz
 
-    if (!MovementHelper.canWalkThrough(ctx, x, currNode.y, z)) {
+    if (!BlockTraversalRules.canWalkThrough(ctx, x, currNode.y, z)) {
       return
     }
 
-    if (!MovementHelper.canWalkOn(ctx, x, y - 1, z)) {
+    if (!BlockTraversalRules.canWalkOn(ctx, x, y - 1, z)) {
       return
     }
 
