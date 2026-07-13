@@ -1,12 +1,12 @@
 package org.cobalt.pathfinder.state
 
-import org.cobalt.pathfinder.PathFindingFacade
-import org.cobalt.pathfinder.PathInput
+import org.cobalt.pathfinder.PathExecutor
+import org.cobalt.pathfinder.helper.PathInput
 
 abstract class ExecutorState {
 
   protected val input: PathInput =
-    PathFindingFacade.pathInput
+    PathExecutor.pathInput
 
   open fun enter() {}
   open fun onTick() {}

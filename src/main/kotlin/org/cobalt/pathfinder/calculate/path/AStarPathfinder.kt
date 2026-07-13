@@ -1,9 +1,10 @@
 package org.cobalt.pathfinder.calculate.path
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
-import org.cobalt.pathfinder.PathFindingConfig
 import org.cobalt.pathfinder.calculate.Path
+import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.calculate.PathNode
 import org.cobalt.pathfinder.calculate.openset.BinaryHeapOpenSet
 import org.cobalt.pathfinder.goal.Goal
@@ -12,68 +13,77 @@ import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
 import org.cobalt.util.ChatUtils
 import org.cobalt.util.MessageType
-import org.cobalt.util.PlayerUtils
 
-object AStarPathfinder {
-  private val nodeCache = Long2ObjectOpenHashMap<PathNode>()
-  private var goal: Goal? = null // This can't be null after findPath is called.
-  private var availableMovements: Array<out Movement>? = null // This can't be null after findPath is called.
+class AStarPathfinder(
+  val startX: Int,
+  val startY: Int,
+  val startZ: Int,
+  val goal: Goal,
+  val mode: PathMode,
+  val returnBestNode: Boolean = false,
+  val maxCalculationTime: Long = 10_000_000L
+) {
 
-  fun findPath(goal: Goal, movements: Array<out Movement>, returnBestNode: Boolean): Path? {
-    val startPos = PlayerUtils.position
+  private val closedSet = Long2ObjectOpenHashMap<PathNode>()
+  private val movements = mode.movements
+  private var startTime = 0L
+
+  fun findPath(): Path? {
     val calculationContext = CalculationContext()
     val openSet = BinaryHeapOpenSet()
     val movementResult = MovementResult()
 
-    // After this, goal and movements should never be null again, so we can do !! in private functions safely.
-    // If they are null, someone nuked the code, and we should get angry at them.
-    AStarPathfinder.goal = goal
-    availableMovements = movements
-
-    val startNode = PathNode(startPos.x, startPos.y, startPos.z, goal)
-
-    startNode.costSoFar = 0.0
-    startNode.totalCost = startNode.costToEnd
+    val startNode = PathNode(
+      startX, startY, startZ, goal
+    ).also {
+      it.costSoFar = 0.0
+      it.totalCost = it.costToEnd
+    }
 
     openSet.add(startNode)
+    startTime = System.nanoTime()
 
-    val startTime = System.nanoTime()
     var bestNode = startNode
+    val deadline = startTime + maxCalculationTime
 
-    val deadline = startTime + PathFindingConfig.maxCalculationTime
     ChatUtils.sendSystemMessage(
       "Starting pathfinding from ${startNode.block}",
       MessageType.DEBUG
     )
 
-    while (!openSet.isEmpty()
-      && System.nanoTime() < deadline
-    ) {
+    while (!openSet.isEmpty() && System.nanoTime() < deadline) {
       val currentNode = openSet.poll()
 
-      if (currentNode < bestNode) bestNode = currentNode
-
-      if (goal.isAtGoal(currentNode.x, currentNode.y, currentNode.z)) {
-        return reconstruct(currentNode, startTime)
+      if (currentNode < bestNode) {
+        bestNode = currentNode
       }
 
-      evaluateMovements(currentNode, calculationContext, movementResult, openSet)
+      if (goal.isAtGoal(currentNode.x, currentNode.y, currentNode.z)) {
+        return reconstruct(currentNode)
+      }
+
+      evaluateMovements(
+        calculationContext,
+        currentNode,
+        movementResult,
+        openSet
+      )
     }
 
     return if (returnBestNode) {
-      reconstruct(bestNode, startTime)
+      reconstruct(bestNode)
     } else {
       null
     }
   }
 
   private fun evaluateMovements(
-    currentNode: PathNode,
     calculationContext: CalculationContext,
+    currentNode: PathNode,
     movementResult: MovementResult,
     openSet: BinaryHeapOpenSet,
   ) {
-    for (move in availableMovements!!) {
+    for (move in movements) {
       movementResult.reset()
       move.calculateCost(calculationContext, currentNode, movementResult)
 
@@ -90,12 +100,14 @@ object AStarPathfinder {
     openSet: BinaryHeapOpenSet,
   ) {
     val neighborCostSoFar = currentNode.costSoFar + movementResult.cost
-    val neighborNode = getOrCacheNode(
+    val neighborNode = getNode(
       movementResult.x, movementResult.y, movementResult.z,
       PathNode.longHash(movementResult.x, movementResult.y, movementResult.z)
     )
 
-    if (neighborCostSoFar >= neighborNode.costSoFar) return
+    if (neighborCostSoFar >= neighborNode.costSoFar) {
+      return
+    }
 
     neighborNode.parent = currentNode
     neighborNode.costSoFar = neighborCostSoFar
@@ -109,18 +121,18 @@ object AStarPathfinder {
     }
   }
 
-  fun getOrCacheNode(x: Int, y: Int, z: Int, hash: Long): PathNode {
-    var node: PathNode? = nodeCache.get(hash)
+  fun getNode(x: Int, y: Int, z: Int, hash: Long): PathNode {
+    var node: PathNode? = closedSet.get(hash)
 
     if (node == null) {
-      node = PathNode(x, y, z, goal!!)
-      nodeCache.put(hash, node)
+      node = PathNode(x, y, z, goal)
+      closedSet.put(hash, node)
     }
 
     return node
   }
 
-  private fun reconstruct(endNode: PathNode, startTime: Long): Path {
+  private fun reconstruct(endNode: PathNode): Path {
     val path = mutableListOf<PathNode>()
     var node: PathNode? = endNode
 
@@ -132,7 +144,7 @@ object AStarPathfinder {
     return Path(
       nodes = path,
       timeElapsed = (System.nanoTime() - startTime).nanoseconds,
-      goal = goal!!
+      goal = goal
     )
   }
 

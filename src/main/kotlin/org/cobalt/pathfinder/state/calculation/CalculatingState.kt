@@ -5,49 +5,47 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.cobalt.pathfinder.PathFindingConfig
-import org.cobalt.pathfinder.PathFindingFacade
+import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.pathing.PathingState
 import org.cobalt.util.ChatUtils
+import org.cobalt.util.PlayerUtils
 
 class CalculatingState : ExecutorState() {
+
   private var calculationJob: Job? = null
 
   override fun enter() {
-    val goal = PathFindingFacade.currentGoal
-    val availableMovements = PathFindingFacade.availableMovements
-
-    if (goal == null) {
-      ChatUtils.sendSystemMessage("<red>Cannot calculate path, no goal set!</red>")
-      PathFindingFacade.stop()
+    val config = PathExecutor.config ?: run {
+      ChatUtils.sendSystemMessage("<red>Cannot calculate path, no path config set!</red>")
+      PathExecutor.stop()
       return
     }
 
-    if (availableMovements == null) {
-      ChatUtils.sendSystemMessage("<red>Cannot calculate path, no movements set!</red>")
-      PathFindingFacade.stop()
-      return
-    }
+    val startPos = PlayerUtils.position
+    val goal = config.goal
 
     calculationJob = CoroutineScope(Dispatchers.Default).launch {
-      val path = AStarPathfinder.findPath(
-        goal,
-        availableMovements,
-        PathFindingConfig.returnBestNode
-      )
+      val path = AStarPathfinder(
+          startPos.x, startPos.y, startPos.z,
+          goal, config.mode,
+          config.returnBestNode,
+          config.maxCalculationTime
+      ).findPath()
 
-      if (!isActive) return@launch
-
-      if (path == null) {
-        ChatUtils.sendSystemMessage("<red>Unable to find a path</red>")
-        PathFindingFacade.stop()
+      if (!isActive) {
         return@launch
       }
 
-      PathFindingFacade.path = path
-      PathFindingFacade.changeState(PathingState())
+      if (path == null) {
+        ChatUtils.sendSystemMessage("<red>Unable to find a path</red>")
+        PathExecutor.stop()
+        return@launch
+      }
+
+      PathExecutor.path = path
+      PathExecutor.changeState(PathingState())
     }
   }
 
@@ -55,4 +53,5 @@ class CalculatingState : ExecutorState() {
     calculationJob?.cancel()
     calculationJob = null
   }
+
 }

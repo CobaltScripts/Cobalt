@@ -4,7 +4,9 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.command.Command
 import org.cobalt.command.annotation.DefaultHandler
 import org.cobalt.command.annotation.SubCommand
-import org.cobalt.pathfinder.PathFindingFacade
+import org.cobalt.pathfinder.PathConfig
+import org.cobalt.pathfinder.PathExecutor
+import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.goal.GoalBlock
 import org.cobalt.ui.screen.ConfigScreen
 import org.cobalt.ui.screen.HudEditorScreen
@@ -30,12 +32,18 @@ object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
 
   @SubCommand
   fun goTo(x: Int, y: Int, z: Int, fly: Boolean) {
-    PathFindingFacade.goTo(GoalBlock(x, y, z), fly)
+    val pathMode = if (fly) PathMode.FLY else PathMode.WALK
+    val config = PathConfig(
+      goal = GoalBlock(x, y, z),
+      mode = pathMode
+    )
+
+    PathExecutor.goTo(config)
   }
 
   @SubCommand
   fun stopPathfinder() {
-    PathFindingFacade.stop()
+    PathExecutor.stop()
   }
 
 }

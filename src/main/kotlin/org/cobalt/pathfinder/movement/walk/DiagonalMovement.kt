@@ -1,8 +1,11 @@
 package org.cobalt.pathfinder.movement.walk
 
 import org.cobalt.pathfinder.calculate.PathNode
-import org.cobalt.pathfinder.movement.*
-import org.cobalt.pathfinder.movement.rules.BlockTraversalRules
+import org.cobalt.pathfinder.movement.CalculationContext
+import org.cobalt.pathfinder.movement.Movement
+import org.cobalt.pathfinder.movement.MovementValidator
+import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.pathfinder.movement.MovementType
 
 class DiagonalMovement(
   val dx: Int,
@@ -18,15 +21,15 @@ class DiagonalMovement(
     val y = currNode.y
     val z = currNode.z + dz
 
-    if (!BlockTraversalRules.canWalkOn(ctx, x, y - 1, z)) {
+    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z)) {
       return
     }
 
-    if (!BlockTraversalRules.canWalkThrough(ctx, currNode.x + dx, y, currNode.z)) {
+    if (!MovementValidator.canWalkThrough(ctx, currNode.x + dx, y, currNode.z)) {
       return
     }
 
-    if (!BlockTraversalRules.canWalkThrough(ctx, currNode.x, y, currNode.z + dz)) {
+    if (!MovementValidator.canWalkThrough(ctx, currNode.x, y, currNode.z + dz)) {
       return
     }
 
