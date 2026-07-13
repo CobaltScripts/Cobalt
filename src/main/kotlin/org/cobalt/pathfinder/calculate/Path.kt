@@ -17,10 +17,10 @@ data class Path(
     }
 
     val keyNodes = mutableListOf(nodes.first())
-    var lastDirection = direction(nodes[0], nodes[1])
+    var lastDirection = Direction(nodes[0], nodes[1])
 
     for (i in 2 until nodes.size) {
-      val currentDirection = direction(nodes[i - 1], nodes[i])
+      val currentDirection = Direction(nodes[i - 1], nodes[i])
 
       if (currentDirection != lastDirection) {
         keyNodes += nodes[i - 1]
@@ -32,12 +32,11 @@ data class Path(
     return keyNodes
   }
 
-  private fun direction(a: PathNode, b: PathNode) = Direction(
-    (b.x - a.x).coerceIn(-1, 1),
-    (b.y - a.y).coerceIn(-1, 1),
-    (b.z - a.z).coerceIn(-1, 1)
-  )
-
-  private data class Direction(val dx: Int, val dy: Int, val dz: Int)
-
+  private data class Direction(val dx: Int, val dy: Int, val dz: Int) {
+    constructor(a: PathNode, b: PathNode) : this(
+      (b.x - a.x).coerceIn(-1, 1),
+      (b.y - a.y).coerceIn(-1, 1),
+      (b.z - a.z).coerceIn(-1, 1)
+    )
+  }
 }
