@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException
 import net.minecraft.client.multiplayer.ClientSuggestionProvider
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.command.impl.MainCommand
-import org.cobalt.util.ChatUtils
+import org.cobalt.util.chat.ChatUtils
 
 object CommandManager {
 

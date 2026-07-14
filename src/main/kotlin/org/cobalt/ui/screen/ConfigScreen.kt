@@ -13,10 +13,10 @@ import org.cobalt.ui.page.Page
 import org.cobalt.ui.page.impl.ModulesPage
 import org.cobalt.ui.theme.Theme
 import org.cobalt.ui.theme.ThemeManager
-import org.cobalt.util.WindowUtils.windowHeight
-import org.cobalt.util.WindowUtils.windowWidth
-import org.cobalt.util.helper.Multithreading
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.client.WindowUtils.windowHeight
+import org.cobalt.util.client.WindowUtils.windowWidth
+import org.cobalt.util.render.SkiaRenderer
+import org.cobalt.util.scheduling.Multithreading
 
 object ConfigScreen : UIScreen() {
 
@@ -67,7 +67,7 @@ object ConfigScreen : UIScreen() {
     val centerX = windowWidth / 2f
     val centerY = windowHeight / 2f
 
-    Skia.push()
+    SkiaRenderer.push()
 
     val scale = when {
       closing -> closeAnim.get(1f, 0f)
@@ -76,9 +76,9 @@ object ConfigScreen : UIScreen() {
     }
 
     if (scale != 1f) {
-      Skia.translate(centerX, centerY)
-      Skia.scale(scale, scale)
-      Skia.translate(-centerX, -centerY)
+      SkiaRenderer.translate(centerX, centerY)
+      SkiaRenderer.scale(scale, scale)
+      SkiaRenderer.translate(-centerX, -centerY)
     }
 
     val interfaceWidth = SidebarComponent.width + ModulesPage.width
@@ -102,25 +102,25 @@ object ConfigScreen : UIScreen() {
       .updateBounds(pageX, pageY)
       .renderComponent()
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       pageX, pageY,
       interfaceWidth, interfaceHeight,
       1f, 10f, theme.border
     )
 
-    Skia.line(
+    SkiaRenderer.line(
       startX, pageY,
       startX, pageY + ModulesPage.height,
       1f, theme.border
     )
 
-    Skia.line(
+    SkiaRenderer.line(
       startX, startY,
       startX + TopbarComponent.width, startY,
       1f, theme.border
     )
 
-    Skia.pop()
+    SkiaRenderer.pop()
 
     if (closing && !closeAnim.isAnimating()) {
       closing = false

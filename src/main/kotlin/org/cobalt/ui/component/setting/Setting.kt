@@ -8,7 +8,7 @@ import org.cobalt.ui.UIComponent
 import org.cobalt.ui.component.ModuleComponent
 import org.cobalt.ui.component.setting.impl.InfoSetting
 import org.cobalt.util.config.SettingContainer
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.render.SkiaRenderer
 
 abstract class Setting<T>(
   val name: String,
@@ -31,15 +31,15 @@ abstract class Setting<T>(
       val totalTextHeight = NAME_SIZE + extraHeight
       val textStartY = yPos + (BASE_HEIGHT - totalTextHeight) / 2
 
-      Skia.text(
-        Skia.regularFont, name,
+      SkiaRenderer.text(
+        SkiaRenderer.regularFont, name,
         xPos + PADDING, textStartY,
         NAME_SIZE, theme.textPrimary
       )
 
       if (description.isNotBlank()) {
-        Skia.text(
-          Skia.regularFont, description,
+        SkiaRenderer.text(
+          SkiaRenderer.regularFont, description,
           xPos + PADDING, textStartY + NAME_SIZE + TEXT_SPACING_Y,
           DESCRIPTION_SIZE, theme.textMuted
         )

@@ -4,8 +4,8 @@ import org.cobalt.module.Module
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.animation.ColorAnimation
 import org.cobalt.ui.animation.EaseOutAnimation
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 class SwitchComponent(val module: Module) : UIComponent(
   width = 30f,
@@ -19,12 +19,12 @@ class SwitchComponent(val module: Module) : UIComponent(
     val mainColor = colorAnimation.get(theme.backgroundPrimary, theme.accentPrimary, !module.enabled)
     val knobX = xOffsetAnimation.get(xPos + 1f, xPos + width - KNOB_SIZE - 1f, !module.enabled)
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos, width, height,
       5f, mainColor
     )
 
-    Skia.circle(
+    SkiaRenderer.circle(
       knobX + KNOB_SIZE / 2f,
       yPos + height / 2f,
       KNOB_SIZE / 2f,
@@ -33,7 +33,7 @@ class SwitchComponent(val module: Module) : UIComponent(
   }
 
   override fun mouseClicked(button: Int): Boolean {
-    if (button == 0 && MouseUtils.isHoveringOver(xPos, yPos, width, height)) {
+    if (button == 0 && Mouse.isHoveringOver(xPos, yPos, width, height)) {
       module.enabled = !module.enabled
       colorAnimation.start()
       xOffsetAnimation.start()

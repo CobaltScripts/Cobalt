@@ -13,8 +13,12 @@ import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.module.type.Script
 import org.cobalt.ui.component.setting.impl.TextSetting
 import org.cobalt.ui.theme.ThemeManager
-import org.cobalt.util.*
-import org.cobalt.util.helper.Clock
+import org.cobalt.util.chat.ChatUtils
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.inventory.InventoryUtils
+import org.cobalt.util.render.GizmoRenderer
+import org.cobalt.util.rotation.RotationMath
+import org.cobalt.util.scheduling.Clock
 
 object Fishing : Script(
   name = "Fishing",
@@ -85,7 +89,7 @@ object Fishing : Script(
 
       State.CAST_ROD -> {
         if (minecraft.player?.fishing == null) {
-          MouseUtils.rightClick()
+          Mouse.rightClick()
         }
 
         state = State.WAIT_FOR_CATCH
@@ -98,7 +102,7 @@ object Fishing : Script(
             Random.nextDouble(-0.25, 0.25),
             Random.nextDouble(-0.25, 0.25)
           )?.let {
-            Rotations.start(RotationUtils.getRotation(it))
+            Rotations.start(RotationMath.getRotation(it))
           }
 
           antiAfkDelay.schedule(Random.nextLong(10_000, 15_000))
@@ -113,7 +117,7 @@ object Fishing : Script(
       }
 
       State.REEL_IN -> {
-        MouseUtils.rightClick()
+        Mouse.rightClick()
         delayClock.schedule(Random.nextLong(100, 250))
         state = State.CAST_ROD
       }
@@ -127,7 +131,7 @@ object Fishing : Script(
     }
 
     lookPos?.let {
-      WorldRenderUtils.drawBox(
+      GizmoRenderer.drawBox(
         AABB(
           it.x - 0.25,
           it.y - 0.25,

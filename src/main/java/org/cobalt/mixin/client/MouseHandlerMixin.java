@@ -5,10 +5,10 @@ import net.minecraft.client.input.MouseButtonInfo;
 import org.cobalt.event.EventBus;
 import org.cobalt.event.impl.MouseEvent;
 import org.cobalt.event.impl.MouseScrollEvent;
-import org.cobalt.util.MouseAction;
-import org.cobalt.util.MouseButton;
-import org.cobalt.util.MouseMode;
-import org.cobalt.util.MouseUtils;
+import org.cobalt.util.input.Mouse;
+import org.cobalt.util.input.MouseAction;
+import org.cobalt.util.input.MouseButton;
+import org.cobalt.util.input.MouseMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -74,14 +74,14 @@ public abstract class MouseHandlerMixin {
 
   @Inject(method = "turnPlayer", at = @At("HEAD"), cancellable = true)
   private void onUpdateMouse(CallbackInfo callbackInfo) {
-    if (MouseUtils.getMouseMode() == MouseMode.LOCK_MOUSE) {
+    if (Mouse.getMouseMode() == MouseMode.LOCK_MOUSE) {
       callbackInfo.cancel();
     }
   }
 
   @Inject(method = "isMouseGrabbed", at = @At("HEAD"), cancellable = true)
   private void onIsCursorLocked(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-    if (MouseUtils.getMouseMode() == MouseMode.UNGRAB_MOUSE) {
+    if (Mouse.getMouseMode() == MouseMode.UNGRAB_MOUSE) {
       if (this.mouseGrabbed) {
         this.releaseMouse();
       }
@@ -92,7 +92,7 @@ public abstract class MouseHandlerMixin {
 
   @Inject(method = "grabMouse", at = @At("HEAD"), cancellable = true)
   private void onLockCursor(CallbackInfo callbackInfo) {
-    if (MouseUtils.getMouseMode() == MouseMode.UNGRAB_MOUSE) {
+    if (Mouse.getMouseMode() == MouseMode.UNGRAB_MOUSE) {
       callbackInfo.cancel();
     }
   }

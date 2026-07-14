@@ -3,8 +3,8 @@ package org.cobalt.ui.component.setting.impl
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import org.cobalt.ui.component.setting.Setting
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 class ModeSetting(
   name: String,
@@ -27,29 +27,29 @@ class ModeSetting(
 
   override fun renderSetting() {
     val display = options.getOrNull(value) ?: ""
-    val buttonWidth = Skia.textWidth(Skia.regularFont, display, FONT_SIZE) + 30f
+    val buttonWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, display, FONT_SIZE) + 30f
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
 
     val borderColor = theme.border
     val textColor = theme.textPrimary
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       startX, startY,
       buttonWidth, BUTTON_HEIGHT,
       5f, theme.backgroundPrimary
     )
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       startX, startY,
       buttonWidth, BUTTON_HEIGHT,
       1f, 5f, borderColor
     )
 
-    val textWidth = Skia.textWidth(Skia.regularFont, display, FONT_SIZE)
+    val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, display, FONT_SIZE)
 
-    Skia.text(
-      Skia.regularFont, display,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, display,
       startX + (buttonWidth - textWidth) / 2,
       startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
       FONT_SIZE, textColor
@@ -62,11 +62,11 @@ class ModeSetting(
     }
 
     val display = options.getOrNull(value) ?: ""
-    val buttonWidth = Skia.textWidth(Skia.regularFont, display, FONT_SIZE) + 30f
+    val buttonWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, display, FONT_SIZE) + 30f
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
 
-    if (!MouseUtils.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)) {
+    if (!Mouse.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)) {
       return false
     }
 

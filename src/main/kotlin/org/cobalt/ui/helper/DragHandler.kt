@@ -1,13 +1,13 @@
 package org.cobalt.ui.helper
 
 import org.cobalt.module.type.RenderableModule
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.MouseUtils.mouseX
-import org.cobalt.util.MouseUtils.mouseY
-import org.cobalt.util.WindowUtils.scaleX
-import org.cobalt.util.WindowUtils.scaleY
-import org.cobalt.util.WindowUtils.windowHeight
-import org.cobalt.util.WindowUtils.windowWidth
+import org.cobalt.util.client.WindowUtils.scaleX
+import org.cobalt.util.client.WindowUtils.scaleY
+import org.cobalt.util.client.WindowUtils.windowHeight
+import org.cobalt.util.client.WindowUtils.windowWidth
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.input.Mouse.mouseX
+import org.cobalt.util.input.Mouse.mouseY
 
 class DragHandler {
 
@@ -43,7 +43,7 @@ class DragHandler {
     val squareOffset = squareSizeScaled / 2f
 
     if (
-      !MouseUtils.isHoveringOver(
+      !Mouse.isHoveringOver(
         renderX + scaledWidth - squareOffset,
         renderY + scaledHeight - squareOffset,
         squareSizeScaled, squareSizeScaled
@@ -103,7 +103,11 @@ class DragHandler {
       }
 
     val (snappedX, snappedY) = snapHelper.findAlignmentGuides(
-      clampedX, clampedY, width, height, windowWidth, windowHeight, otherBounds
+      clampedX,
+      clampedY,
+      width,
+      height,
+      otherBounds,
     )
 
     module.xPos = snappedX / scaleX

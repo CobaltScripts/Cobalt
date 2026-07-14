@@ -1,0 +1,33 @@
+package org.cobalt.pathfinder.movement.fly
+
+import org.cobalt.pathfinder.calculate.PathNode
+import org.cobalt.pathfinder.movement.CalculationContext
+import org.cobalt.pathfinder.movement.Movement
+import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.pathfinder.movement.MovementType
+import org.cobalt.pathfinder.movement.MovementValidator
+
+class FlyDescendMovement : Movement(MovementType.FLY) {
+
+  override fun calculateCost(
+    ctx: CalculationContext,
+    currNode: PathNode,
+    res: MovementResult,
+  ) {
+    val x = currNode.x
+    val y = currNode.y - 1
+    val z = currNode.z
+
+    if (!MovementValidator.canWalkThrough(ctx, x, y, z)) {
+      return
+    }
+
+    res.set(x, y, z)
+    res.cost = 1.0
+  }
+
+  companion object {
+    val DEFAULT = FlyDescendMovement()
+  }
+
+}

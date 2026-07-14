@@ -7,10 +7,14 @@ import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.WorldEvent
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
-import org.cobalt.ui.component.setting.impl.*
-import org.cobalt.util.KeybindUtils
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.helper.Clock
+import org.cobalt.ui.component.setting.impl.CheckboxSetting
+import org.cobalt.ui.component.setting.impl.KeyBindSetting
+import org.cobalt.ui.component.setting.impl.ModeSetting
+import org.cobalt.ui.component.setting.impl.SliderSetting
+import org.cobalt.ui.component.setting.impl.TextSetting
+import org.cobalt.util.input.Keyboard
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.scheduling.Clock
 
 object AutoClicker : Module(
   name = "AutoClicker",
@@ -80,18 +84,18 @@ object AutoClicker : Module(
 
     if (
       leftClickDelay.passed() &&
-      KeybindUtils.isKeyDown(leftClickKeybind) &&
+      Keyboard.isKeyDown(leftClickKeybind) &&
       canLeftClick()
     ) {
-      MouseUtils.leftClick()
+      Mouse.leftClick()
       leftClickDelay.schedule(nextDelay(leftClickCps))
     }
 
     if (
       rightClickDelay.passed() &&
-      KeybindUtils.isKeyDown(rightClickKeybind)
+      Keyboard.isKeyDown(rightClickKeybind)
     ) {
-      KeybindUtils.press(minecraft.options.keyUse)
+      Keyboard.press(minecraft.options.keyUse)
       rightClickDelay.schedule(nextDelay(rightClickCps))
     }
   }

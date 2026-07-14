@@ -7,8 +7,8 @@ import org.cobalt.ui.component.button.IconButton
 import org.cobalt.ui.helper.ScrollHelper
 import org.cobalt.ui.page.Page
 import org.cobalt.ui.theme.ThemeManager
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 object ThemesPage : Page() {
 
@@ -62,7 +62,7 @@ object ThemesPage : Page() {
     val contentHeight = pageOffset + PADDING * 2 + rows * ThemeComponent.HEIGHT + (rows - 1) * SPACING
 
     scrollHelper.updateMaxScroll(contentHeight, height)
-    Skia.pushScissor(xPos, yPos, width, height)
+    SkiaRenderer.pushScissor(xPos, yPos, width, height)
 
     themeComponents.forEachIndexed { index, component ->
       val col = index % COLUMNS
@@ -76,7 +76,7 @@ object ThemesPage : Page() {
         .renderComponent()
     }
 
-    Skia.popScissor()
+    SkiaRenderer.popScissor()
 
     val buttonX = xPos + width - PADDING - reloadButton.width
     val buttonY = yPos + height - PADDING - reloadButton.height
@@ -87,7 +87,7 @@ object ThemesPage : Page() {
   }
 
   override fun mouseScrolled(horizontalAmount: Double, verticalAmount: Double): Boolean {
-    if (MouseUtils.isHoveringOver(xPos, yPos, width, height)) {
+    if (Mouse.isHoveringOver(xPos, yPos, width, height)) {
       scrollHelper.scroll(verticalAmount)
       return true
     }

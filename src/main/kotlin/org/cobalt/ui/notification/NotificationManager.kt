@@ -4,8 +4,8 @@ import kotlin.time.Duration
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.RenderEvent
-import org.cobalt.util.WindowUtils.windowHeight
-import org.cobalt.util.skia.SkiaPIP
+import org.cobalt.util.client.WindowUtils.windowHeight
+import org.cobalt.util.render.skia.SkiaPIP
 
 object NotificationManager {
 

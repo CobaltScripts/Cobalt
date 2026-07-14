@@ -3,8 +3,8 @@ package org.cobalt.ui.page
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.component.SidebarComponent
 import org.cobalt.ui.component.TopbarComponent
-import org.cobalt.util.skia.Skia
-import org.cobalt.util.skia.helper.SkiaCorner
+import org.cobalt.util.render.SkiaRenderer
+import org.cobalt.util.render.skia.data.SkiaCorner
 
 abstract class Page : UIComponent() {
 
@@ -17,7 +17,7 @@ abstract class Page : UIComponent() {
     get() = SidebarComponent.height - TopbarComponent.height
 
   override fun renderComponent() {
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos,
       width, height,
       CORNER_RADIUS,

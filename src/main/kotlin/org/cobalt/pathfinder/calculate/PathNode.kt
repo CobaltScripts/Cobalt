@@ -3,20 +3,21 @@ package org.cobalt.pathfinder.calculate
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
 import org.cobalt.pathfinder.goal.Goal
-import org.cobalt.pathfinder.movement.Movement
+import org.cobalt.pathfinder.movement.MovementType
 
 data class PathNode(
   val x: Int,
   val y: Int,
   val z: Int,
   val goal: Goal,
-) {
+) : Comparable<PathNode> {
 
   var costSoFar = 1e6
   val costToEnd = goal.heuristic(x, y, z)
   var totalCost = 1.0
   var heapPosition = -1
-  var type = Movement.Type.WALK
+
+  var movementType = MovementType.WALK
   var parent: PathNode? = null
 
   val block: BlockPos = BlockPos(x, y, z)
@@ -24,8 +25,17 @@ data class PathNode(
   val centerVec: Vec3 = Vec3(x + 0.5, y + 0.5, z + 0.5)
   val topCenterVec: Vec3 = Vec3(x + 0.5, y.toDouble(), z + 0.5)
 
-  val isFly: Boolean
-    get() = type == Movement.Type.FLY
+  val useMovementFly: Boolean
+    get() = movementType == MovementType.FLY
+
+  override fun compareTo(other: PathNode): Int {
+    return compareValuesBy(
+      this,
+      other,
+      PathNode::costToEnd,
+      PathNode::costSoFar,
+    )
+  }
 
   override fun equals(other: Any?): Boolean {
     if (this === other) {

@@ -6,8 +6,8 @@ import org.cobalt.ui.component.ModuleComponent
 import org.cobalt.ui.helper.ScrollHelper
 import org.cobalt.ui.page.Page
 import org.cobalt.ui.screen.ConfigScreen
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 object ModulesPage : Page() {
 
@@ -63,7 +63,7 @@ object ModulesPage : Page() {
     val rightX = xPos + PADDING + ModuleComponent.WIDTH + COLUMN_GAP
     var rightY = yPos + PADDING + pageOffset - scrollHelper.scrollOffset
 
-    Skia.pushScissor(xPos, yPos, width, height)
+    SkiaRenderer.pushScissor(xPos, yPos, width, height)
 
     moduleComponents.forEachIndexed { index, component ->
       if (index % 2 == 0) {
@@ -81,7 +81,7 @@ object ModulesPage : Page() {
       }
     }
 
-    Skia.popScissor()
+    SkiaRenderer.popScissor()
 
     val contentHeight = maxOf(
       leftY + scrollHelper.scrollOffset,
@@ -93,7 +93,7 @@ object ModulesPage : Page() {
 
 
   override fun mouseScrolled(horizontalAmount: Double, verticalAmount: Double): Boolean {
-    if (MouseUtils.isHoveringOver(xPos, yPos, width, height)) {
+    if (Mouse.isHoveringOver(xPos, yPos, width, height)) {
       scrollHelper.scroll(verticalAmount)
       return true
     }

@@ -1,6 +1,7 @@
 package org.cobalt.ui.helper
 
 import kotlin.math.abs
+import org.cobalt.util.client.WindowUtils
 
 class SnapHelper(private val snapThreshold: Float = 5f) {
 
@@ -12,8 +13,6 @@ class SnapHelper(private val snapThreshold: Float = 5f) {
     moduleY: Float,
     moduleW: Float,
     moduleH: Float,
-    screenWidth: Float,
-    screenHeight: Float,
     otherModuleBounds: List<ModuleBounds>,
   ): Pair<Float, Float> {
     val right = moduleX + moduleW
@@ -21,8 +20,8 @@ class SnapHelper(private val snapThreshold: Float = 5f) {
     val bottom = moduleY + moduleH
     val centerY = moduleY + moduleH / 2f
 
-    val xTargets = mutableListOf(0f, screenWidth / 2f, screenWidth)
-    val yTargets = mutableListOf(0f, screenHeight / 2f, screenHeight)
+    val xTargets = mutableListOf(0f, WindowUtils.windowWidth / 2f, WindowUtils.windowWidth)
+    val yTargets = mutableListOf(0f, WindowUtils.windowHeight / 2f, WindowUtils.windowHeight)
 
     otherModuleBounds.forEach { bounds ->
       xTargets.add(bounds.x)
@@ -35,15 +34,14 @@ class SnapHelper(private val snapThreshold: Float = 5f) {
 
     var snappedX = moduleX
     var snappedY = moduleY
-    var bestXDiff = snapThreshold + 1f
-    var bestYDiff = snapThreshold + 1f
+    val bestXDiff = snapThreshold + 1f
+    val bestYDiff = snapThreshold + 1f
     var xGuide: GuideLine? = null
     var yGuide: GuideLine? = null
 
     fun checkX(target: Float, edge: Float, newX: Float) {
       val diff = abs(edge - target)
       if (diff <= snapThreshold && diff < bestXDiff) {
-        bestXDiff = diff
         snappedX = newX
         xGuide = GuideLine(true, target)
       }
@@ -52,7 +50,6 @@ class SnapHelper(private val snapThreshold: Float = 5f) {
     fun checkY(target: Float, edge: Float, newY: Float) {
       val diff = abs(edge - target)
       if (diff <= snapThreshold && diff < bestYDiff) {
-        bestYDiff = diff
         snappedY = newY
         yGuide = GuideLine(false, target)
       }

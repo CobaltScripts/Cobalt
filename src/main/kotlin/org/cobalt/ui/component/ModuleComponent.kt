@@ -3,7 +3,7 @@ package org.cobalt.ui.component
 import org.cobalt.module.Module
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.animation.EaseOutAnimation
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.render.SkiaRenderer
 
 class ModuleComponent(
   val module: Module,
@@ -43,7 +43,7 @@ class ModuleComponent(
   }
 
   override fun renderComponent() {
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       xPos, yPos, width, height,
       5f, theme.backgroundSecondary
     )
@@ -58,13 +58,13 @@ class ModuleComponent(
     }
 
     if (settings.isNotEmpty() && expandProgress > 0f) {
-      Skia.line(
+      SkiaRenderer.line(
         xPos + PADDING, yPos + BASE_HEIGHT,
         xPos + width - PADDING, yPos + BASE_HEIGHT,
         1f, theme.border
       )
 
-      Skia.pushScissor(xPos, yPos + BASE_HEIGHT, width, expandedSettingsHeight * expandProgress)
+      SkiaRenderer.pushScissor(xPos, yPos + BASE_HEIGHT, width, expandedSettingsHeight * expandProgress)
 
       var settingY = yPos + BASE_HEIGHT + 6f
 
@@ -75,17 +75,17 @@ class ModuleComponent(
         settingY += setting.height
       }
 
-      Skia.popScissor()
+      SkiaRenderer.popScissor()
     }
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       xPos, yPos,
       width, height,
       1f, 5f, theme.border
     )
 
-    Skia.text(
-      Skia.regularFont, module.name,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, module.name,
       xPos + PADDING, yPos + (BASE_HEIGHT - FONT_SIZE) / 2,
       FONT_SIZE, theme.textPrimary
     )

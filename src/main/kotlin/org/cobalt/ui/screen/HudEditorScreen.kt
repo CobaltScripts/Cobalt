@@ -9,13 +9,13 @@ import org.cobalt.ui.helper.DragHandler
 import org.cobalt.ui.helper.SnapHelper
 import org.cobalt.ui.theme.Theme
 import org.cobalt.ui.theme.ThemeManager
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.WindowUtils.scaleX
-import org.cobalt.util.WindowUtils.scaleY
-import org.cobalt.util.WindowUtils.windowHeight
-import org.cobalt.util.WindowUtils.windowWidth
-import org.cobalt.util.helper.Multithreading
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.client.WindowUtils.scaleX
+import org.cobalt.util.client.WindowUtils.scaleY
+import org.cobalt.util.client.WindowUtils.windowHeight
+import org.cobalt.util.client.WindowUtils.windowWidth
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
+import org.cobalt.util.scheduling.Multithreading
 
 object HudEditorScreen : UIScreen() {
 
@@ -33,19 +33,19 @@ object HudEditorScreen : UIScreen() {
 
   override fun renderSkia() {
     modules.forEach { module ->
-      Skia.push()
+      SkiaRenderer.push()
 
       val renderX = module.xPos * scaleX
       val renderY = module.yPos * scaleY
       val finalScale = module.scale * scaleY
 
-      Skia.translate(renderX, renderY)
-      Skia.scale(finalScale, finalScale)
-      Skia.translate(-module.xPos, -module.yPos)
+      SkiaRenderer.translate(renderX, renderY)
+      SkiaRenderer.scale(finalScale, finalScale)
+      SkiaRenderer.translate(-module.xPos, -module.yPos)
 
       drawRenderableModule(module)
 
-      Skia.pop()
+      SkiaRenderer.pop()
     }
 
     drawSnapGuides()
@@ -58,9 +58,9 @@ object HudEditorScreen : UIScreen() {
 
     snapHelper.activeGuides.forEach { guide ->
       if (guide.isVertical) {
-        Skia.line(guide.position, 0f, guide.position, windowHeight, 1f, theme.accentPrimary)
+        SkiaRenderer.line(guide.position, 0f, guide.position, windowHeight, 1f, theme.accentPrimary)
       } else {
-        Skia.line(0f, guide.position, windowWidth, guide.position, 1f, theme.accentPrimary)
+        SkiaRenderer.line(0f, guide.position, windowWidth, guide.position, 1f, theme.accentPrimary)
       }
     }
   }
@@ -75,11 +75,11 @@ object HudEditorScreen : UIScreen() {
 
     val isSelected = module == selectedModule
 
-    Skia.outline(x, y, width, height, 1f, if (isSelected) theme.accentPrimary else theme.border)
+    SkiaRenderer.outline(x, y, width, height, 1f, if (isSelected) theme.accentPrimary else theme.border)
 
     if (isSelected) {
       val squareOffset = SQUARE_SIZE / 2.0f
-      Skia.rect(
+      SkiaRenderer.rect(
         x + width - squareOffset, y + height - squareOffset,
         SQUARE_SIZE, SQUARE_SIZE,
         theme.accentPrimary
@@ -110,7 +110,7 @@ object HudEditorScreen : UIScreen() {
         return@firstOrNull true
       }
 
-      if (MouseUtils.isHoveringOver(renderX, renderY, scaledWidth, scaledHeight)) {
+      if (Mouse.isHoveringOver(renderX, renderY, scaledWidth, scaledHeight)) {
         dragHandler.startMove(renderX, renderY)
         return@firstOrNull true
       }
@@ -152,7 +152,7 @@ object HudEditorScreen : UIScreen() {
       val scaledWidth = candidate.width * candidate.scale * resScale
       val scaledHeight = candidate.height * candidate.scale * resScale
 
-      MouseUtils.isHoveringOver(renderX, renderY, scaledWidth, scaledHeight)
+      Mouse.isHoveringOver(renderX, renderY, scaledWidth, scaledHeight)
     } ?: return super.mouseScrolled(x, y, scrollX, scrollY)
 
     selectedModule = module

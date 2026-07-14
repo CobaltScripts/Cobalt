@@ -54,7 +54,11 @@ style:
     active: true
     maxJumpCount: 3
   WildcardImport:
-    active: false
+    active: true
+    excludeImports:
+      - 'org.lwjgl.vulkan.*'
+      - 'io.github.humbleui.skija.*'
+      - 'net.minecraft.world.level.block.*'
   ForbiddenComment:
     active: false
   UnusedPrivateProperty:

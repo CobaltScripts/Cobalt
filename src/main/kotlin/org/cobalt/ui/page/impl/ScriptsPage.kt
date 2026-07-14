@@ -6,8 +6,8 @@ import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.ScriptComponent
 import org.cobalt.ui.helper.ScrollHelper
 import org.cobalt.ui.page.Page
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 
 object ScriptsPage : Page() {
 
@@ -59,13 +59,13 @@ object ScriptsPage : Page() {
     val pageOffset = openingOffset.get(-30f, 0f)
     var currentY = yPos + PADDING + pageOffset - scrollHelper.scrollOffset
 
-    Skia.pushScissor(xPos, yPos, width, height)
+    SkiaRenderer.pushScissor(xPos, yPos, width, height)
 
     scriptComponents
       .groupBy { (_, category) -> category }
       .forEach { (category, components) ->
-        Skia.text(
-          Skia.regularFont, category,
+        SkiaRenderer.text(
+          SkiaRenderer.regularFont, category,
           xPos + PADDING, currentY,
           CATEGORY_FONT_SIZE, theme.textMuted
         )
@@ -91,14 +91,14 @@ object ScriptsPage : Page() {
         currentY = columnY.max() + GROUP_GAP
       }
 
-    Skia.popScissor()
+    SkiaRenderer.popScissor()
 
     val contentHeight = currentY + scrollHelper.scrollOffset - yPos
     scrollHelper.updateMaxScroll(contentHeight, height)
   }
 
   override fun mouseScrolled(horizontalAmount: Double, verticalAmount: Double): Boolean {
-    if (MouseUtils.isHoveringOver(xPos, yPos, width, height)) {
+    if (Mouse.isHoveringOver(xPos, yPos, width, height)) {
       scrollHelper.scroll(verticalAmount)
       return true
     }

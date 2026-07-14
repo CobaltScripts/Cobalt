@@ -5,8 +5,8 @@ import com.google.gson.JsonPrimitive
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.input.KeyEvent
 import org.cobalt.ui.component.setting.Setting
-import org.cobalt.util.MouseUtils
-import org.cobalt.util.skia.Skia
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.render.SkiaRenderer
 import org.lwjgl.glfw.GLFW
 
 class KeyBindSetting(
@@ -35,28 +35,28 @@ class KeyBindSetting(
     get() = if (listening) "..." else value.displayName.string
 
   private val buttonWidth: Float
-    get() = Skia.textWidth(Skia.regularFont, displayText, FONT_SIZE) + 30f
+    get() = SkiaRenderer.textWidth(SkiaRenderer.regularFont, displayText, FONT_SIZE) + 30f
 
   override fun renderSetting() {
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
 
-    Skia.roundedRect(
+    SkiaRenderer.roundedRect(
       startX, startY,
       buttonWidth, BUTTON_HEIGHT,
       5f, theme.backgroundPrimary
     )
 
-    Skia.roundedOutline(
+    SkiaRenderer.roundedOutline(
       startX, startY,
       buttonWidth, BUTTON_HEIGHT,
       1f, 5f, theme.border
     )
 
-    val textWidth = Skia.textWidth(Skia.regularFont, displayText, FONT_SIZE)
+    val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, displayText, FONT_SIZE)
 
-    Skia.text(
-      Skia.regularFont, displayText,
+    SkiaRenderer.text(
+      SkiaRenderer.regularFont, displayText,
       startX + (buttonWidth - textWidth) / 2,
       startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
       FONT_SIZE, theme.textPrimary
@@ -66,7 +66,7 @@ class KeyBindSetting(
   override fun mouseClicked(button: Int): Boolean {
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
-    val isHovered = MouseUtils.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)
+    val isHovered = Mouse.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)
 
     if (listening) {
       value = InputConstants.Type.MOUSE.getOrCreate(button)

@@ -15,7 +15,7 @@ import org.cobalt.event.EventBus
 import org.cobalt.event.impl.WorldEvent
 import org.cobalt.module.ModuleManager
 import org.cobalt.ui.theme.ThemeManager
-import org.cobalt.util.skia.SkiaPIP
+import org.cobalt.util.render.skia.SkiaPIP
 import org.slf4j.LoggerFactory
 
 object Cobalt : ClientModInitializer {
