@@ -111,7 +111,7 @@ class AStarPathfinder(
     neighborNode.parent = currentNode
     neighborNode.costSoFar = neighborCostSoFar
     neighborNode.totalCost = neighborCostSoFar + neighborNode.costToEnd
-    neighborNode.movementType = movement.type
+    neighborNode.movement = movement
 
     if (neighborNode.heapPosition == -1) {
       openSet.add(neighborNode)

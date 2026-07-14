@@ -1,9 +1,12 @@
 package org.cobalt.pathfinder.movement.walk
 
+import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.calculate.PathNode
+import org.cobalt.pathfinder.helper.MovementController
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.pathfinder.movement.MovementState
 import org.cobalt.pathfinder.movement.MovementType
 import org.cobalt.pathfinder.movement.MovementValidator
 
@@ -11,6 +14,10 @@ class DiagonalMovement(
   val dx: Int,
   val dz: Int,
 ) : Movement(MovementType.WALK) {
+
+  override fun updateState(config: PathConfig, nodes: List<PathNode>, currNodeIndex: Int): MovementState {
+    TODO("Not yet implemented")
+  }
 
   override fun calculateCost(
     ctx: CalculationContext,
@@ -21,15 +28,10 @@ class DiagonalMovement(
     val y = currNode.y
     val z = currNode.z + dz
 
-    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z)) {
-      return
-    }
-
-    if (!MovementValidator.canWalkThrough(ctx, currNode.x + dx, y, currNode.z)) {
-      return
-    }
-
-    if (!MovementValidator.canWalkThrough(ctx, currNode.x, y, currNode.z + dz)) {
+    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z) ||
+      !MovementValidator.canWalkThrough(ctx, currNode.x + dx, currNode.y, currNode.z) ||
+      !MovementValidator.canWalkThrough(ctx, currNode.x, currNode.y, currNode.z + dz)
+    ) {
       return
     }
 

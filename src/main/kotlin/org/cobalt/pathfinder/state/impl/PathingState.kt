@@ -1,19 +1,23 @@
-package org.cobalt.pathfinder.state.pathing
+package org.cobalt.pathfinder.state.impl
 
+import org.cobalt.module.impl.misc.Rotations
+import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.calculate.Path
-import org.cobalt.pathfinder.calculate.PathNode
+import org.cobalt.pathfinder.movement.MovementStatus
 import org.cobalt.pathfinder.state.ExecutorState
-import org.cobalt.pathfinder.state.fly.StartFlyState
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
 import org.cobalt.util.client.PlayerUtils
+import org.cobalt.util.rotation.RotationMath
+import org.cobalt.util.rotation.data.RotationTarget
 
 class PathingState : ExecutorState() {
 
   private var path: Path? = null
+  private var config: PathConfig? = null
 
-  private inline var currPathIndex
+  private inline var currPathIndex: Int
     get() = PathExecutor.pathIndex
     set(value) {
       PathExecutor.pathIndex = value
@@ -28,20 +32,20 @@ class PathingState : ExecutorState() {
   }
 
   override fun exit() {
-    playerInput.stopMovement()
+    movementController.stopMovement()
   }
 
   override fun onTick() {
     val path = path ?: return
+    val config = config ?: return
 
     val nodes = path.nodes
     val targetNode = nodes[currPathIndex]
 
-    if (targetNode.useMovementFly && PlayerUtils.canFly && !PlayerUtils.isFlying) {
-      PathExecutor.changeState(StartFlyState())
-    }
+    val movement = targetNode.movement
+    val state = movement?.updateState(config, nodes, currPathIndex) ?: return
 
-    if (hasArrived(targetNode)) {
+    if (state.status == MovementStatus.REACHED) {
       currPathIndex++
 
       if (currPathIndex >= nodes.size) {
@@ -52,11 +56,15 @@ class PathingState : ExecutorState() {
       return
     }
 
-    // TODO: ROTATIONS & MOVEMENT
-  }
+    if (targetNode.useMovementFly && PlayerUtils.canFly && !PlayerUtils.isFlying) {
+      PathExecutor.changeState(StartFlyState())
+      return
+    }
 
-  private fun hasArrived(node: PathNode): Boolean {
-    return node.block == PlayerUtils.position
+    state.target?.let { target ->
+      movementController.applyInput(target.input)
+      target.lookAt?.let(::RotationTarget)?.let(Rotations::track)
+    }
   }
 
 }

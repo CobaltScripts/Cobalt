@@ -1,9 +1,12 @@
 package org.cobalt.pathfinder.movement.walk
 
+import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.calculate.PathNode
+import org.cobalt.pathfinder.helper.MovementController
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.pathfinder.movement.MovementState
 import org.cobalt.pathfinder.movement.MovementType
 import org.cobalt.pathfinder.movement.MovementValidator
 
@@ -11,6 +14,10 @@ class TraverseMovement(
   val dx: Int,
   val dz: Int,
 ) : Movement(MovementType.WALK) {
+
+  override fun updateState(config: PathConfig, nodes: List<PathNode>, currNodeIndex: Int): MovementState {
+    TODO("Not yet implemented")
+  }
 
   override fun calculateCost(
     ctx: CalculationContext,

@@ -1,4 +1,4 @@
-package org.cobalt.pathfinder.state.calculation
+package org.cobalt.pathfinder.state.impl
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
-import org.cobalt.pathfinder.state.pathing.PathingState
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.client.PlayerUtils
 
@@ -28,10 +27,10 @@ class CalculatingState : ExecutorState() {
 
     calculationJob = CoroutineScope(Dispatchers.Default).launch {
       val path = AStarPathfinder(
-        startPos.x, startPos.y, startPos.z,
-        goal, config.mode,
-        config.returnBestNode,
-        config.maxCalculationTime
+          startPos.x, startPos.y, startPos.z,
+          goal, config.mode,
+          config.returnBestNode,
+          config.maxCalculationTime
       ).findPath()
 
       if (!isActive) {

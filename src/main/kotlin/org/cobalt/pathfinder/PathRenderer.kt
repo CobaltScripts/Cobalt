@@ -29,11 +29,9 @@ object PathRenderer {
       GizmoRenderer.drawBox(targetNode.smallBox(), Color.RED)
     }
 
-    for (index in nodes.indices) {
-      if (index <= 0) continue
-
+    for (index in 1 until nodes.size) {
       val prev = nodes[index - 1]
-      val curr = nodes[index + 1]
+      val curr = nodes[index]
 
       GizmoRenderer.drawLine(
         prev.centerVec,

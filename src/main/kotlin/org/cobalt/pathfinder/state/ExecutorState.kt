@@ -1,12 +1,12 @@
 package org.cobalt.pathfinder.state
 
 import org.cobalt.pathfinder.PathExecutor
-import org.cobalt.pathfinder.helper.PlayerInput
+import org.cobalt.pathfinder.helper.MovementController
 
 abstract class ExecutorState {
 
-  protected val playerInput: PlayerInput =
-    PathExecutor.playerInput
+  protected val movementController: MovementController =
+    PathExecutor.movementController
 
   open fun enter() {}
   open fun onTick() {}

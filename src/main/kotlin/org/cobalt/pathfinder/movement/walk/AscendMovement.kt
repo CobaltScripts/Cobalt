@@ -1,17 +1,17 @@
 package org.cobalt.pathfinder.movement.walk
 
+import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.calculate.PathNode
-import org.cobalt.pathfinder.movement.CalculationContext
-import org.cobalt.pathfinder.movement.Movement
-import org.cobalt.pathfinder.movement.MovementResult
-import org.cobalt.pathfinder.movement.MovementType
-import org.cobalt.pathfinder.movement.MovementValidator
+import org.cobalt.pathfinder.movement.*
 
-// TODO: Handle ladder & vine climbing & jump boost
 class AscendMovement(
   val dx: Int,
   val dz: Int,
 ) : Movement(MovementType.WALK) {
+
+  override fun updateState(config: PathConfig, nodes: List<PathNode>, currNodeIndex: Int): MovementState {
+    TODO("Not yet implemented")
+  }
 
   override fun calculateCost(
     ctx: CalculationContext,
@@ -22,11 +22,9 @@ class AscendMovement(
     val y = currNode.y + 1
     val z = currNode.z + dz
 
-    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z)) {
-      return
-    }
-
-    if (!MovementValidator.canWalkThrough(ctx, currNode.x, currNode.y + 1, currNode.z)) {
+    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z) ||
+      !MovementValidator.canWalkThrough(ctx, currNode.x, currNode.y + 1, currNode.z)
+    ) {
       return
     }
 

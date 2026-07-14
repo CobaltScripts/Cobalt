@@ -1,8 +1,7 @@
-package org.cobalt.pathfinder.state.fly
+package org.cobalt.pathfinder.state.impl
 
 import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.state.ExecutorState
-import org.cobalt.pathfinder.state.pathing.PathingState
 import org.cobalt.util.client.PlayerUtils
 
 class StartFlyState : ExecutorState() {
@@ -31,26 +30,26 @@ class StartFlyState : ExecutorState() {
       flyStage = FlyStage.INITIAL_JUMP
     }
 
-    playerInput.stopMovement()
+    movementController.stopMovement()
 
     when (flyStage) {
       FlyStage.INITIAL_JUMP -> {
-        playerInput.jump = true
+        movementController.jump = true
         flyStage = FlyStage.RELEASE_INITIAL_JUMP
       }
 
       FlyStage.RELEASE_INITIAL_JUMP -> {
-        playerInput.jump = false
+        movementController.jump = false
         flyStage = FlyStage.SECOND_JUMP
       }
 
       FlyStage.SECOND_JUMP -> {
-        playerInput.jump = true
+        movementController.jump = true
         flyStage = FlyStage.RELEASE_SECOND_JUMP
       }
 
       FlyStage.RELEASE_SECOND_JUMP -> {
-        playerInput.jump = false
+        movementController.jump = false
       }
     }
 

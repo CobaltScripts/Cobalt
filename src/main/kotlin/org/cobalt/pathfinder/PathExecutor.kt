@@ -7,9 +7,9 @@ import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
 import org.cobalt.event.impl.WorldEvent
 import org.cobalt.pathfinder.calculate.Path
-import org.cobalt.pathfinder.helper.PlayerInput
+import org.cobalt.pathfinder.helper.MovementController
 import org.cobalt.pathfinder.state.ExecutorState
-import org.cobalt.pathfinder.state.calculation.CalculatingState
+import org.cobalt.pathfinder.state.impl.CalculatingState
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
 import org.cobalt.util.client.PlayerUtils
@@ -20,10 +20,10 @@ object PathExecutor {
   var config: PathConfig? = null
 
   var path: Path? = null
-  var pathIndex: Int = 0
+  var pathIndex: Int = 1
 
   var running = false
-  var playerInput = PlayerInput()
+  var movementController = MovementController()
 
   init {
     EventBus.register(this)
@@ -53,7 +53,7 @@ object PathExecutor {
       return
     }
 
-    player.input = playerInput
+//    player.input = movementController
 
     this.config = config
     this.running = true
@@ -65,16 +65,16 @@ object PathExecutor {
     state?.exit()
     state = null
 
-    minecraft.player?.let {
-      it.input = KeyboardInput(minecraft.options)
-    }.also {
-      playerInput.stopMovement()
-    }
+//    minecraft.player?.let {
+//      it.input = KeyboardInput(minecraft.options)
+//    }.also {
+//      movementController.stopMovement()
+//    }
 
     running = false
 
     path = null
-    pathIndex = 0
+    pathIndex = 1
   }
 
   fun changeState(newState: ExecutorState) {
@@ -96,7 +96,7 @@ object PathExecutor {
     }
 
     if (minecraft.gui.screen() != null) {
-      playerInput.stopMovement()
+      movementController.stopMovement()
       return
     }
 
