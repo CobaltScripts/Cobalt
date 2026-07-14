@@ -7,7 +7,7 @@ import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
 import org.cobalt.event.impl.WorldEvent
 import org.cobalt.pathfinder.calculate.Path
-import org.cobalt.pathfinder.helper.PathInput
+import org.cobalt.pathfinder.helper.PlayerInput
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.pathfinder.state.calculation.CalculatingState
 import org.cobalt.util.chat.ChatUtils
@@ -23,7 +23,7 @@ object PathExecutor {
   var pathIndex: Int = 0
 
   var running = false
-  var pathInput = PathInput()
+  var playerInput = PlayerInput()
 
   init {
     EventBus.register(this)
@@ -53,7 +53,7 @@ object PathExecutor {
       return
     }
 
-    player.input = pathInput
+    player.input = playerInput
 
     this.config = config
     this.running = true
@@ -68,7 +68,7 @@ object PathExecutor {
     minecraft.player?.let {
       it.input = KeyboardInput(minecraft.options)
     }.also {
-      pathInput.stopMovement()
+      playerInput.stopMovement()
     }
 
     running = false
@@ -96,7 +96,7 @@ object PathExecutor {
     }
 
     if (minecraft.gui.screen() != null) {
-      pathInput.stopMovement()
+      playerInput.stopMovement()
       return
     }
 

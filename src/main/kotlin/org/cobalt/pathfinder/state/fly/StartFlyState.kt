@@ -31,26 +31,26 @@ class StartFlyState : ExecutorState() {
       flyStage = FlyStage.INITIAL_JUMP
     }
 
-    input.stopMovement()
+    playerInput.stopMovement()
 
     when (flyStage) {
       FlyStage.INITIAL_JUMP -> {
-        input.jump = true
+        playerInput.jump = true
         flyStage = FlyStage.RELEASE_INITIAL_JUMP
       }
 
       FlyStage.RELEASE_INITIAL_JUMP -> {
-        input.jump = false
+        playerInput.jump = false
         flyStage = FlyStage.SECOND_JUMP
       }
 
       FlyStage.SECOND_JUMP -> {
-        input.jump = true
+        playerInput.jump = true
         flyStage = FlyStage.RELEASE_SECOND_JUMP
       }
 
       FlyStage.RELEASE_SECOND_JUMP -> {
-        input.jump = false
+        playerInput.jump = false
       }
     }
 

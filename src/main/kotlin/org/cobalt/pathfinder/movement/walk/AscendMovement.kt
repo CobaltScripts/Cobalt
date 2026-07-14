@@ -22,10 +22,6 @@ class AscendMovement(
     val y = currNode.y + 1
     val z = currNode.z + dz
 
-    if (!MovementValidator.canWalkOn(ctx, currNode.x, currNode.y, currNode.z)) {
-      return
-    }
-
     if (!MovementValidator.canWalkOn(ctx, x, y - 1, z)) {
       return
     }
