@@ -4,8 +4,8 @@ import net.minecraft.world.phys.Vec3
 import org.cobalt.pathfinder.helper.PlayerInput
 
 class MovementState(
-  val status: MovementStatus,
   val target: MovementTarget? = null,
+  val status: MovementStatus = MovementStatus.UNREACHED,
 )
 
 data class MovementTarget(
