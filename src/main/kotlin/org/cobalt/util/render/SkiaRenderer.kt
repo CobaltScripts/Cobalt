@@ -3,7 +3,6 @@
 package org.cobalt.util.render
 
 import io.github.humbleui.skija.*
-import io.github.humbleui.skija.paragraph.FontCollection
 import io.github.humbleui.skija.svg.SVGDOM
 import io.github.humbleui.skija.svg.SVGLengthContext
 import io.github.humbleui.types.RRect
@@ -13,6 +12,7 @@ import kotlin.math.max
 import org.cobalt.util.render.skia.data.SkiaCorner
 import org.cobalt.util.render.skia.data.SkiaFont
 import org.cobalt.util.render.skia.data.SkiaImage
+import org.cobalt.util.render.skia.helper.LineWrapper
 
 object SkiaRenderer {
 
@@ -193,58 +193,11 @@ object SkiaRenderer {
 
   @JvmStatic
   fun wrap(font: SkiaFont, text: String, maxWidth: Float, size: Float): List<String> {
-    val lines = mutableListOf<String>()
-    val line = StringBuilder()
-
-    fun pushLine() {
-      lines.add(line.toString())
-      line.clear()
+    val wrapper = LineWrapper(maxWidth) { stringToMeasure ->
+      textWidth(font, stringToMeasure, size)
     }
 
-    fun append(text: String) {
-      if (line.isNotEmpty()) {
-        line.append(' ')
-      }
-
-      line.append(text)
-    }
-
-    fun addWord(word: String) {
-      val candidate = if (line.isEmpty()) word else "$line $word"
-
-      if (line.isNotEmpty() && textWidth(font, candidate, size) > maxWidth) {
-        pushLine()
-      }
-
-      if (textWidth(font, word, size) <= maxWidth) {
-        append(word)
-        return
-      }
-
-      val chunk = StringBuilder()
-
-      for (char in word) {
-        if (chunk.isNotEmpty() && textWidth(font, "$chunk$char", size) > maxWidth) {
-          append(chunk.toString())
-          pushLine()
-          chunk.clear()
-        }
-
-        chunk.append(char)
-      }
-
-      append(chunk.toString())
-    }
-
-    text.split('\n').forEach { paragraph ->
-      paragraph.split(' ').filter { it.isNotEmpty() }.forEach { addWord(it) }
-
-      if (line.isNotEmpty()) {
-        pushLine()
-      }
-    }
-
-    return lines
+    return wrapper.wrap(text)
   }
 
   @JvmStatic
