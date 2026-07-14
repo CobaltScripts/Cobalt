@@ -19,8 +19,8 @@ class AStarPathfinder(
   val startZ: Int,
   val goal: Goal,
   val mode: PathMode,
-  val returnBestNode: Boolean = false,
-  val maxCalculationTime: Long = 10_000_000L,
+  val returnBestNode: Boolean,
+  val maxCalculationTime: Long,
 ) {
 
   private val closedSet = Long2ObjectOpenHashMap<PathNode>()
@@ -86,7 +86,7 @@ class AStarPathfinder(
       movementResult.reset()
       move.calculateCost(calculationContext, currentNode, movementResult)
 
-      if (movementResult.cost < calculationContext.infCost) {
+      if (movementResult.cost < calculationContext.actionCosts.infCost) {
         relaxNeighbor(currentNode, move, movementResult, openSet)
       }
     }

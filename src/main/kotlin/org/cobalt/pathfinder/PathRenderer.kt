@@ -19,9 +19,9 @@ object PathRenderer {
     val path: Path = PathExecutor.path ?: return
 
     val nodes = path.nodes
-    val keyNodes = path.keyNodes
+    val index = PathExecutor.pathIndex
 
-    val targetNode = nodes[PathExecutor.pathIndex].centerVec
+    val targetNode = nodes[index].centerVec
     val playerPos = PlayerUtils.position.centerVec()
 
     if (Debug.enabled) {
@@ -29,21 +29,15 @@ object PathRenderer {
       GizmoRenderer.drawBox(targetNode.smallBox(), Color.RED)
     }
 
-    for (index in keyNodes.indices) {
-      val node = keyNodes[index]
-
-      GizmoRenderer.drawBlockPos(
-        if (node.useMovementFly) node.block else node.blockStandingOn,
-        color = theme.accentPrimary
-      )
-
+    for (index in nodes.indices) {
       if (index <= 0) continue
 
-      val prev = keyNodes[index - 1]
+      val prev = nodes[index - 1]
+      val curr = nodes[index + 1]
 
       GizmoRenderer.drawLine(
-        if (prev.useMovementFly) prev.centerVec else prev.topCenterVec,
-        if (node.useMovementFly) node.centerVec else node.topCenterVec,
+        prev.centerVec,
+        curr.centerVec,
         theme.accentSecondary
       )
     }
