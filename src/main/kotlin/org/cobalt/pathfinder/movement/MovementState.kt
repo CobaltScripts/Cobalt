@@ -14,7 +14,7 @@ data class MovementTarget(
 )
 
 enum class MovementStatus {
-  REACHED, UNREACHED
+  REACHED, UNREACHED, FAILED
 }
 
 enum class MovementType {

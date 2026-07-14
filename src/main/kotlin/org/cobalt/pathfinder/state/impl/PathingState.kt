@@ -9,7 +9,6 @@ import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
 import org.cobalt.util.client.PlayerUtils
-import org.cobalt.util.rotation.RotationMath
 import org.cobalt.util.rotation.data.RotationTarget
 
 class PathingState : ExecutorState() {
@@ -45,25 +44,33 @@ class PathingState : ExecutorState() {
     val movement = targetNode.movement
     val state = movement?.updateState(config, nodes, currPathIndex) ?: return
 
-    if (state.status == MovementStatus.REACHED) {
-      currPathIndex++
+    when (state.status) {
+      MovementStatus.REACHED -> {
+        currPathIndex++
 
-      if (currPathIndex >= nodes.size) {
-        ChatUtils.sendSystemMessage("Completed Path!", MessageType.DEBUG)
-        PathExecutor.stop()
+        if (currPathIndex >= nodes.size) {
+          ChatUtils.sendSystemMessage("Completed Path!", MessageType.DEBUG)
+          PathExecutor.stop()
+        }
+
+        return
       }
 
-      return
-    }
+      MovementStatus.UNREACHED -> {
+        if (targetNode.useMovementFly && PlayerUtils.canFly && !PlayerUtils.isFlying) {
+          PathExecutor.changeState(StartFlyState())
+          return
+        }
 
-    if (targetNode.useMovementFly && PlayerUtils.canFly && !PlayerUtils.isFlying) {
-      PathExecutor.changeState(StartFlyState())
-      return
-    }
+        state.target?.let { target ->
+          movementController.applyInput(target.input)
+          target.lookAt?.let(::RotationTarget)?.let(Rotations::track)
+        }
+      }
 
-    state.target?.let { target ->
-      movementController.applyInput(target.input)
-      target.lookAt?.let(::RotationTarget)?.let(Rotations::track)
+      MovementStatus.FAILED -> {
+        PathExecutor.changeState(CalculatingState())
+      }
     }
   }
 
