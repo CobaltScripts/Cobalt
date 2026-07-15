@@ -2,7 +2,6 @@ package org.cobalt.pathfinder.movement.walk
 
 import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.calculate.PathNode
-import org.cobalt.pathfinder.helper.MovementController
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult

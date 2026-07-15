@@ -1,6 +1,5 @@
 package org.cobalt.pathfinder
 
-import net.minecraft.client.player.KeyboardInput
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent

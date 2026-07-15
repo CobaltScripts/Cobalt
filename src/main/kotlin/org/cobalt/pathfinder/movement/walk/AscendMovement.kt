@@ -2,7 +2,12 @@ package org.cobalt.pathfinder.movement.walk
 
 import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.calculate.PathNode
-import org.cobalt.pathfinder.movement.*
+import org.cobalt.pathfinder.movement.CalculationContext
+import org.cobalt.pathfinder.movement.Movement
+import org.cobalt.pathfinder.movement.MovementResult
+import org.cobalt.pathfinder.movement.MovementState
+import org.cobalt.pathfinder.movement.MovementType
+import org.cobalt.pathfinder.movement.MovementValidator
 
 class AscendMovement(
   val dx: Int,
@@ -22,7 +27,8 @@ class AscendMovement(
     val y = currNode.y + 1
     val z = currNode.z + dz
 
-    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z) ||
+    if (
+      !MovementValidator.canWalkOn(ctx, x, y - 1, z) ||
       !MovementValidator.canWalkThrough(ctx, currNode.x, currNode.y + 1, currNode.z)
     ) {
       return

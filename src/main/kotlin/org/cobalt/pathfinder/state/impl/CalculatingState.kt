@@ -27,10 +27,10 @@ class CalculatingState : ExecutorState() {
 
     calculationJob = CoroutineScope(Dispatchers.Default).launch {
       val path = AStarPathfinder(
-          startPos.x, startPos.y, startPos.z,
-          goal, config.mode,
-          config.returnBestNode,
-          config.maxCalculationTime
+        startPos.x, startPos.y, startPos.z,
+        goal, config.mode,
+        config.returnBestNode,
+        config.maxCalculationTime
       ).findPath()
 
       if (!isActive) {

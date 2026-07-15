@@ -2,7 +2,6 @@ package org.cobalt.pathfinder.movement.walk
 
 import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.calculate.PathNode
-import org.cobalt.pathfinder.helper.MovementController
 import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
@@ -28,7 +27,8 @@ class DiagonalMovement(
     val y = currNode.y
     val z = currNode.z + dz
 
-    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z) ||
+    if (
+      !MovementValidator.canWalkOn(ctx, x, y - 1, z) ||
       !MovementValidator.canWalkThrough(ctx, currNode.x + dx, currNode.y, currNode.z) ||
       !MovementValidator.canWalkThrough(ctx, currNode.x, currNode.y, currNode.z + dz)
     ) {
