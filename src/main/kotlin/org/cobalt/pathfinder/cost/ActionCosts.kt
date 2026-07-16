@@ -11,7 +11,6 @@ class ActionCosts(private val ctx: CalculationContext, speedAmplifier: Int, jump
 
   val blockFallCost: DoubleArray = generateBlockFallCost()
   val jumpOneBlockCost: Double
-  val yawTurnCost: Double
 
   val oneBlockWalkCost = 1.0 / speedEffect(speedAmplifier)
   val walkOffOneBlockCost = oneBlockWalkCost * 0.8
@@ -41,7 +40,6 @@ class ActionCosts(private val ctx: CalculationContext, speedAmplifier: Int, jump
     }
 
     jumpOneBlockCost = time + fallDistanceToTicks(height - 1)
-    yawTurnCost = oneBlockWalkCost * 0.5
   }
 
   private fun speedEffect(amplifier: Int): Double {

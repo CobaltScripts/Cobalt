@@ -101,8 +101,7 @@ class AStarPathfinder(
     movementResult: MovementResult,
     openSet: BinaryHeapOpenSet,
   ) {
-    val turnCost = yawTurnCost(currentNode, movementResult)
-    val neighborCostSoFar = currentNode.costSoFar + movementResult.cost + turnCost
+    val neighborCostSoFar = currentNode.costSoFar + movementResult.cost
     val neighborNode = getNode(
       movementResult.x, movementResult.y, movementResult.z,
       PathNode.longHash(movementResult.x, movementResult.y, movementResult.z)
@@ -122,32 +121,6 @@ class AStarPathfinder(
     } else {
       openSet.relocate(neighborNode)
     }
-  }
-
-  private fun yawTurnCost(currentNode: PathNode, movementResult: MovementResult): Double {
-    val parent = currentNode.parent ?: return 0.0
-
-    val prevDx = currentNode.x - parent.x
-    val prevDz = currentNode.z - parent.z
-    val nextDx = movementResult.x - currentNode.x
-    val nextDz = movementResult.z - currentNode.z
-
-    val prevYaw = yawOf(prevDx, prevDz) ?: return 0.0
-    val nextYaw = yawOf(nextDx, nextDz) ?: return 0.0
-
-    return if (abs(RotationMath.angleDifference(nextYaw, prevYaw)) > 35f) {
-      calculationContext.costs.yawTurnCost
-    } else {
-      0.0
-    }
-  }
-
-  private fun yawOf(dx: Int, dz: Int): Float? {
-    if (dx == 0 && dz == 0) {
-      return null
-    }
-
-    return (atan2(dz.toDouble(), dx.toDouble()) * RotationMath.RAD_TO_DEG - 90.0).toFloat()
   }
 
   fun getNode(x: Int, y: Int, z: Int, hash: Long): PathNode {
