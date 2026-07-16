@@ -13,8 +13,8 @@ import org.cobalt.util.rotation.data.RotationTarget
 
 class PathingState : ExecutorState() {
 
-  private var path: Path? = null
   private var config: PathConfig? = null
+  private var path: Path? = null
 
   private inline var currPathIndex: Int
     get() = PathExecutor.pathIndex
@@ -23,6 +23,7 @@ class PathingState : ExecutorState() {
     }
 
   override fun enter() {
+    config = PathExecutor.config
     path = PathExecutor.path ?: run {
       ChatUtils.sendSystemMessage("<red>Cannot traverse a nonexistent path...</red>")
       PathExecutor.stop()
@@ -31,12 +32,13 @@ class PathingState : ExecutorState() {
   }
 
   override fun exit() {
+    Rotations.stop()
     movementController.stopMovement()
   }
 
   override fun onTick() {
-    val path = path ?: return
     val config = config ?: return
+    val path = path ?: return
 
     val nodes = path.nodes
     val targetNode = nodes[currPathIndex]
@@ -46,6 +48,7 @@ class PathingState : ExecutorState() {
 
     when (state.status) {
       MovementStatus.REACHED -> {
+        ChatUtils.sendSystemMessage("Reached Node [$currPathIndex]!", MessageType.DEBUG)
         currPathIndex++
 
         if (currPathIndex >= nodes.size) {
@@ -57,6 +60,8 @@ class PathingState : ExecutorState() {
       }
 
       MovementStatus.UNREACHED -> {
+        ChatUtils.sendSystemMessage("Moving towards node [$currPathIndex]!", MessageType.DEBUG)
+
         if (targetNode.useMovementFly && PlayerUtils.canFly && !PlayerUtils.isFlying) {
           PathExecutor.changeState(StartFlyState())
           return
@@ -69,6 +74,7 @@ class PathingState : ExecutorState() {
       }
 
       MovementStatus.FAILED -> {
+        ChatUtils.sendSystemMessage("<red>Recalculating path...</red>", MessageType.DEBUG)
         PathExecutor.changeState(CalculatingState())
       }
     }

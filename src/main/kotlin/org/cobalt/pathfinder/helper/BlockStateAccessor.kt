@@ -1,12 +1,16 @@
 package org.cobalt.pathfinder.helper
 
 import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.LevelChunk
 import net.minecraft.world.level.chunk.status.ChunkStatus
 
 class BlockStateAccessor(val level: ClientLevel) {
+
+  val access: BlockViewWrapper = BlockViewWrapper(this)
+  val mutableBlockPos: BlockPos.MutableBlockPos = BlockPos.MutableBlockPos()
 
   private val provider = level.chunkSource
   private var prevChunk: LevelChunk? = null

@@ -11,13 +11,13 @@ object MovementValidator {
       return false
     }
 
-    return canStandOn(calculationContext.blockStateAccessor, x, y, z)
+    return canStandOn(calculationContext.bsa, x, y, z)
   }
 
   @JvmStatic
   fun canWalkThrough(calculationContext: CalculationContext, x: Int, y: Int, z: Int): Boolean {
-    return canPassThrough(calculationContext.blockStateAccessor, x, y, z) &&
-      canPassThrough(calculationContext.blockStateAccessor, x, y + 1, z)
+    return canPassThrough(calculationContext.bsa, x, y, z) &&
+      canPassThrough(calculationContext.bsa, x, y + 1, z)
   }
 
 }

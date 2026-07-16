@@ -2,6 +2,8 @@ package org.cobalt.pathfinder.calculate.path
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.math.abs
+import kotlin.math.atan2
 import org.cobalt.pathfinder.calculate.Path
 import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.calculate.PathNode
@@ -12,6 +14,7 @@ import org.cobalt.pathfinder.movement.Movement
 import org.cobalt.pathfinder.movement.MovementResult
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
+import org.cobalt.util.rotation.RotationMath
 
 class AStarPathfinder(
   val startX: Int,
@@ -19,6 +22,7 @@ class AStarPathfinder(
   val startZ: Int,
   val goal: Goal,
   val mode: PathMode,
+  val calculationContext: CalculationContext,
   val returnBestNode: Boolean,
   val maxCalculationTime: Long,
 ) {
@@ -28,7 +32,6 @@ class AStarPathfinder(
   private var startTime = 0L
 
   fun findPath(): Path? {
-    val calculationContext = CalculationContext()
     val openSet = BinaryHeapOpenSet()
     val movementResult = MovementResult()
 
@@ -86,7 +89,7 @@ class AStarPathfinder(
       movementResult.reset()
       move.calculateCost(calculationContext, currentNode, movementResult)
 
-      if (movementResult.cost < calculationContext.actionCosts.infCost) {
+      if (movementResult.cost < calculationContext.costs.infCost) {
         relaxNeighbor(currentNode, move, movementResult, openSet)
       }
     }
@@ -98,7 +101,8 @@ class AStarPathfinder(
     movementResult: MovementResult,
     openSet: BinaryHeapOpenSet,
   ) {
-    val neighborCostSoFar = currentNode.costSoFar + movementResult.cost
+    val turnCost = yawTurnCost(currentNode, movementResult)
+    val neighborCostSoFar = currentNode.costSoFar + movementResult.cost + turnCost
     val neighborNode = getNode(
       movementResult.x, movementResult.y, movementResult.z,
       PathNode.longHash(movementResult.x, movementResult.y, movementResult.z)
@@ -118,6 +122,32 @@ class AStarPathfinder(
     } else {
       openSet.relocate(neighborNode)
     }
+  }
+
+  private fun yawTurnCost(currentNode: PathNode, movementResult: MovementResult): Double {
+    val parent = currentNode.parent ?: return 0.0
+
+    val prevDx = currentNode.x - parent.x
+    val prevDz = currentNode.z - parent.z
+    val nextDx = movementResult.x - currentNode.x
+    val nextDz = movementResult.z - currentNode.z
+
+    val prevYaw = yawOf(prevDx, prevDz) ?: return 0.0
+    val nextYaw = yawOf(nextDx, nextDz) ?: return 0.0
+
+    return if (abs(RotationMath.angleDifference(nextYaw, prevYaw)) > 35f) {
+      calculationContext.costs.yawTurnCost
+    } else {
+      0.0
+    }
+  }
+
+  private fun yawOf(dx: Int, dz: Int): Float? {
+    if (dx == 0 && dz == 0) {
+      return null
+    }
+
+    return (atan2(dz.toDouble(), dx.toDouble()) * RotationMath.RAD_TO_DEG - 90.0).toFloat()
   }
 
   fun getNode(x: Int, y: Int, z: Int, hash: Long): PathNode {

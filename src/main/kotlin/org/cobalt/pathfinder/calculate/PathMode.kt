@@ -1,32 +1,32 @@
 package org.cobalt.pathfinder.calculate
 
 import org.cobalt.pathfinder.movement.Movement
-import org.cobalt.pathfinder.movement.walk.AscendMovement
-import org.cobalt.pathfinder.movement.walk.DescendMovement
-import org.cobalt.pathfinder.movement.walk.DiagonalMovement
-import org.cobalt.pathfinder.movement.walk.TraverseMovement
+import org.cobalt.pathfinder.movement.walk.MovementAscend
+import org.cobalt.pathfinder.movement.walk.MovementDescend
+import org.cobalt.pathfinder.movement.walk.MovementDiagonal
+import org.cobalt.pathfinder.movement.walk.MovementTraverse
 
 enum class PathMode(vararg val movements: Movement) {
   WALK(
-    TraverseMovement.NORTH,
-    TraverseMovement.SOUTH,
-    TraverseMovement.EAST,
-    TraverseMovement.WEST,
+    MovementTraverse.NORTH,
+    MovementTraverse.SOUTH,
+    MovementTraverse.EAST,
+    MovementTraverse.WEST,
 
-    DiagonalMovement.NORTH_EAST,
-    DiagonalMovement.NORTH_WEST,
-    DiagonalMovement.SOUTH_EAST,
-    DiagonalMovement.SOUTH_WEST,
+    MovementDiagonal.NORTH_EAST,
+    MovementDiagonal.NORTH_WEST,
+    MovementDiagonal.SOUTH_EAST,
+    MovementDiagonal.SOUTH_WEST,
 
-    AscendMovement.NORTH,
-    AscendMovement.SOUTH,
-    AscendMovement.EAST,
-    AscendMovement.WEST,
+    MovementAscend.NORTH,
+    MovementAscend.SOUTH,
+    MovementAscend.EAST,
+    MovementAscend.WEST,
 
-    DescendMovement.NORTH,
-    DescendMovement.SOUTH,
-    DescendMovement.EAST,
-    DescendMovement.WEST
+    MovementDescend.NORTH,
+    MovementDescend.SOUTH,
+    MovementDescend.EAST,
+    MovementDescend.WEST
   ),
 
   FLY

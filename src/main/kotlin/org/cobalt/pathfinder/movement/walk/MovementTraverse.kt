@@ -8,14 +8,23 @@ import org.cobalt.pathfinder.movement.MovementResult
 import org.cobalt.pathfinder.movement.MovementState
 import org.cobalt.pathfinder.movement.MovementType
 import org.cobalt.pathfinder.movement.MovementValidator
+import org.cobalt.util.client.PlayerUtils
+import org.cobalt.pathfinder.movement.MovementTarget
+import org.cobalt.pathfinder.movement.MovementStatus
 
-class DiagonalMovement(
+class MovementTraverse(
   val dx: Int,
   val dz: Int,
 ) : Movement(MovementType.WALK) {
 
   override fun updateState(config: PathConfig, nodes: List<PathNode>, currNodeIndex: Int): MovementState {
-    TODO("Not yet implemented")
+    val targetNode = nodes[currNodeIndex]
+
+    if (PlayerUtils.position == targetNode.block) {
+      return MovementState(status = MovementStatus.REACHED)
+    }
+
+    return MovementState(MovementTarget(lookAt = targetNode.centerVec))
   }
 
   override fun calculateCost(
@@ -27,23 +36,19 @@ class DiagonalMovement(
     val y = currNode.y
     val z = currNode.z + dz
 
-    if (
-      !MovementValidator.canWalkOn(ctx, x, y - 1, z) ||
-      !MovementValidator.canWalkThrough(ctx, currNode.x + dx, currNode.y, currNode.z) ||
-      !MovementValidator.canWalkThrough(ctx, currNode.x, currNode.y, currNode.z + dz)
-    ) {
+    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z)) {
       return
     }
 
     res.set(x, y, z)
-    res.cost = 1.0
+    res.cost = ctx.costs.oneBlockWalkCost
   }
 
   companion object {
-    val NORTH_EAST = DiagonalMovement(1, -1)
-    val NORTH_WEST = DiagonalMovement(-1, -1)
-    val SOUTH_EAST = DiagonalMovement(1, 1)
-    val SOUTH_WEST = DiagonalMovement(-1, 1)
+    val NORTH = MovementTraverse(0, -1)
+    val SOUTH = MovementTraverse(0, 1)
+    val EAST = MovementTraverse(1, 0)
+    val WEST = MovementTraverse(-1, 0)
   }
 
 }

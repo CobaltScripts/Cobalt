@@ -30,6 +30,18 @@ fun Vec3.smallBox(): AABB {
 object BlockUtils {
 
   @JvmStatic
+  fun getCollisionHeight(bsa: BlockStateAccessor, x: Int, y: Int, z: Int): Double {
+    val state = bsa.get(x, y, z)
+    val shape = state.getCollisionShape(bsa.level, BlockPos(x, y, z))
+
+    if (shape.isEmpty) {
+      return 0.0
+    }
+
+    return shape.toAabbs().maxOfOrNull { it.maxY } ?: 0.0
+  }
+
+  @JvmStatic
   fun isWater(state: BlockState): Boolean {
     val fluid = state.fluidState.type
     return fluid == Fluids.WATER || fluid == Fluids.FLOWING_WATER

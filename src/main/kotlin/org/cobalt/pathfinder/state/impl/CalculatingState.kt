@@ -29,6 +29,7 @@ class CalculatingState : ExecutorState() {
       val path = AStarPathfinder(
         startPos.x, startPos.y, startPos.z,
         goal, config.mode,
+        config.calculationContext,
         config.returnBestNode,
         config.maxCalculationTime
       ).findPath()

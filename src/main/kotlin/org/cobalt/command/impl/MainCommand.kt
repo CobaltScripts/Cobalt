@@ -8,6 +8,7 @@ import org.cobalt.pathfinder.PathConfig
 import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.calculate.PathMode
 import org.cobalt.pathfinder.goal.GoalBlock
+import org.cobalt.pathfinder.movement.CalculationContext
 import org.cobalt.ui.screen.ConfigScreen
 import org.cobalt.ui.screen.HudEditorScreen
 import org.cobalt.util.scheduling.TickScheduler
@@ -33,9 +34,11 @@ object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
   @SubCommand
   fun goTo(x: Int, y: Int, z: Int, fly: Boolean) {
     val pathMode = if (fly) PathMode.FLY else PathMode.WALK
+    val ctx = CalculationContext()
     val config = PathConfig(
-      goal = GoalBlock(x, y, z),
-      mode = pathMode
+      goal = GoalBlock(x, y, z, ctx),
+      mode = pathMode,
+      calculationContext = ctx
     )
 
     PathExecutor.goTo(config)
