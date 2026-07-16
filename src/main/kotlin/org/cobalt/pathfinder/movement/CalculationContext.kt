@@ -1,5 +1,6 @@
 package org.cobalt.pathfinder.movement
 
+import kotlin.math.max
 import net.minecraft.world.effect.MobEffects
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.pathfinder.cost.ActionCosts
@@ -10,12 +11,12 @@ class CalculationContext {
   val level = minecraft.level!!
   val player = minecraft.player!!
 
-  val maxFallDistance = 20
+  val costs = ActionCosts()
+  val bsa = BlockStateAccessor(level)
 
-  val speedAmplifier = player.getEffect(MobEffects.SPEED)?.amplifier ?: -1
   val jumpAmplifier = player.getEffect(MobEffects.JUMP_BOOST)?.amplifier ?: -1
 
-  val costs = ActionCosts(this, speedAmplifier, jumpAmplifier)
-  val bsa = BlockStateAccessor(level)
+  val maxFallDistance = 20
+  val maxJumpBlock: Int = max(2, 2 + (jumpAmplifier * 2 + 1) / 4)
 
 }

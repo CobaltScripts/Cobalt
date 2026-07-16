@@ -8,12 +8,9 @@ import org.cobalt.pathfinder.movement.MovementResult
 import org.cobalt.pathfinder.movement.MovementState
 import org.cobalt.pathfinder.movement.MovementType
 import org.cobalt.pathfinder.movement.MovementValidator
-import org.cobalt.util.block.BlockUtils
 import org.cobalt.util.client.PlayerUtils
 import org.cobalt.pathfinder.movement.MovementTarget
 import org.cobalt.pathfinder.movement.MovementStatus
-import kotlin.math.min
-
 class MovementDescend(
   val dx: Int,
   val dz: Int,
@@ -61,21 +58,9 @@ class MovementDescend(
       return
     }
 
-    val sourceHeight = BlockUtils.getCollisionHeight(ctx.bsa, currNode.x, currNode.y, currNode.z)
-    val destHeight = BlockUtils.getCollisionHeight(ctx.bsa, x, landingY, z)
-    val fallBlocks = (currNode.y - landingY).coerceAtLeast(1)
-    val diff = fallBlocks.toDouble() + sourceHeight - destHeight
-    val fallDistance = min(ctx.costs.blockFallCost.lastIndex, fallBlocks)
 
     res.set(x, landingY, z)
-
-    val fallCost = ctx.costs.blockFallCost[fallDistance] + ctx.costs.walkOffOneBlockCost + ctx.costs.centerAfterFallCost
-
-    res.cost = when {
-      diff <= 0.5 -> ctx.costs.oneBlockWalkCost
-      diff <= ctx.costs.blockFallCost.lastIndex -> fallCost
-      else -> ctx.costs.infCost
-    }
+    res.cost = ctx.costs.oneBlockWalkCost
   }
 
   companion object {

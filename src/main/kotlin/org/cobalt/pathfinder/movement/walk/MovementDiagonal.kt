@@ -46,10 +46,12 @@ class MovementDiagonal(
     }
 
     res.set(x, y, z)
-    res.cost = ctx.costs.oneBlockWalkCost * sqrt(2.0)
+    res.cost = ctx.costs.oneBlockWalkCost * SQRT_2
   }
 
   companion object {
+    private val SQRT_2 = sqrt(2.0)
+
     val NORTH_EAST = MovementDiagonal(1, -1)
     val NORTH_WEST = MovementDiagonal(-1, -1)
     val SOUTH_EAST = MovementDiagonal(1, 1)
