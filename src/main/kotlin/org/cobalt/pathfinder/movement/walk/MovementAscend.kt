@@ -24,11 +24,11 @@ class MovementAscend(
   override fun updateState(config: PathConfig, nodes: List<PathNode>, currNodeIndex: Int): MovementState {
     val targetNode = nodes[currNodeIndex]
 
-    if (PlayerUtils.position == targetNode.block) {
+    if (PlayerUtils.blockStandingOn == targetNode.block) {
       return MovementState(status = MovementStatus.REACHED)
     }
 
-    return MovementState(MovementTarget(lookAt = targetNode.centerVec))
+    return MovementState(MovementTarget())
   }
 
   override fun calculateCost(
@@ -46,13 +46,13 @@ class MovementAscend(
     var landingY: Int? = null
 
     while (y <= currNode.y + maxJumpBlocks) {
-      if (!MovementValidator.canWalkThrough(ctx, currNode.x, y, currNode.z)) {
+      if (!MovementValidator.canWalkThrough(ctx, currNode.x, y + 1, currNode.z)) {
         break
       }
 
       if (
-        MovementValidator.canWalkOn(ctx, x, y - 1, z) &&
-        MovementValidator.canWalkThrough(ctx, x, y, z)
+        MovementValidator.canWalkOn(ctx, x, y, z) &&
+        MovementValidator.canWalkThrough(ctx, x, y + 1, z)
       ) {
         landingY = y
         break
@@ -65,8 +65,8 @@ class MovementAscend(
       return
     }
 
-    val sourceHeight = BlockUtils.getCollisionHeight(ctx.bsa, currNode.x, currNode.y - 1, currNode.z)
-    val destHeight = BlockUtils.getCollisionHeight(ctx.bsa, x, landingY - 1, z)
+    val sourceHeight = BlockUtils.getCollisionHeight(ctx.bsa, currNode.x, currNode.y, currNode.z)
+    val destHeight = BlockUtils.getCollisionHeight(ctx.bsa, x, landingY, z)
     val diff = (landingY - currNode.y).toDouble() + destHeight - sourceHeight
     val jumpProgress = (diff / maxJumpHeight).coerceIn(0.0, 1.0)
     val jumpPreference = (1.0 - jumpProgress) * ctx.costs.oneBlockWalkCost * 0.75

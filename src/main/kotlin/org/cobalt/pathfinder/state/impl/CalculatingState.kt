@@ -22,7 +22,7 @@ class CalculatingState : ExecutorState() {
       return
     }
 
-    val startPos = PlayerUtils.position
+    val startPos = PlayerUtils.blockStandingOn
     val goal = config.goal
 
     calculationJob = CoroutineScope(Dispatchers.Default).launch {

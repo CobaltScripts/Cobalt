@@ -20,11 +20,11 @@ class MovementTraverse(
   override fun updateState(config: PathConfig, nodes: List<PathNode>, currNodeIndex: Int): MovementState {
     val targetNode = nodes[currNodeIndex]
 
-    if (PlayerUtils.position == targetNode.block) {
+    if (PlayerUtils.blockStandingOn == targetNode.block) {
       return MovementState(status = MovementStatus.REACHED)
     }
 
-    return MovementState(MovementTarget(lookAt = targetNode.centerVec))
+    return MovementState(MovementTarget())
   }
 
   override fun calculateCost(
@@ -36,7 +36,7 @@ class MovementTraverse(
     val y = currNode.y
     val z = currNode.z + dz
 
-    if (!MovementValidator.canWalkOn(ctx, x, y - 1, z)) {
+    if (!MovementValidator.canWalkOn(ctx, x, y, z)) {
       return
     }
 

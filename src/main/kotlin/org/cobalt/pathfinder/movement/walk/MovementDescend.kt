@@ -22,11 +22,11 @@ class MovementDescend(
   override fun updateState(config: PathConfig, nodes: List<PathNode>, currNodeIndex: Int): MovementState {
     val targetNode = nodes[currNodeIndex]
 
-    if (PlayerUtils.position == targetNode.block) {
+    if (PlayerUtils.blockStandingOn == targetNode.block) {
       return MovementState(status = MovementStatus.REACHED)
     }
 
-    return MovementState(MovementTarget(lookAt = targetNode.centerVec))
+    return MovementState(MovementTarget())
   }
 
   override fun calculateCost(
@@ -37,7 +37,7 @@ class MovementDescend(
     val x = currNode.x + dx
     val z = currNode.z + dz
 
-    if (!MovementValidator.canWalkThrough(ctx, x, currNode.y, z)) {
+    if (!MovementValidator.canWalkThrough(ctx, x, currNode.y + 1, z)) {
       return
     }
 
@@ -45,11 +45,11 @@ class MovementDescend(
     var landingY: Int? = null
 
     while (currNode.y - y <= ctx.maxFallDistance) {
-      if (!MovementValidator.canWalkThrough(ctx, x, y, z)) {
+      if (!MovementValidator.canWalkThrough(ctx, x, y + 1, z)) {
         break
       }
 
-      if (MovementValidator.canWalkOn(ctx, x, y - 1, z)) {
+      if (MovementValidator.canWalkOn(ctx, x, y, z)) {
         landingY = y
         break
       }
@@ -61,10 +61,10 @@ class MovementDescend(
       return
     }
 
-    val sourceHeight = BlockUtils.getCollisionHeight(ctx.bsa, currNode.x, currNode.y - 1, currNode.z)
-    val destHeight = BlockUtils.getCollisionHeight(ctx.bsa, x, landingY - 1, z)
+    val sourceHeight = BlockUtils.getCollisionHeight(ctx.bsa, currNode.x, currNode.y, currNode.z)
+    val destHeight = BlockUtils.getCollisionHeight(ctx.bsa, x, landingY, z)
     val fallBlocks = (currNode.y - landingY).coerceAtLeast(1)
-    val diff = fallBlocks.toDouble() + destHeight - sourceHeight
+    val diff = fallBlocks.toDouble() + sourceHeight - destHeight
     val fallDistance = min(ctx.costs.blockFallCost.lastIndex, fallBlocks)
 
     res.set(x, landingY, z)

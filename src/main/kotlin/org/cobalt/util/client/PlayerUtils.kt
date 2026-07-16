@@ -58,20 +58,13 @@ object PlayerUtils {
     }
 
   @JvmStatic
-  val positionVec: Vec3
-    get() {
-      val player = player ?: return Vec3.ZERO
-      return player.position()
-    }
-
-  @JvmStatic
-  val position: BlockPos
+  val blockStandingOn: BlockPos
     get() {
       val player = player ?: return BlockPos.ZERO
 
       return BlockPos(
         floor(player.x).toInt(),
-        ceil(player.blockPosition().y.toDouble() - 0.25).toInt(),
+        (ceil(player.y - 0.25) - 1).toInt(),
         floor(player.z).toInt()
       )
     }

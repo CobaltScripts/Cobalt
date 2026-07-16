@@ -22,22 +22,15 @@ object PathRenderer {
     val index = PathExecutor.pathIndex
 
     val targetNode = nodes[index].centerVec
-    val playerPos = PlayerUtils.position.centerVec()
+    val playerPos = PlayerUtils.blockStandingOn.centerVec()
 
     if (Debug.enabled) {
       GizmoRenderer.drawBox(playerPos.smallBox(), Color.GREEN)
       GizmoRenderer.drawBox(targetNode.smallBox(), Color.RED)
     }
 
-    for (index in 1 until nodes.size) {
-      val prev = nodes[index - 1]
-      val curr = nodes[index]
-
-      GizmoRenderer.drawLine(
-        prev.centerVec,
-        curr.centerVec,
-        theme.accentSecondary
-      )
+    for (node in nodes) {
+      GizmoRenderer.drawBlockPos(node.block, theme.accentSecondary)
     }
   }
 
