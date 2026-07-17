@@ -18,9 +18,11 @@ class GoalBlock(
 
     val diagonal = min(dx, dz).toDouble()
     val straight = max(dx, dz).toDouble() - diagonal
-    val horizontal = straight + diagonal * SQRT_2
 
-    return horizontal + dy
+    val horizontal = straight + diagonal * SQRT_2
+    val vertical = dy * 2.0
+
+    return horizontal + vertical
   }
 
   override fun isAtGoal(x: Int, y: Int, z: Int): Boolean {
