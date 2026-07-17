@@ -4,11 +4,13 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
+import org.cobalt.pathfinder.movement.CalculationContext
 
 class GoalBlock(
   val goalX: Int,
   val goalY: Int,
   val goalZ: Int,
+  val ctx: CalculationContext
 ) : Goal {
 
   override fun heuristic(x: Int, y: Int, z: Int): Double {
