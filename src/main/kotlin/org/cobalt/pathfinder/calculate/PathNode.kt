@@ -22,7 +22,6 @@ data class PathNode(
   var parent: PathNode? = null
 
   val block: BlockPos = BlockPos(x, y, z)
-  val centerVec: Vec3 = Vec3(x + 0.5, y + 0.5, z + 0.5)
 
   val useMovementFly: Boolean
     get() = movement?.type == MovementType.FLY
