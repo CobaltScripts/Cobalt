@@ -14,17 +14,25 @@ class GoalBlock(
 ) : Goal {
 
   override fun heuristic(x: Int, y: Int, z: Int): Double {
-    val dx = abs(goalX - x)
-    val dy = abs(goalY - y)
-    val dz = abs(goalZ - z)
+    var heuristic = 0.0
 
-    val diagonal = min(dx, dz).toDouble()
-    val straight = max(dx, dz).toDouble() - diagonal
+    val xDiff = x - goalX
+    val yDiff = y - goalY
+    val zDiff = z - goalZ
 
-    val horizontal = straight + diagonal * SQRT_2
-    val vertical = dy * 2.0
+    if (yDiff > 0) {
+      heuristic += (ctx.costs.fallNBlocksCost[2] / 2.0) * yDiff
+    } else if (yDiff < 0) {
+      heuristic += -yDiff * ctx.costs.jumpOneBlockCost
+    }
 
-    return horizontal + vertical
+    val absX = abs(xDiff.toDouble())
+    val absZ = abs(zDiff.toDouble())
+    val diagonal = min(absX, absZ)
+    val straight = max(absX, absZ) - diagonal
+
+    heuristic += (diagonal * SQRT_2 + straight) * 3.563
+    return heuristic
   }
 
   override fun isAtGoal(x: Int, y: Int, z: Int): Boolean {
@@ -34,5 +42,4 @@ class GoalBlock(
   companion object {
     private val SQRT_2 = sqrt(2.0)
   }
-
 }

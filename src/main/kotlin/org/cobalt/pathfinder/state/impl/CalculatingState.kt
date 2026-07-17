@@ -9,6 +9,7 @@ import org.cobalt.pathfinder.PathExecutor
 import org.cobalt.pathfinder.calculate.path.AStarPathfinder
 import org.cobalt.pathfinder.state.ExecutorState
 import org.cobalt.util.chat.ChatUtils
+import org.cobalt.util.chat.MessageType
 import org.cobalt.util.client.PlayerUtils
 
 class CalculatingState : ExecutorState() {
@@ -43,6 +44,13 @@ class CalculatingState : ExecutorState() {
         PathExecutor.stop()
         return@launch
       }
+
+      val nodes = path.nodes
+      val dur = path.timeElapsed
+
+      ChatUtils.sendSystemMessage("Nodes: ${nodes.size}", MessageType.DEBUG)
+      ChatUtils.sendSystemMessage("Time: ${dur.inWholeMilliseconds} ms", MessageType.DEBUG)
+      ChatUtils.sendSystemMessage("Per node: ${dur.inWholeNanoseconds / nodes.size} ns", MessageType.DEBUG)
 
       PathExecutor.path = path
       PathExecutor.changeState(PathingState())

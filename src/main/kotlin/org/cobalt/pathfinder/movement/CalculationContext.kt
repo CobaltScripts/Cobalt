@@ -11,10 +11,10 @@ class CalculationContext {
   val level = minecraft.level!!
   val player = minecraft.player!!
 
-  val costs = ActionCosts()
-  val bsa = BlockStateAccessor(level)
+  val jumpAmplifier = player.getEffect(MobEffects.JUMP_BOOST)?.amplifier ?: 0
 
-  val jumpAmplifier = player.getEffect(MobEffects.JUMP_BOOST)?.amplifier ?: -1
+  val costs = ActionCosts(this)
+  val bsa = BlockStateAccessor(level)
 
   val maxFallDistance = 20
   val maxJumpBlock: Int = max(2, 2 + (jumpAmplifier * 2 + 1) / 4)

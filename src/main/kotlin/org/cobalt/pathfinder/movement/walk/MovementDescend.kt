@@ -59,8 +59,9 @@ class MovementDescend(
     }
 
 
+    val fallDistance = currNode.y - landingY
     res.set(x, landingY, z)
-    res.cost = ctx.costs.oneBlockWalkCost
+    res.cost = ctx.costs.fallNBlocksCost[fallDistance]
   }
 
   companion object {

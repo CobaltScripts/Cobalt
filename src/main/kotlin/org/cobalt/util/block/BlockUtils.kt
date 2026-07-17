@@ -1,6 +1,7 @@
 package org.cobalt.util.block
 
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.world.level.EmptyBlockGetter
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.piston.MovingPistonBlock
@@ -12,33 +13,19 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import org.cobalt.pathfinder.helper.BlockStateAccessor
 
-fun BlockPos.centerVec(): Vec3 {
-  return Vec3(x + 0.5, y + 0.5, z + 0.5)
-}
-
-fun Vec3.smallBox(): AABB {
-  return AABB(
-    x - 0.25,
-    y - 0.25,
-    z - 0.25,
-    x + 0.25,
-    y + 0.25,
-    z + 0.25
-  )
-}
 
 object BlockUtils {
 
   @JvmStatic
   fun getCollisionHeight(bsa: BlockStateAccessor, x: Int, y: Int, z: Int): Double {
     val state = bsa.get(x, y, z)
-    val shape = state.getCollisionShape(bsa.level, BlockPos(x, y, z))
+    val shape = state.getCollisionShape(bsa.level, bsa.mutableBlockPos.set(x, y, z))
 
     if (shape.isEmpty) {
       return 0.0
     }
 
-    return shape.toAabbs().maxOfOrNull { it.maxY } ?: 0.0
+    return shape.max(Direction.Axis.Y)
   }
 
   @JvmStatic

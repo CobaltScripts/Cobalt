@@ -60,8 +60,9 @@ class MovementAscend(
       return
     }
 
+    val jumpHeight = landingY - currNode.y
     res.set(x, landingY, z)
-    res.cost = ctx.costs.oneBlockWalkCost
+    res.cost = ctx.costs.oneBlockWalkCost + ctx.costs.jumpOneBlockCost * jumpHeight
   }
 
   companion object {
