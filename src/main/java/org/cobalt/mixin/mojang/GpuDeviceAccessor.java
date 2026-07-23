@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface GpuDeviceAccessor {
 
   @Accessor("backend")
-  GpuDeviceBackend getBackend();
+  GpuDeviceBackend cobalt$getBackend();
 
 }

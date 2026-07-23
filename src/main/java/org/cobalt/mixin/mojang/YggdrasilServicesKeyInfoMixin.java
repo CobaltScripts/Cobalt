@@ -16,7 +16,7 @@ public class YggdrasilServicesKeyInfoMixin {
       target = "Lorg/slf4j/Logger;error(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"
     )
   )
-  private boolean hideLoggerErrors(Logger instance, String s, Object o, Object o1) {
+  private boolean cobalt$hideLoggerErrors(Logger instance, String str, Object obj, Object obj1) {
     return false;
   }
 

@@ -28,7 +28,7 @@ public class GuiMixin {
       ordinal = 3
     )
   )
-  private void beforeFinalPop(
+  private void cobalt$beforeFinalPop(
     DeltaTracker deltaTracker,
     boolean shouldRenderLevel,
     boolean resourcesLoaded,
@@ -47,7 +47,7 @@ public class GuiMixin {
       shift = At.Shift.AFTER
     )
   )
-  private void onScreenOpen(Screen screen, CallbackInfo ci) {
+  private void cobalt$onScreenOpen(Screen screen, CallbackInfo ci) {
     GuiEvent.Open event = new GuiEvent.Open(screen);
     EventBus.post(event);
   }
@@ -59,7 +59,7 @@ public class GuiMixin {
       target = "Lnet/minecraft/client/gui/screens/Screen;removed()V"
     )
   )
-  private void onCloseScreen(Screen screen, CallbackInfo ci) {
+  private void cobalt$onCloseScreen(Screen screen, CallbackInfo ci) {
     GuiEvent.Close event = new GuiEvent.Close(this.screen);
     EventBus.post(event);
   }
@@ -73,7 +73,7 @@ public class GuiMixin {
       shift = At.Shift.AFTER
     )
   )
-  private void renderScreen(
+  private void cobalt$renderScreen(
     DeltaTracker deltaTracker,
     boolean shouldRenderLevel,
     boolean resourcesLoaded,

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class HudMixin {
 
   @Inject(method = "extractRenderState", at = @At("TAIL"))
-  public void extractRenderState(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+  public void cobalt$extractRenderState(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     RenderEvent.Hud event = new RenderEvent.Hud(graphics, deltaTracker);
     EventBus.post(event);
   }

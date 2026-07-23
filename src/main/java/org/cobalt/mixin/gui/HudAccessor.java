@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface HudAccessor {
 
   @Accessor("SCORE_DISPLAY_ORDER")
-  static Comparator<PlayerScoreEntry> getScoreDisplayOrder() {
+  static Comparator<PlayerScoreEntry> cobalt$getScoreDisplayOrder() {
     throw new AssertionError();
   }
 

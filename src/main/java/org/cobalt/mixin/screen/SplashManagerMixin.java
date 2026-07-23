@@ -21,7 +21,7 @@ public class SplashManagerMixin {
     at = @At("HEAD"),
     cancellable = true
   )
-  private void modifySplash(CallbackInfoReturnable<SplashRenderer> cir) {
+  private void cobalt$modifySplash(CallbackInfoReturnable<SplashRenderer> cir) {
     Component splash = cobalt$createSplash();
     SplashRenderer splashRenderer = new SplashRenderer(splash);
 

@@ -81,7 +81,7 @@ public class FontMixin {
     argsOnly = true,
     name = "text"
   )
-  private FormattedCharSequence modifyCharSequence(FormattedCharSequence text) {
+  private FormattedCharSequence cobalt$modifyCharSequence(FormattedCharSequence text) {
     if (NickHider.INSTANCE.getEnabled()) {
       MutableComponent component = Component.literal(NickHider.INSTANCE.getNickname());
       return cobalt$replaceWordWithText(text, PlayerUtils.getIgn(), component);

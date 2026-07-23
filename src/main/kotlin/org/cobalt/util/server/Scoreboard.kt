@@ -28,7 +28,7 @@ object Scoreboard {
       return scoreboard.listPlayerScores(objective)
         .asSequence()
         .filter { !it.isHidden }
-        .sortedWith(HudAccessor.getScoreDisplayOrder())
+        .sortedWith(HudAccessor.`cobalt$getScoreDisplayOrder`())
         .take(15)
         .map { entry ->
           val team = scoreboard.getPlayersTeam(entry.owner())

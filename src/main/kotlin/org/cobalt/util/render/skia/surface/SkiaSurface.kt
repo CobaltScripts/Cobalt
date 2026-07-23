@@ -21,7 +21,7 @@ interface SkiaSurface {
 
     fun getInstance(): SkiaSurface {
       val rawDevice = RenderSystem.getDevice()
-      val backend = (rawDevice as GpuDeviceAccessor).getBackend()
+      val backend = (rawDevice as GpuDeviceAccessor).`cobalt$getBackend`()
 
       if (backend is VulkanDevice) {
         return VulkanSurface()

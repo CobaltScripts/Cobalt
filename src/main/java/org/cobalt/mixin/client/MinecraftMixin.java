@@ -22,13 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftMixin {
 
   @Inject(method = "tick", at = @At("HEAD"))
-  private void onStartTick(CallbackInfo callbackInfo) {
+  private void cobalt$onStartTick(CallbackInfo callbackInfo) {
     TickEvent.Start event = new TickEvent.Start();
     EventBus.post(event);
   }
 
   @Inject(method = "tick", at = @At("RETURN"))
-  private void onEndTick(CallbackInfo callbackInfo) {
+  private void cobalt$onEndTick(CallbackInfo callbackInfo) {
     TickEvent.End event = new TickEvent.End();
     EventBus.post(event);
   }
@@ -41,12 +41,12 @@ public class MinecraftMixin {
     ),
     index = 0
   )
-  private String modifyTitle(String oldTitle) {
+  private String cobalt$modifyTitle(String oldTitle) {
     return Cobalt.MOD_NAME + " " + Cobalt.MINECRAFT_VERSION + " (v" + Cobalt.MOD_VERSION + ")";
   }
 
   @Inject(method = "close", at = @At("HEAD"))
-  public void onClose(CallbackInfo callbackInfo) {
+  public void cobalt$onClose(CallbackInfo callbackInfo) {
     List<Pair<AddonMetadata, Addon>> addonsList = AddonManager.getAddons();
 
     addonsList.forEach((addon) -> {

@@ -50,7 +50,7 @@ internal class VulkanSurface : SkiaSurface {
   }
 
   private fun makeContext(): DirectContext {
-    val vkDevice = (RenderSystem.getDevice() as GpuDeviceAccessor).getBackend() as VulkanDevice
+    val vkDevice = (RenderSystem.getDevice() as GpuDeviceAccessor).`cobalt$getBackend`() as VulkanDevice
 
     val lwjglDevice = vkDevice.vkDevice()
     val device = lwjglDevice.address()

@@ -27,7 +27,7 @@ public abstract class MouseHandlerMixin {
   public abstract void releaseMouse();
 
   @Inject(method = "onButton", at = @At("HEAD"), cancellable = true)
-  private void onMouseButton(long handle, MouseButtonInfo rawButtonInfo, int action, CallbackInfo callbackInfo) {
+  private void cobalt$onMouseButton(long handle, MouseButtonInfo rawButtonInfo, int action, CallbackInfo callbackInfo) {
     MouseEvent event = cobalt$createMouseEvent(rawButtonInfo.button(), action);
 
     if (event == null) {
@@ -42,7 +42,7 @@ public abstract class MouseHandlerMixin {
   }
 
   @Inject(method = "onScroll", at = @At("HEAD"))
-  private void onMouseScroll(long handle, double xoffset, double yoffset, CallbackInfo callbackInfo) {
+  private void cobalt$onMouseScroll(long handle, double xoffset, double yoffset, CallbackInfo callbackInfo) {
     EventBus.post(new MouseScrollEvent(xoffset, yoffset));
   }
 
@@ -73,14 +73,14 @@ public abstract class MouseHandlerMixin {
   }
 
   @Inject(method = "turnPlayer", at = @At("HEAD"), cancellable = true)
-  private void onUpdateMouse(CallbackInfo callbackInfo) {
+  private void cobalt$onUpdateMouse(CallbackInfo callbackInfo) {
     if (Mouse.getMouseMode() == MouseMode.LOCK_MOUSE) {
       callbackInfo.cancel();
     }
   }
 
   @Inject(method = "isMouseGrabbed", at = @At("HEAD"), cancellable = true)
-  private void onIsCursorLocked(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+  private void cobalt$onIsCursorLocked(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
     if (Mouse.getMouseMode() == MouseMode.UNGRAB_MOUSE) {
       if (this.mouseGrabbed) {
         this.releaseMouse();
@@ -91,7 +91,7 @@ public abstract class MouseHandlerMixin {
   }
 
   @Inject(method = "grabMouse", at = @At("HEAD"), cancellable = true)
-  private void onLockCursor(CallbackInfo callbackInfo) {
+  private void cobalt$onLockCursor(CallbackInfo callbackInfo) {
     if (Mouse.getMouseMode() == MouseMode.UNGRAB_MOUSE) {
       callbackInfo.cancel();
     }

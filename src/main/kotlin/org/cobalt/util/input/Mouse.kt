@@ -60,8 +60,8 @@ object Mouse {
     val info = MouseButtonInfo(button, 0)
 
     runOnClientThread {
-      mouse.invokeOnButton(window, info, GLFW.GLFW_PRESS)
-      mouse.invokeOnButton(window, info, GLFW.GLFW_RELEASE)
+      mouse.`cobalt$invokeOnButton`(window, info, GLFW.GLFW_PRESS)
+      mouse.`cobalt$invokeOnButton`(window, info, GLFW.GLFW_RELEASE)
     }
   }
 
