@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPacketListenerMixin {
 
   @Inject(method = "sendChat", at = @At("HEAD"), cancellable = true)
-  public void sendChatMessage(String content, CallbackInfo callbackInfo) {
+  public void cobalt$sendChatMessage(String content, CallbackInfo callbackInfo) {
     if (CommandManager.handleCommandExecution$cobalt(content)) {
       callbackInfo.cancel();
       return;

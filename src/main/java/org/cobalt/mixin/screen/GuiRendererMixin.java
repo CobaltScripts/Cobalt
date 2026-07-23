@@ -27,17 +27,17 @@ public class GuiRendererMixin {
       opcode = Opcodes.GETFIELD
     )
   )
-  private CubeMap redirectCubeMap(GuiRenderer instance) {
+  private CubeMap cobalt$redirectCubeMap(GuiRenderer instance) {
     return cobalt$cubeMap;
   }
 
   @Inject(method = "registerPanoramaTextures", at = @At("HEAD"))
-  private void registerCustomCubeMapTextures(TextureManager textureManager, CallbackInfo callbackInfo) {
+  private void cobalt$registerCustomCubeMapTextures(TextureManager textureManager, CallbackInfo callbackInfo) {
     cobalt$cubeMap.registerTextures(textureManager);
   }
 
   @Inject(method = "close", at = @At("RETURN"))
-  private void onClose(CallbackInfo callbackInfo) {
+  private void cobalt$onClose(CallbackInfo callbackInfo) {
     cobalt$cubeMap.close();
   }
 

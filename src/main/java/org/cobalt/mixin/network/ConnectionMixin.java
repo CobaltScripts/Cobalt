@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ConnectionMixin {
 
   @Inject(method = "genericsFtw", at = @At("HEAD"), cancellable = true)
-  private static void onPacketReceived(Packet<?> packet, PacketListener listener, CallbackInfo callbackInfo) {
+  private static void cobalt$onPacketReceived(Packet<?> packet, PacketListener listener, CallbackInfo callbackInfo) {
     PacketEvent.Receive event = new PacketEvent.Receive(packet);
     EventBus.post(event);
 
@@ -25,7 +25,7 @@ public class ConnectionMixin {
   }
 
   @Inject(method = "sendPacket", at = @At("HEAD"), cancellable = true)
-  private void onPacketSent(Packet<?> packet, ChannelFutureListener listener, boolean flush, CallbackInfo callbackInfo) {
+  private void cobalt$onPacketSent(Packet<?> packet, ChannelFutureListener listener, boolean flush, CallbackInfo callbackInfo) {
     PacketEvent.Send event = new PacketEvent.Send(packet);
     EventBus.post(event);
 
