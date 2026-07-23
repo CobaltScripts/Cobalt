@@ -10,18 +10,16 @@ import org.cobalt.util.scheduling.TickScheduler
 
 object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
 
-  private const val DELAY_TICKS = 1L
-
   @DefaultHandler
   fun main() {
-    TickScheduler.schedule(DELAY_TICKS) {
+    TickScheduler.schedule(1L) {
       minecraft.gui.setScreen(ConfigScreen)
     }
   }
 
   @SubCommand
   fun hud() {
-    TickScheduler.schedule(DELAY_TICKS) {
+    TickScheduler.schedule(1L) {
       minecraft.gui.setScreen(HudEditorScreen)
     }
   }
