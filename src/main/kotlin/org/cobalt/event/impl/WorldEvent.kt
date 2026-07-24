@@ -4,7 +4,7 @@ import org.cobalt.event.Event
 
 abstract class WorldEvent : Event() {
 
-  class Render : WorldEvent()
+  class GizmoRender : WorldEvent()
   class Load : WorldEvent()
 
 }

@@ -53,7 +53,7 @@ object Cobalt : ClientModInitializer {
     ModuleManager.registerModules()
     CommandManager.registerCommands()
 
-    LevelRenderEvents.BEFORE_GIZMOS.register { EventBus.post(WorldEvent.Render()) }
+    LevelRenderEvents.BEFORE_GIZMOS.register { EventBus.post(WorldEvent.GizmoRender()) }
     ServerLevelEvents.LOAD.register { _, _ -> EventBus.post(WorldEvent.Load()) }
     PictureInPictureRendererRegistry.register { SkiaPIP() }
   }

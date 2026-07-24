@@ -3,6 +3,8 @@ package org.cobalt.module.type
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
 import org.cobalt.util.chat.ChatUtils
+import org.cobalt.util.input.Mouse
+import org.cobalt.util.input.MouseMode
 
 abstract class Script(
   name: String,
@@ -22,6 +24,7 @@ abstract class Script(
       return
     }
 
+    Mouse.mouseMode = MouseMode.UNGRAB_MOUSE
     ChatUtils.sendSystemMessage("$name Script has been <green>Enabled</green>")
     enabled = true
   }
@@ -31,6 +34,7 @@ abstract class Script(
       return
     }
 
+    Mouse.mouseMode = MouseMode.DEFAULT
     ChatUtils.sendSystemMessage("$name Script has been <red>Disabled</red>")
     enabled = false
   }

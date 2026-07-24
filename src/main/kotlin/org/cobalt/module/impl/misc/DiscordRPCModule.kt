@@ -11,7 +11,7 @@ import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
 import org.slf4j.LoggerFactory
 
-object DiscordRPC : Module(
+object DiscordRPCModule : Module(
   name = "DiscordRPC",
   category = ModuleCategory.MISC,
 ) {

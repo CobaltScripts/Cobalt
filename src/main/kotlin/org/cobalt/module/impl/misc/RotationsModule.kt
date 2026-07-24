@@ -17,7 +17,7 @@ import org.cobalt.util.rotation.RotationMath
 import org.cobalt.util.rotation.data.Rotation
 import org.cobalt.util.rotation.data.RotationTarget
 
-object Rotations : Module(
+object RotationsModule : Module(
   name = "Rotations",
   category = ModuleCategory.MISC,
   toggleable = false,
@@ -119,7 +119,7 @@ object Rotations : Module(
   }
 
   @SubscribeEvent
-  fun onRender(ignored: WorldEvent.Render) {
+  fun onRender(ignored: WorldEvent.GizmoRender) {
     if (!running || minecraft.gui.screen() != null) {
       return
     }

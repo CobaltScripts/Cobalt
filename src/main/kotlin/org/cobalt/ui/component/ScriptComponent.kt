@@ -18,6 +18,7 @@ class ScriptComponent(val script: Script) : UIComponent(
 
   private val colorAnim = ColorAnimation(200L)
   private val alphaAnim = EaseOutAnimation(200L)
+
   private val backgroundPicture: SkiaImage? = if (script.backgroundResourcePath.isNotBlank()) {
     SkiaRenderer.createImage(script.backgroundResourcePath)
   } else {

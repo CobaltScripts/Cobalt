@@ -17,9 +17,10 @@ class RotationTarget {
       val vec = vector
         ?: entity?.position()
         ?: blockPos?.let { Vec3.atCenterOf(it) }
-        ?: error("No rotation target set.")
 
-      return rotation ?: RotationMath.getRotation(vec)
+      return rotation
+        ?: vec?.let(RotationMath::getRotation)
+        ?: error("No rotation target set..?")
     }
 
   constructor(entityTarget: Entity) {

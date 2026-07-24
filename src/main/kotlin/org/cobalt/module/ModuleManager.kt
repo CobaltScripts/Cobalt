@@ -6,15 +6,15 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.RenderEvent
-import org.cobalt.module.impl.combat.AutoClicker
-import org.cobalt.module.impl.misc.AutoHarp
-import org.cobalt.module.impl.misc.AutoSprint
-import org.cobalt.module.impl.misc.Debug
-import org.cobalt.module.impl.misc.DiscordRPC
-import org.cobalt.module.impl.misc.NickHider
-import org.cobalt.module.impl.misc.Rotations
-import org.cobalt.module.impl.skills.Fishing
-import org.cobalt.module.impl.visual.PerformanceHUD
+import org.cobalt.module.impl.combat.AutoClickerModule
+import org.cobalt.module.impl.misc.AutoHarpModule
+import org.cobalt.module.impl.misc.AutoSprintModule
+import org.cobalt.module.impl.misc.DebugModule
+import org.cobalt.module.impl.misc.DiscordRPCModule
+import org.cobalt.module.impl.misc.NickHiderModule
+import org.cobalt.module.impl.misc.RotationsModule
+import org.cobalt.module.script.fishing.FishingScript
+import org.cobalt.module.impl.visual.PerformanceHUDModule
 import org.cobalt.module.type.RenderableModule
 import org.cobalt.module.type.Script
 import org.cobalt.ui.screen.HudEditorScreen
@@ -36,21 +36,21 @@ object ModuleManager {
   internal fun registerModules() {
     val builtIn = arrayOf(
       // Combat
-      AutoClicker,
+      AutoClickerModule,
 
       // Misc
-      AutoHarp,
-      AutoSprint,
-      Debug,
-      DiscordRPC,
-      NickHider,
-      Rotations,
+      AutoHarpModule,
+      AutoSprintModule,
+      DebugModule,
+      DiscordRPCModule,
+      NickHiderModule,
+      RotationsModule,
 
       // Skills
-      Fishing,
+      FishingScript,
 
       // Visual
-      PerformanceHUD,
+      PerformanceHUDModule,
     )
 
     builtIn.forEach { module ->
