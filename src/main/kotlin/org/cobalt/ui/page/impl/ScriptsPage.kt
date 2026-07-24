@@ -65,9 +65,12 @@ object ScriptsPage : Page() {
       .groupBy { (_, category) -> category }
       .forEach { (category, components) ->
         SkiaRenderer.text(
-          SkiaRenderer.regularFont, category,
-          xPos + PADDING, currentY,
-          CATEGORY_FONT_SIZE, theme.textMuted
+          font = SkiaRenderer.regularFont,
+          text = category,
+          x = xPos + PADDING,
+          y = currentY,
+          size = CATEGORY_FONT_SIZE,
+          color = theme.textMuted
         )
 
         currentY += CATEGORY_FONT_SIZE + CATEGORY_MARGIN

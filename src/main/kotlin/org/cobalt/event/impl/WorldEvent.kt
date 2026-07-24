@@ -2,9 +2,9 @@ package org.cobalt.event.impl
 
 import org.cobalt.event.Event
 
-abstract class WorldEvent : Event() {
+interface WorldEvent : Event {
 
-  class GizmoRender : WorldEvent()
-  class Load : WorldEvent()
+  class GizmoRender : WorldEvent
+  class Load : WorldEvent
 
 }

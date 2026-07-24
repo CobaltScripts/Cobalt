@@ -32,9 +32,13 @@ object SidebarComponent : UIComponent(
 
   override fun renderComponent() {
     SkiaRenderer.roundedRect(
-      xPos, yPos, width, height,
-      10f, theme.backgroundSecondary,
-      SkiaCorner.LEFT_SIDE
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 10f,
+      color = theme.backgroundSecondary,
+      corners = SkiaCorner.LEFT_SIDE
     )
 
     val titleTextWidth = SkiaRenderer.textWidth(SkiaRenderer.boldFont, TITLE_TEXT, TITLE_FONT_SIZE)
@@ -42,9 +46,12 @@ object SidebarComponent : UIComponent(
     val titleTextY = yPos + TITLE_PADDING
 
     SkiaRenderer.text(
-      SkiaRenderer.boldFont, TITLE_TEXT,
-      titleTextX, titleTextY,
-      TITLE_FONT_SIZE, theme.textPrimary
+      font = SkiaRenderer.boldFont,
+      text = TITLE_TEXT,
+      x = titleTextX,
+      y = titleTextY,
+      size = TITLE_FONT_SIZE,
+      color = theme.textPrimary
     )
 
     val buttonX = xPos + (width - SidebarButton.WIDTH) / 2f
@@ -66,43 +73,64 @@ object SidebarComponent : UIComponent(
     val boxY = yPos + height - (USER_INFO_HEIGHT + USER_INFO_OUTER_PADDING)
 
     SkiaRenderer.roundedRect(
-      boxX, boxY, USER_INFO_WIDTH, USER_INFO_HEIGHT,
-      USER_INFO_CORNER_RADIUS, theme.backgroundPrimary,
+      x = boxX,
+      y = boxY,
+      width = USER_INFO_WIDTH,
+      height = USER_INFO_HEIGHT,
+      radius = USER_INFO_CORNER_RADIUS,
+      color = theme.backgroundPrimary,
     )
 
     SkiaRenderer.roundedOutline(
-      boxX, boxY, USER_INFO_WIDTH, USER_INFO_HEIGHT,
-      1f, USER_INFO_CORNER_RADIUS, theme.border
+      x = boxX,
+      y = boxY,
+      width = USER_INFO_WIDTH,
+      height = USER_INFO_HEIGHT,
+      thickness = 1f,
+      radius = USER_INFO_CORNER_RADIUS,
+      color = theme.border
     )
 
     val playerFaceX = boxX + USER_INFO_INNER_PADDING
     val playerFaceY = boxY + (USER_INFO_HEIGHT - PLAYER_FACE_SIDE_LENGTH) / 2
 
     SkiaRenderer.image(
-      playerFace ?: steveFace,
-      playerFaceX, playerFaceY,
-      PLAYER_FACE_SIDE_LENGTH, PLAYER_FACE_SIDE_LENGTH,
-      PLAYER_FACE_SIDE_LENGTH / 2
+      image = playerFace ?: steveFace,
+      x = playerFaceX,
+      y = playerFaceY,
+      width = PLAYER_FACE_SIDE_LENGTH,
+      height = PLAYER_FACE_SIDE_LENGTH,
+      radius = PLAYER_FACE_SIDE_LENGTH / 2
     )
 
     SkiaRenderer.roundedOutline(
-      playerFaceX, playerFaceY,
-      PLAYER_FACE_SIDE_LENGTH, PLAYER_FACE_SIDE_LENGTH,
-      1f, PLAYER_FACE_SIDE_LENGTH / 2, theme.border
+      x = playerFaceX,
+      y = playerFaceY,
+      width = PLAYER_FACE_SIDE_LENGTH,
+      height = PLAYER_FACE_SIDE_LENGTH,
+      thickness = 1f,
+      radius = PLAYER_FACE_SIDE_LENGTH / 2,
+      color = theme.border
     )
 
     val textX = boxX + PLAYER_FACE_SIDE_LENGTH + (USER_INFO_INNER_PADDING * 2)
     val textY = boxY + USER_INFO_INNER_PADDING
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, minecraft.gameProfile.name,
-      textX, textY, USER_INFO_TEXT_SIZE, theme.textPrimary
+      font = SkiaRenderer.regularFont,
+      text = minecraft.gameProfile.name,
+      x = textX, y = textY,
+      size = USER_INFO_TEXT_SIZE,
+      color = theme.textPrimary
     )
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, "User",
-      textX, textY + USER_INFO_TEXT_SIZE + 2f,
-      USER_INFO_TEXT_SIZE, theme.textSecondary,
+      font = SkiaRenderer.regularFont,
+      text = "User",
+      x = textX,
+      y = textY + USER_INFO_TEXT_SIZE + 2f,
+      size = USER_INFO_TEXT_SIZE,
+      color = theme.textSecondary,
     )
   }
 

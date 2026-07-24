@@ -2,7 +2,7 @@ package org.cobalt.module.impl.script
 
 import net.minecraft.client.Minecraft
 
-abstract class ScriptState {
+open class ScriptState {
 
   protected val minecraft = Minecraft.getInstance()
 

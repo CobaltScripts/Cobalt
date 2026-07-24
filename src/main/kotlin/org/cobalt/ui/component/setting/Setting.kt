@@ -32,16 +32,22 @@ abstract class Setting<T>(
       val textStartY = yPos + (BASE_HEIGHT - totalTextHeight) / 2
 
       SkiaRenderer.text(
-        SkiaRenderer.regularFont, name,
-        xPos + PADDING, textStartY,
-        NAME_SIZE, theme.textPrimary
+        font = SkiaRenderer.regularFont,
+        text = name,
+        x = xPos + PADDING,
+        y = textStartY,
+        size = NAME_SIZE,
+        color = theme.textPrimary
       )
 
       if (description.isNotBlank()) {
         SkiaRenderer.text(
-          SkiaRenderer.regularFont, description,
-          xPos + PADDING, textStartY + NAME_SIZE + TEXT_SPACING_Y,
-          DESCRIPTION_SIZE, theme.textMuted
+          font = SkiaRenderer.regularFont,
+          text = description,
+          x = xPos + PADDING,
+          y = textStartY + NAME_SIZE + TEXT_SPACING_Y,
+          size = DESCRIPTION_SIZE,
+          color = theme.textMuted
         )
       }
     }

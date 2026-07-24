@@ -44,30 +44,42 @@ class ButtonSetting(
     val textColor = colorAnim.get(theme.textPrimary, theme.accentPrimary, !hovering)
 
     SkiaRenderer.roundedRect(
-      startX, startY,
-      buttonWidth, BUTTON_HEIGHT,
-      5f, theme.backgroundPrimary
+      x = startX,
+      y = startY,
+      width = buttonWidth,
+      height = BUTTON_HEIGHT,
+      radius = 5f,
+      color = theme.backgroundPrimary
     )
 
     SkiaRenderer.roundedRect(
-      startX, startY,
-      buttonWidth, BUTTON_HEIGHT,
-      5f, theme.accentPrimary.updateAlpha(alpha)
+      x = startX,
+      y = startY,
+      width = buttonWidth,
+      height = BUTTON_HEIGHT,
+      radius = 5f,
+      color = theme.accentPrimary.updateAlpha(alpha)
     )
 
     SkiaRenderer.roundedOutline(
-      startX, startY,
-      buttonWidth, BUTTON_HEIGHT,
-      1f, 5f, borderColor
+      x = startX,
+      y = startY,
+      width = buttonWidth,
+      height = BUTTON_HEIGHT,
+      thickness = 1f,
+      radius = 5f,
+      color = borderColor
     )
 
     val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, buttonLabel, FONT_SIZE)
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, buttonLabel,
-      startX + (buttonWidth - textWidth) / 2,
-      startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
-      FONT_SIZE, textColor
+      font = SkiaRenderer.regularFont,
+      text = buttonLabel,
+      x = startX + (buttonWidth - textWidth) / 2,
+      y = startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
+      size = FONT_SIZE,
+      color = textColor
     )
   }
 

@@ -26,51 +26,79 @@ class ScriptComponent(val script: Script) : UIComponent(
   }
 
   override fun renderComponent() {
-    backgroundPicture?.let {
-      val (imageWidth, imageHeight) = SkiaRenderer.imageSize(it)
-      val scale = maxOf(width / imageWidth, height / imageHeight)
-      val drawWidth = imageWidth * scale
-      val drawHeight = imageHeight * scale
-      val drawX = xPos + (width - drawWidth) / 2f
-      val drawY = yPos + (height - drawHeight) / 2f
-
-      SkiaRenderer.pushScissor(xPos, yPos, width, height, 5f)
-      SkiaRenderer.blurredImage(
-        it, drawX, drawY, drawWidth, drawHeight,
-        radius = 2f, cornerRadius = 5f
-      )
-
-      SkiaRenderer.popScissor()
-    }
+    drawBackgroundPicture()
 
     val borderColor = colorAnim.get(theme.border, theme.textMuted, !script.enabled)
     val alpha = alphaAnim.get(0f, 255f, !script.enabled).toInt()
 
     SkiaRenderer.roundedRect(
-      xPos, yPos, width, height,
-      5f, theme.backgroundPrimary.updateAlpha(100)
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 5f,
+      color = theme.backgroundPrimary.updateAlpha(100)
     )
 
     SkiaRenderer.roundedOutline(
-      xPos, yPos, width, height,
-      1f, 5f, borderColor
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      thickness = 1f,
+      radius = 5f,
+      color = borderColor
     )
 
     if (script.enabled) {
       SkiaRenderer.image(
-        pauseIcon,
-        xPos + (width - ICON_SIZE) / 2,
-        yPos + (height - ICON_SIZE) / 2,
-        ICON_SIZE, ICON_SIZE,
+        image = pauseIcon,
+        x = xPos + (width - ICON_SIZE) / 2,
+        y = yPos + (height - ICON_SIZE) / 2,
+        width = ICON_SIZE,
+        height = ICON_SIZE,
         color = theme.textMuted.updateAlpha(alpha)
       )
     }
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, script.name,
-      xPos + PADDING, yPos + height - PADDING - FONT_SIZE,
-      FONT_SIZE, theme.textPrimary
+      font = SkiaRenderer.regularFont,
+      text = script.name,
+      x = xPos + PADDING,
+      y = yPos + height - PADDING - FONT_SIZE,
+      size = FONT_SIZE,
+      color = theme.textPrimary
     )
+  }
+
+  private fun drawBackgroundPicture() {
+    val picture = backgroundPicture ?: return
+    val (imageWidth, imageHeight) = SkiaRenderer.imageSize(picture)
+    val scale = maxOf(width / imageWidth, height / imageHeight)
+    val drawWidth = imageWidth * scale
+    val drawHeight = imageHeight * scale
+    val drawX = xPos + (width - drawWidth) / 2f
+    val drawY = yPos + (height - drawHeight) / 2f
+
+    SkiaRenderer.pushScissor(
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 5f
+    )
+
+    SkiaRenderer.blurredImage(
+      image = picture,
+      x = drawX,
+      y = drawY,
+      width = drawWidth,
+      height = drawHeight,
+      radius = 2f,
+      cornerRadius = 5f
+    )
+
+    SkiaRenderer.popScissor()
   }
 
   override fun mouseClicked(button: Int): Boolean {

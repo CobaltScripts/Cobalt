@@ -35,24 +35,33 @@ class ModeSetting(
     val textColor = theme.textPrimary
 
     SkiaRenderer.roundedRect(
-      startX, startY,
-      buttonWidth, BUTTON_HEIGHT,
-      5f, theme.backgroundPrimary
+      x = startX,
+      y = startY,
+      width = buttonWidth,
+      height = BUTTON_HEIGHT,
+      radius = 5f,
+      color = theme.backgroundPrimary
     )
 
     SkiaRenderer.roundedOutline(
-      startX, startY,
-      buttonWidth, BUTTON_HEIGHT,
-      1f, 5f, borderColor
+      x = startX,
+      y = startY,
+      width = buttonWidth,
+      height = BUTTON_HEIGHT,
+      thickness = 1f,
+      radius = 5f,
+      color = borderColor
     )
 
     val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, display, FONT_SIZE)
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, display,
-      startX + (buttonWidth - textWidth) / 2,
-      startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
-      FONT_SIZE, textColor
+      font = SkiaRenderer.regularFont,
+      text = display,
+      x = startX + (buttonWidth - textWidth) / 2,
+      y = startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
+      size = FONT_SIZE,
+      color = textColor
     )
   }
 

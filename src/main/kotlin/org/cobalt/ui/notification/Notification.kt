@@ -61,8 +61,12 @@ class Notification(
     updateBounds(resolvedX, resolvedY)
 
     SkiaRenderer.roundedRect(
-      xPos, yPos, width, height,
-      CORNER_RADIUS, theme.backgroundPrimary
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = CORNER_RADIUS,
+      color = theme.backgroundPrimary
     )
 
     drawText()
@@ -77,16 +81,24 @@ class Notification(
     val titleHeight = SkiaRenderer.wrappedTextHeight(SkiaRenderer.boldFont, title, contentWidth, titleFontSize)
 
     SkiaRenderer.wrappedText(
-      SkiaRenderer.boldFont, title,
-      xPos + CONTENT_PADDING, yPos + CONTENT_PADDING,
-      contentWidth, titleFontSize, theme.textPrimary,
+      font = SkiaRenderer.boldFont,
+      text = title,
+      x = xPos + CONTENT_PADDING,
+      y = yPos + CONTENT_PADDING,
+      width = contentWidth,
+      size = titleFontSize,
+      color = theme.textPrimary,
     )
 
     if (hasDescription) {
       SkiaRenderer.wrappedText(
-        SkiaRenderer.boldFont, description,
-        xPos + CONTENT_PADDING, yPos + CONTENT_PADDING + titleHeight + TITLE_DESCRIPTION_GAP,
-        contentWidth, DESCRIPTION_FONT_SIZE, theme.textSecondary,
+        font = SkiaRenderer.boldFont,
+        text = description,
+        x = xPos + CONTENT_PADDING,
+        y = yPos + CONTENT_PADDING + titleHeight + TITLE_DESCRIPTION_GAP,
+        width = contentWidth,
+        size = DESCRIPTION_FONT_SIZE,
+        color = theme.textSecondary,
       )
     }
   }
@@ -96,20 +108,24 @@ class Notification(
     val fillWidth = width * progress
 
     SkiaRenderer.roundedRect(
-      xPos, yPos + height - PROGRESS_BAR_HEIGHT,
-      width, PROGRESS_BAR_HEIGHT,
-      CORNER_RADIUS,
-      theme.backgroundSecondary,
-      SkiaCorner.BOTTOM_SIDE
+      x = xPos,
+      y = yPos + height - PROGRESS_BAR_HEIGHT,
+      width = width,
+      height = PROGRESS_BAR_HEIGHT,
+      radius = CORNER_RADIUS,
+      color = theme.backgroundSecondary,
+      corners = SkiaCorner.BOTTOM_SIDE
     )
 
     if (fillWidth > 0f) {
       SkiaRenderer.roundedRect(
-        xPos, yPos + height - PROGRESS_BAR_HEIGHT,
-        fillWidth, PROGRESS_BAR_HEIGHT,
-        CORNER_RADIUS,
-        theme.accentPrimary,
-        SkiaCorner.BOTTOM_SIDE
+        x = xPos,
+        y = yPos + height - PROGRESS_BAR_HEIGHT,
+        width = fillWidth,
+        height = PROGRESS_BAR_HEIGHT,
+        radius = CORNER_RADIUS,
+        color = theme.accentPrimary,
+        corners = SkiaCorner.BOTTOM_SIDE
       )
     }
   }

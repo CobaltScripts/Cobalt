@@ -35,15 +35,22 @@ class CheckboxSetting(
     val bgColor = colorAnimation.get(theme.backgroundPrimary, theme.accentPrimary, !value)
 
     SkiaRenderer.roundedRect(
-      startX, startY,
-      SIZE, SIZE,
-      5f, bgColor.updateAlpha(alpha)
+      x = startX,
+      y = startY,
+      width = SIZE,
+      height = SIZE,
+      radius = 5f,
+      color = bgColor.updateAlpha(alpha)
     )
 
     SkiaRenderer.roundedOutline(
-      startX, startY,
-      SIZE, SIZE,
-      1f, 5f, borderColor
+      x = startX,
+      y = startY,
+      width = SIZE,
+      height = SIZE,
+      thickness = 1f,
+      radius = 5f,
+      color = borderColor
     )
 
     SkiaRenderer.circle(

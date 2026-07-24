@@ -20,15 +20,19 @@ class SwitchComponent(val module: Module) : UIComponent(
     val knobX = xOffsetAnimation.get(xPos + 1f, xPos + width - KNOB_SIZE - 1f, !module.enabled)
 
     SkiaRenderer.roundedRect(
-      xPos, yPos, width, height,
-      5f, mainColor
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 5f,
+      color = mainColor
     )
 
     SkiaRenderer.circle(
-      knobX + KNOB_SIZE / 2f,
-      yPos + height / 2f,
-      KNOB_SIZE / 2f,
-      theme.textPrimary
+      x = knobX + KNOB_SIZE / 2f,
+      y = yPos + height / 2f,
+      radius = KNOB_SIZE / 2f,
+      color = theme.textPrimary
     )
   }
 

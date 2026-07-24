@@ -35,28 +35,42 @@ class IconButton(
     val iconColor = colorAnimation.get(theme.textMuted, theme.accentPrimary, !hovering)
 
     SkiaRenderer.roundedRect(
-      xPos, yPos,
-      width, height,
-      5f, theme.backgroundPrimary
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 5f,
+      color = theme.backgroundPrimary
     )
 
     SkiaRenderer.roundedRect(
-      xPos, yPos,
-      width, height,
-      5f, theme.accentPrimary.updateAlpha(alpha)
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 5f,
+      color = theme.accentPrimary.updateAlpha(alpha)
     )
 
     SkiaRenderer.roundedOutline(
-      xPos, yPos,
-      width, height,
-      1f, 5f, borderColor
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      thickness = 1f,
+      radius = 5f,
+      color = borderColor
     )
 
     val iconX = xPos + (width - ICON_SIZE) / 2f
     val iconY = yPos + (height - ICON_SIZE) / 2f
 
     SkiaRenderer.image(
-      icon, iconX, iconY, ICON_SIZE, ICON_SIZE,
+      image = icon,
+      x = iconX,
+      y = iconY,
+      width = ICON_SIZE,
+      height = ICON_SIZE,
       color = iconColor
     )
   }

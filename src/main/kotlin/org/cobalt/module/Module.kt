@@ -6,7 +6,7 @@ import org.cobalt.module.type.Script
 import org.cobalt.ui.component.setting.Setting
 import org.cobalt.util.config.SettingContainer
 
-abstract class Module(
+open class Module(
   val name: String,
   val category: ModuleCategory,
   val toggleable: Boolean = true,

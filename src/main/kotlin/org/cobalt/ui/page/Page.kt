@@ -18,11 +18,13 @@ abstract class Page : UIComponent() {
 
   override fun renderComponent() {
     SkiaRenderer.roundedRect(
-      xPos, yPos,
-      width, height,
-      CORNER_RADIUS,
-      theme.backgroundPrimary,
-      arrayOf(SkiaCorner.BOTTOM_RIGHT)
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = CORNER_RADIUS,
+      color = theme.backgroundPrimary,
+      corners = arrayOf(SkiaCorner.BOTTOM_RIGHT)
     )
   }
 

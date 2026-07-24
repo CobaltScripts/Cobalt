@@ -14,24 +14,34 @@ class ThemeComponent(val newTheme: Theme) : UIComponent(
 
   override fun renderComponent() {
     SkiaRenderer.roundedRect(
-      xPos, yPos,
-      width, height,
-      5f, newTheme.accentPrimary.updateAlpha(40)
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 5f,
+      color = newTheme.accentPrimary.updateAlpha(40)
     )
 
     SkiaRenderer.roundedOutline(
-      xPos, yPos,
-      width, height,
-      1f, 5f, newTheme.accentPrimary
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      thickness = 1f,
+      radius = 5f,
+      color = newTheme.accentPrimary
     )
 
     val startX = xPos + INNER_PADDING
     var startY = yPos + INNER_PADDING
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, newTheme.name,
-      startX, startY,
-      THEME_NAME_FONT_SIZE, theme.textPrimary
+      font = SkiaRenderer.regularFont,
+      text = newTheme.name,
+      x = startX,
+      y = startY,
+      size = THEME_NAME_FONT_SIZE,
+      color = theme.textPrimary
     )
 
     val isActive = theme == newTheme
@@ -40,23 +50,32 @@ class ThemeComponent(val newTheme: Theme) : UIComponent(
     val statusY = startY + THEME_NAME_FONT_SIZE + TEXT_PADDING
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, text,
-      startX, statusY,
-      STATUS_FONT_SIZE, textColor
+      font = SkiaRenderer.regularFont,
+      text = text,
+      x = startX,
+      y = statusY,
+      size = STATUS_FONT_SIZE,
+      color = textColor
     )
 
     startY = yPos + height - SWATCH_HEIGHT - INNER_PADDING
 
     SkiaRenderer.roundedRect(
-      startX, startY,
-      SWATCH_WIDTH, SWATCH_HEIGHT,
-      2.5f, newTheme.accentPrimary
+      x = startX,
+      y = startY,
+      width = SWATCH_WIDTH,
+      height = SWATCH_HEIGHT,
+      radius = 2.5f,
+      color = newTheme.accentPrimary
     )
 
     SkiaRenderer.roundedRect(
-      startX + SWATCH_WIDTH + SWATCH_PADDING, startY,
-      SWATCH_WIDTH, SWATCH_HEIGHT,
-      2.5f, newTheme.accentSecondary
+      x = startX + SWATCH_WIDTH + SWATCH_PADDING,
+      y = startY,
+      width = SWATCH_WIDTH,
+      height = SWATCH_HEIGHT,
+      radius = 2.5f,
+      color = newTheme.accentSecondary
     )
   }
 

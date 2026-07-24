@@ -1,8 +1,8 @@
 package org.cobalt.event
 
-abstract class Event {
+interface Event {
 
-  abstract class Cancellable : Event() {
+  abstract class Cancellable : Event {
 
     private var cancelled = false
 

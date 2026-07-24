@@ -103,11 +103,11 @@ class DragHandler {
       }
 
     val (snappedX, snappedY) = snapHelper.findAlignmentGuides(
-      clampedX,
-      clampedY,
-      width,
-      height,
-      otherBounds,
+      moduleX = clampedX,
+      moduleY = clampedY,
+      moduleW = width,
+      moduleH = height,
+      otherModuleBounds = otherBounds,
     )
 
     module.xPos = snappedX / scaleX

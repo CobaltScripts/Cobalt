@@ -36,7 +36,10 @@ internal class VulkanSurface : SkiaSurface {
     RenderSystem.getDevice().createCommandEncoder().submit()
     directContext.resetAll()
 
-    val skijaSurface = surfaceFor(directContext, width, height, vkImage, vkFormat)
+    val skijaSurface = surfaceFor(
+      directContext = directContext, width = width, height = height,
+      vkImage = vkImage, vkFormat = vkFormat
+    )
 
     SkiaRenderer.beginFrame(skijaSurface.canvas)
 

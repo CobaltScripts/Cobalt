@@ -15,14 +15,11 @@ class CatchState : ScriptState() {
   override fun onTick() {
     if (!caught) {
       if (FishingScript.antiAfkDelay.passed()) {
-        println("PASSED")
-
         FishingScript.lookPos?.add(
           Random.nextDouble(-0.25, 0.25),
           Random.nextDouble(-0.25, 0.25),
           Random.nextDouble(-0.25, 0.25)
         )?.let {
-          println("ROTATING")
           RotationsModule.start(RotationMath.getRotation(it))
         }
 

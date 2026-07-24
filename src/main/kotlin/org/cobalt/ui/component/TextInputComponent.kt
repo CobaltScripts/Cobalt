@@ -28,9 +28,12 @@ class TextInputComponent(
     inputHandler.updateBounds(xPos, yPos, width, height)
 
     SkiaRenderer.roundedRect(
-      xPos, yPos,
-      width, height,
-      5f, theme.backgroundPrimary
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 5f,
+      color = theme.backgroundPrimary
     )
 
     val textColor = if (inputHandler.focused) theme.textPrimary else theme.textMuted
@@ -48,26 +51,35 @@ class TextInputComponent(
     drawSelection(textX, textY)
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont,
-      currentText,
-      textX, textY,
-      fontSize, textColor
+      font = SkiaRenderer.regularFont,
+      text = currentText,
+      x = textX,
+      y = textY,
+      size = fontSize,
+      color = textColor
     )
 
     if (inputHandler.focused && (System.currentTimeMillis() / 500) % 2 == 0L) {
       val caretX = textX + caretOffset
+
       SkiaRenderer.rect(
-        caretX, textY,
-        1.5f, fontSize,
-        theme.textPrimary
+        x = caretX,
+        y = textY,
+        width = 1.5f,
+        height = fontSize,
+        color = theme.textPrimary
       )
     }
 
     SkiaRenderer.popScissor()
     SkiaRenderer.roundedOutline(
-      xPos, yPos,
-      width, height,
-      1f, 5f, theme.border
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      thickness = 1f,
+      radius = 5f,
+      color = theme.border
     )
   }
 
@@ -98,9 +110,11 @@ class TextInputComponent(
     val selectionColor = theme.textPrimary.updateAlpha(40)
 
     SkiaRenderer.rect(
-      selStartX, textY,
-      selWidth, fontSize,
-      selectionColor
+      x = selStartX,
+      y = textY,
+      width = selWidth,
+      height = fontSize,
+      color = selectionColor
     )
   }
 

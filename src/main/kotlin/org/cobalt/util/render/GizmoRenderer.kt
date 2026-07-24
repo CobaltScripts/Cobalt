@@ -20,11 +20,13 @@ object GizmoRenderer {
     lineWidth: Float = 1f,
   ) {
     drawBox(
-      AABB(
+      box = AABB(
         pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
         pos.x + 1.0, pos.y + 1.0, pos.z + 1.0,
       ),
-      color, esp, lineWidth,
+      color = color,
+      esp = esp,
+      lineWidth = lineWidth,
     )
   }
 
@@ -59,7 +61,13 @@ object GizmoRenderer {
       .position()
       .add(Vec3.directionFromRotation(camera.xRot(), camera.yRot()))
 
-    drawLine(from, to, color, esp, lineWidth)
+    drawLine(
+      from = from,
+      to = to,
+      color = color,
+      esp = esp,
+      lineWidth = lineWidth
+    )
   }
 
   @JvmStatic

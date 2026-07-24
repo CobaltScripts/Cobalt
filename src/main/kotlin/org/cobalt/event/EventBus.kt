@@ -50,7 +50,13 @@ object EventBus {
     receiveCancelled: Boolean = false,
     once: Boolean = false,
     noinline handler: (T) -> Unit,
-  ): Any = registerLambdaInternal(T::class.java, priority, receiveCancelled, once, handler)
+  ): Any = registerLambdaInternal(
+    eventType = T::class.java,
+    priority = priority,
+    receiveCancelled = receiveCancelled,
+    once = once,
+    handler = handler
+  )
 
   @JvmStatic
   @PublishedApi

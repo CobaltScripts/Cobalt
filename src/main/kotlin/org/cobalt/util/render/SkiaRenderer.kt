@@ -174,7 +174,15 @@ object SkiaRenderer {
     val spacing = size * lineHeight
 
     wrap(font, text, width, size).forEach { line ->
-      text(font, line, x, cursorY, size, color)
+      text(
+        font = font,
+        text = line,
+        x = x,
+        y = cursorY,
+        size = size,
+        color = color
+      )
+
       cursorY += spacing
     }
   }
@@ -221,6 +229,7 @@ object SkiaRenderer {
     imageCache.remove(image)
   }
 
+  @Suppress("ReturnFromFinally")
   @JvmStatic
   fun image(
     image: SkiaImage,
@@ -302,7 +311,7 @@ object SkiaRenderer {
   }
 
   private fun getImage(image: SkiaImage): Image {
-    return imageCache[image]?.image ?: throw IllegalStateException("Image (${image.location}) doesn't exist")
+    return imageCache[image]?.image ?: error("Image (${image.location}) doesn't exist")
   }
 
   private fun loadImage(image: SkiaImage): Image {
@@ -313,7 +322,7 @@ object SkiaRenderer {
     val data = Data.makeFromBytes(image.bytes)
     val dom = SVGDOM(data)
     val root = dom.root
-      ?: throw IllegalStateException("Failed to read SVG root: ${image.location}")
+      ?: error("Failed to read SVG root: ${image.location}")
 
     val intrinsic = root.getIntrinsicSize(SVGLengthContext(256f, 256f, 96f))
     val width = max(1, intrinsic.x.toInt())
@@ -370,7 +379,7 @@ object SkiaRenderer {
   }
 
   private fun canvas(): Canvas {
-    return canvas ?: throw IllegalStateException("Skia frame has not started")
+    return canvas ?: error("Skia frame has not started")
   }
 
   private data class CachedImage(var count: Int, val image: Image)

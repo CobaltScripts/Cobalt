@@ -42,24 +42,33 @@ class KeyBindSetting(
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
 
     SkiaRenderer.roundedRect(
-      startX, startY,
-      buttonWidth, BUTTON_HEIGHT,
-      5f, theme.backgroundPrimary
+      x = startX,
+      y = startY,
+      width = buttonWidth,
+      height = BUTTON_HEIGHT,
+      radius = 5f,
+      color = theme.backgroundPrimary
     )
 
     SkiaRenderer.roundedOutline(
-      startX, startY,
-      buttonWidth, BUTTON_HEIGHT,
-      1f, 5f, theme.border
+      x = startX,
+      y = startY,
+      width = buttonWidth,
+      height = BUTTON_HEIGHT,
+      thickness = 1f,
+      radius = 5f,
+      color = theme.border
     )
 
     val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, displayText, FONT_SIZE)
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, displayText,
-      startX + (buttonWidth - textWidth) / 2,
-      startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
-      FONT_SIZE, theme.textPrimary
+      font = SkiaRenderer.regularFont,
+      text = displayText,
+      x = startX + (buttonWidth - textWidth) / 2,
+      y = startY + (BUTTON_HEIGHT - FONT_SIZE) / 2,
+      size = FONT_SIZE,
+      color = theme.textPrimary
     )
   }
 

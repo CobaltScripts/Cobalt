@@ -60,7 +60,7 @@ public class GuiMixin {
     )
   )
   private void cobalt$onCloseScreen(Screen screen, CallbackInfo ci) {
-    GuiEvent.Close event = new GuiEvent.Close(this.screen);
+    GuiEvent.Close event = new GuiEvent.Close(screen);
     EventBus.post(event);
   }
 
@@ -79,7 +79,7 @@ public class GuiMixin {
     boolean resourcesLoaded,
     CallbackInfo ci
   ) {
-    GuiEvent.Draw event = new GuiEvent.Draw();
+    GuiEvent.Draw event = new GuiEvent.Draw(this.screen);
     EventBus.post(event);
   }
 

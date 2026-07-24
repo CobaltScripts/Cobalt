@@ -16,22 +16,32 @@ class InfoSetting(
 
   override fun renderSetting() {
     SkiaRenderer.roundedRect(
-      xPos + INNER_PADDING, yPos + INNER_PADDING,
-      width - (INNER_PADDING * 2), height - (INNER_PADDING * 2),
-      5f, color.updateAlpha(40)
+      x = xPos + INNER_PADDING,
+      y = yPos + INNER_PADDING,
+      width = width - (INNER_PADDING * 2),
+      height = height - (INNER_PADDING * 2),
+      radius = 5f,
+      color = color.updateAlpha(40)
     )
 
     SkiaRenderer.roundedOutline(
-      xPos + INNER_PADDING, yPos + INNER_PADDING,
-      width - (INNER_PADDING * 2), height - (INNER_PADDING * 2),
-      1f, 5f, color
+      x = xPos + INNER_PADDING,
+      y = yPos + INNER_PADDING,
+      width = width - (INNER_PADDING * 2),
+      height = height - (INNER_PADDING * 2),
+      thickness = 1f,
+      radius = 5f,
+      color = color
     )
 
     val imageY = yPos + 1f + (height - ICON_SIZE) / 2
 
     SkiaRenderer.image(
-      icon, xPos + PADDING, imageY,
-      ICON_SIZE, ICON_SIZE,
+      image = icon,
+      x = xPos + PADDING,
+      y = imageY,
+      width = ICON_SIZE,
+      height = ICON_SIZE,
       color = color
     )
 
@@ -39,9 +49,12 @@ class InfoSetting(
     val textY = yPos + (height - NAME_SIZE) / 2
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, text,
-      textX, textY,
-      NAME_SIZE, color
+      font = SkiaRenderer.regularFont,
+      text = text,
+      x = textX,
+      y = textY,
+      size = NAME_SIZE,
+      color = color
     )
   }
 

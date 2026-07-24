@@ -18,7 +18,7 @@ import net.minecraft.client.multiplayer.ClientSuggestionProvider
 import org.cobalt.command.annotation.DefaultHandler
 import org.cobalt.command.annotation.SubCommand
 
-abstract class Command(val name: String, val aliases: List<String> = emptyList()) {
+open class Command(val name: String, val aliases: List<String> = emptyList()) {
 
   internal fun build(): List<LiteralArgumentBuilder<ClientSuggestionProvider>> {
     val mainRoot = LiteralArgumentBuilder.literal<ClientSuggestionProvider>(name)

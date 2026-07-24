@@ -34,36 +34,53 @@ class SliderSetting(
     val boxY = yPos + (BASE_HEIGHT - VALUE_BOX_HEIGHT) / 2
 
     SkiaRenderer.roundedRect(
-      boxX, boxY, boxWidth, VALUE_BOX_HEIGHT,
-      5f, theme.backgroundPrimary
+      x = boxX,
+      y = boxY,
+      width = boxWidth,
+      height = VALUE_BOX_HEIGHT,
+      radius = 5f,
+      color = theme.backgroundPrimary
     )
 
     SkiaRenderer.roundedOutline(
-      boxX, boxY, boxWidth, VALUE_BOX_HEIGHT,
-      1f, 5f, theme.border
+      x = boxX,
+      y = boxY,
+      width = boxWidth,
+      height = VALUE_BOX_HEIGHT,
+      thickness = 1f,
+      radius = 5f,
+      color = theme.border
     )
 
     val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, text, FONT_SIZE)
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, text,
-      boxX + (boxWidth - textWidth) / 2,
-      boxY + (VALUE_BOX_HEIGHT - FONT_SIZE) / 2,
-      FONT_SIZE, theme.textPrimary
+      font = SkiaRenderer.regularFont,
+      text = text,
+      x = boxX + (boxWidth - textWidth) / 2,
+      y = boxY + (VALUE_BOX_HEIGHT - FONT_SIZE) / 2,
+      size = FONT_SIZE,
+      color = theme.textPrimary
     )
 
     val (startX, trackWidth, trackY, knobX) = trackGeometry()
 
     SkiaRenderer.roundedRect(
-      startX, trackY - 2f,
-      trackWidth, 4f,
-      3f, theme.backgroundPrimary
+      x = startX,
+      y = trackY - 2f,
+      width = trackWidth,
+      height = 4f,
+      radius = 3f,
+      color = theme.backgroundPrimary
     )
 
     SkiaRenderer.roundedRect(
-      startX, trackY - 2f,
-      (knobX - startX).coerceAtLeast(0f), 4f,
-      3f, theme.accentPrimary
+      x = startX,
+      y = trackY - 2f,
+      width = (knobX - startX).coerceAtLeast(0f),
+      height = 4f,
+      radius = 3f,
+      color = theme.accentPrimary
     )
 
     SkiaRenderer.circle(

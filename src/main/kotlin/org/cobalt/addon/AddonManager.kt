@@ -69,7 +69,7 @@ object AddonManager {
       for (entrypoint in metadata.entrypoints) {
         val classPath = "${entrypoint.replace('.', '/')}.class"
 
-        check(zip.getEntry(classPath) != null) {
+        checkNotNull(zip.getEntry(classPath)) {
           "Entrypoint class '$entrypoint' does not exist inside ${jarPath.fileName}"
         }
 

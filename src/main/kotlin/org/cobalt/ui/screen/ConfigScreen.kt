@@ -103,21 +103,31 @@ object ConfigScreen : UIScreen() {
       .renderComponent()
 
     SkiaRenderer.roundedOutline(
-      pageX, pageY,
-      interfaceWidth, interfaceHeight,
-      1f, 10f, theme.border
+      x = pageX,
+      y = pageY,
+      width = interfaceWidth,
+      height = interfaceHeight,
+      thickness = 1f,
+      radius = 10f,
+      color = theme.border
     )
 
     SkiaRenderer.line(
-      startX, pageY,
-      startX, pageY + ModulesPage.height,
-      1f, theme.border
+      x1 = startX,
+      y1 = pageY,
+      x2 = startX,
+      y2 = pageY + ModulesPage.height,
+      thickness = 1f,
+      color = theme.border
     )
 
     SkiaRenderer.line(
-      startX, startY,
-      startX + TopbarComponent.width, startY,
-      1f, theme.border
+      x1 = startX,
+      y1 = startY,
+      x2 = startX + TopbarComponent.width,
+      y2 = startY,
+      thickness = 1f,
+      color = theme.border
     )
 
     SkiaRenderer.pop()

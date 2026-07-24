@@ -32,8 +32,8 @@ object PerformanceHUDModule : RenderableModule(
 
   override fun renderComponent() {
     SkiaRenderer.roundedRect(
-      xPos, yPos, width, height,
-      5f, theme.backgroundPrimary
+      x = xPos, y = yPos, width = width, height = height,
+      radius = 5f, color = theme.backgroundPrimary
     )
 
     var currentX = xPos + PADDING
@@ -46,9 +46,9 @@ object PerformanceHUDModule : RenderableModule(
         val midY = yPos + height / 2
 
         SkiaRenderer.line(
-          dividerX, midY - DIVIDER_HALF_HEIGHT,
-          dividerX, midY + DIVIDER_HALF_HEIGHT,
-          2f, theme.border
+          x1 = dividerX, y1 = midY - DIVIDER_HALF_HEIGHT,
+          x2 = dividerX, y2 = midY + DIVIDER_HALF_HEIGHT,
+          thickness = 2f, color = theme.border
         )
 
         currentX = dividerX + DIVIDER_GAP
@@ -57,19 +57,19 @@ object PerformanceHUDModule : RenderableModule(
       var textX = currentX
 
       SkiaRenderer.text(
-        SkiaRenderer.boldFont,
-        stat.value,
-        textX, textY,
-        FONT_SIZE, theme.textPrimary
+        font = SkiaRenderer.boldFont,
+        text = stat.value,
+        x = textX, y = textY,
+        size = FONT_SIZE, color = theme.textPrimary
       )
 
       textX += SkiaRenderer.textWidth(SkiaRenderer.boldFont, stat.value, FONT_SIZE) + TEXT_SPACING
 
       SkiaRenderer.text(
-        SkiaRenderer.boldFont,
-        stat.unit,
-        textX, textY,
-        FONT_SIZE, theme.textDisabled
+        font = SkiaRenderer.boldFont,
+        text = stat.unit,
+        x = textX, y = textY,
+        size = FONT_SIZE, color = theme.textDisabled
       )
 
       currentX = textX + SkiaRenderer.textWidth(SkiaRenderer.boldFont, stat.unit, FONT_SIZE)

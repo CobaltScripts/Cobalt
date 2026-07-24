@@ -58,9 +58,23 @@ object HudEditorScreen : UIScreen() {
 
     snapHelper.activeGuides.forEach { guide ->
       if (guide.isVertical) {
-        SkiaRenderer.line(guide.position, 0f, guide.position, windowHeight, 1f, theme.accentPrimary)
+        SkiaRenderer.line(
+          x1 = guide.position,
+          y1 = 0f,
+          x2 = guide.position,
+          y2 = windowHeight,
+          thickness = 1f,
+          color = theme.accentPrimary
+        )
       } else {
-        SkiaRenderer.line(0f, guide.position, windowWidth, guide.position, 1f, theme.accentPrimary)
+        SkiaRenderer.line(
+          x1 = 0f,
+          y1 = guide.position,
+          x2 = windowWidth,
+          y2 = guide.position,
+          thickness = 1f,
+          color = theme.accentPrimary
+        )
       }
     }
   }
@@ -75,14 +89,22 @@ object HudEditorScreen : UIScreen() {
 
     val isSelected = module == selectedModule
 
-    SkiaRenderer.outline(x, y, width, height, 1f, if (isSelected) theme.accentPrimary else theme.border)
+    SkiaRenderer.outline(
+      x = x, y = y,
+      width = width,
+      height = height,
+      thickness = 1f,
+      color = if (isSelected) theme.accentPrimary else theme.border
+    )
 
     if (isSelected) {
       val squareOffset = SQUARE_SIZE / 2.0f
       SkiaRenderer.rect(
-        x + width - squareOffset, y + height - squareOffset,
-        SQUARE_SIZE, SQUARE_SIZE,
-        theme.accentPrimary
+        x = x + width - squareOffset,
+        y = y + height - squareOffset,
+        width = SQUARE_SIZE,
+        height = SQUARE_SIZE,
+        color = theme.accentPrimary
       )
     }
   }
@@ -100,11 +122,11 @@ object HudEditorScreen : UIScreen() {
       val scaledHeight = module.height * module.scale * resScale
 
       if (module == selectedModule && dragHandler.tryStartResize(
-          SQUARE_SIZE,
-          renderX,
-          renderY,
-          scaledWidth,
-          scaledHeight
+          squareSize = SQUARE_SIZE,
+          renderX = renderX,
+          renderY = renderY,
+          scaledWidth = scaledWidth,
+          scaledHeight = scaledHeight
         )
       ) {
         return@firstOrNull true

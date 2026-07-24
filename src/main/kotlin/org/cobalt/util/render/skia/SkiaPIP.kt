@@ -79,8 +79,12 @@ class SkiaPIP : PictureInPictureRenderer<SkiaPIP.SkiaRenderState>() {
       }
 
       val state = SkiaRenderState(
-        width, height,
-        pose, scissor, bounds, runnable
+        width = width,
+        height = height,
+        poseMatrix = pose,
+        scissor = scissor,
+        bounds = bounds,
+        runnable = runnable
       )
 
       graphics.guiRenderState.addPicturesInPictureState(state)

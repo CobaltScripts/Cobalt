@@ -23,14 +23,17 @@ object TickScheduler {
 
   @SubscribeEvent
   fun onClientTick(ignored: TickEvent.End) {
-    if (taskQueue.isEmpty()) {
-      return
-    }
+    if (taskQueue.isEmpty()) return
 
     currentTick++
-    var task: ScheduledTask?
 
-    while (taskQueue.peek().also { task = it } != null && currentTick >= task!!.executeTick) {
+    while (true) {
+      val task = taskQueue.peek() ?: break
+
+      if (currentTick < task.executeTick) {
+        break
+      }
+
       taskQueue.poll().action.run()
     }
   }

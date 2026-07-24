@@ -52,18 +52,25 @@ object TopbarComponent : UIComponent() {
     val currentPage = ConfigScreen.currentPage
 
     SkiaRenderer.roundedRect(
-      xPos, yPos,
-      width, height,
-      10f, theme.backgroundSecondary,
-      arrayOf(SkiaCorner.TOP_RIGHT)
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 10f,
+      color = theme.backgroundSecondary,
+      corners = arrayOf(SkiaCorner.TOP_RIGHT)
     )
 
     val textX = xPos + INNER_PADDING + 10f
     val textY = yPos + (height - CURRENT_PAGE_TITLE_FONT) / 2
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, currentPage.title,
-      textX, textY, CURRENT_PAGE_TITLE_FONT, theme.textPrimary
+      font = SkiaRenderer.regularFont,
+      text = currentPage.title,
+      x = textX,
+      y = textY,
+      size = CURRENT_PAGE_TITLE_FONT,
+      color = theme.textPrimary
     )
 
     val searchBarX = xPos + width - SEARCHBAR_WIDTH - INNER_PADDING

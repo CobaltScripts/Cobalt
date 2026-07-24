@@ -44,8 +44,12 @@ class ModuleComponent(
 
   override fun renderComponent() {
     SkiaRenderer.roundedRect(
-      xPos, yPos, width, height,
-      5f, theme.backgroundSecondary
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      radius = 5f,
+      color = theme.backgroundSecondary
     )
 
     switch?.let { switch ->
@@ -59,12 +63,20 @@ class ModuleComponent(
 
     if (settings.isNotEmpty() && expandProgress > 0f) {
       SkiaRenderer.line(
-        xPos + PADDING, yPos + BASE_HEIGHT,
-        xPos + width - PADDING, yPos + BASE_HEIGHT,
-        1f, theme.border
+        x1 = xPos + PADDING,
+        y1 = yPos + BASE_HEIGHT,
+        x2 = xPos + width - PADDING,
+        y2 = yPos + BASE_HEIGHT,
+        thickness = 1f,
+        color = theme.border
       )
 
-      SkiaRenderer.pushScissor(xPos, yPos + BASE_HEIGHT, width, expandedSettingsHeight * expandProgress)
+      SkiaRenderer.pushScissor(
+        x = xPos,
+        y = yPos + BASE_HEIGHT,
+        width = width,
+        height = expandedSettingsHeight * expandProgress
+      )
 
       var settingY = yPos + BASE_HEIGHT + 6f
 
@@ -79,15 +91,22 @@ class ModuleComponent(
     }
 
     SkiaRenderer.roundedOutline(
-      xPos, yPos,
-      width, height,
-      1f, 5f, theme.border
+      x = xPos,
+      y = yPos,
+      width = width,
+      height = height,
+      thickness = 1f,
+      radius = 5f,
+      color = theme.border
     )
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont, module.name,
-      xPos + PADDING, yPos + (BASE_HEIGHT - FONT_SIZE) / 2,
-      FONT_SIZE, theme.textPrimary
+      font = SkiaRenderer.regularFont,
+      text = module.name,
+      x = xPos + PADDING,
+      y = yPos + (BASE_HEIGHT - FONT_SIZE) / 2,
+      size = FONT_SIZE,
+      color = theme.textPrimary
     )
   }
 

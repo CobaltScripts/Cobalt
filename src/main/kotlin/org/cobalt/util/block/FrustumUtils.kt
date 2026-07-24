@@ -8,7 +8,15 @@ object FrustumUtils {
 
   @JvmStatic
   fun isVisible(frustum: Frustum, box: AABB): Boolean {
-    return isVisible(frustum, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ)
+    return isVisible(
+      frustum = frustum,
+      minX = box.minX,
+      minY = box.minY,
+      minZ = box.minZ,
+      maxX = box.maxX,
+      maxY = box.maxY,
+      maxZ = box.maxZ
+    )
   }
 
   @JvmStatic

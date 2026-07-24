@@ -23,9 +23,7 @@ abstract class UIComponent(
   abstract fun renderComponent()
 
   fun addChild(component: UIComponent) {
-    if (component == this) {
-      throw IllegalArgumentException("Cannot add this component as a child")
-    }
+    require(component != this) { "Cannot add this component as a child" }
 
     children.add(component)
     component.parent = this

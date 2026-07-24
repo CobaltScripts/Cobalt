@@ -39,16 +39,16 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
 
     if (isSelectedNow) {
       SkiaRenderer.roundedRect(
-        xPos, yPos,
-        width, height,
-        CORNER_RADIUS,
-        opaqueColor
+        x = xPos, y = yPos,
+        width = width, height = height,
+        radius = CORNER_RADIUS,
+        color = opaqueColor
       )
 
       SkiaRenderer.roundedOutline(
-        xPos, yPos,
-        width, height,
-        1f, CORNER_RADIUS, mainColor
+        x = xPos, y = yPos,
+        width = width, height = height,
+        thickness = 1f, radius = CORNER_RADIUS, color = mainColor
       )
     }
 
@@ -56,17 +56,21 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
     fun iconY(iconSize: Float) = yPos + (height - iconSize) / 2F
 
     SkiaRenderer.image(
-      icon,
-      iconX + xOffset, iconY(ICON_SIZE),
-      ICON_SIZE, ICON_SIZE,
+      image = icon,
+      x = iconX + xOffset,
+      y = iconY(ICON_SIZE),
+      width = ICON_SIZE,
+      height = ICON_SIZE,
       color = textColor
     )
 
     if (isSelectedNow) {
       SkiaRenderer.image(
-        selectedIcon,
-        iconX, iconY(SELECTION_ICON_SIZE),
-        SELECTION_ICON_SIZE, SELECTION_ICON_SIZE,
+        image = selectedIcon,
+        x = iconX,
+        y = iconY(SELECTION_ICON_SIZE),
+        width = SELECTION_ICON_SIZE,
+        height = SELECTION_ICON_SIZE,
         color = mainColor
       )
     }
@@ -75,10 +79,10 @@ class SidebarButton(val category: ModuleCategory) : UIComponent(
     val textY = yPos + height / 2F - FONT_SIZE / 2F
 
     SkiaRenderer.text(
-      SkiaRenderer.regularFont,
-      category.displayName,
-      textX + xOffset, textY,
-      FONT_SIZE, textColor
+      font = SkiaRenderer.regularFont,
+      text = category.displayName,
+      x = textX + xOffset, y = textY,
+      size = FONT_SIZE, color = textColor
     )
   }
 

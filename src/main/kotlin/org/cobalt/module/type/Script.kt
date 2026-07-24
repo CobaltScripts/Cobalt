@@ -6,7 +6,7 @@ import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.input.MouseMode
 
-abstract class Script(
+open class Script(
   name: String,
   category: ModuleCategory,
   val backgroundResourcePath: String = "",
