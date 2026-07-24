@@ -13,7 +13,7 @@ import org.cobalt.module.impl.misc.DebugModule
 import org.cobalt.module.impl.misc.DiscordRPCModule
 import org.cobalt.module.impl.misc.NickHiderModule
 import org.cobalt.module.impl.misc.RotationsModule
-import org.cobalt.module.script.fishing.FishingScript
+import org.cobalt.module.impl.script.fishing.FishingScript
 import org.cobalt.module.impl.visual.PerformanceHUDModule
 import org.cobalt.module.type.RenderableModule
 import org.cobalt.module.type.Script

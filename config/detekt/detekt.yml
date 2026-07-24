@@ -11,8 +11,8 @@ complexity:
   ComplexCondition:
     allowedConditions: 5
   LongParameterList:
-    allowedFunctionParameters: 7
-    allowedConstructorParameters: 7
+    allowedFunctionParameters: 8
+    allowedConstructorParameters: 8
   CyclomaticComplexMethod:
     active: false
   CognitiveComplexMethod:

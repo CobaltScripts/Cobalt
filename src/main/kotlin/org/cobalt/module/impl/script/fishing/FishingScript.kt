@@ -1,4 +1,4 @@
-package org.cobalt.module.script.fishing
+package org.cobalt.module.impl.script.fishing
 
 import kotlin.random.Random
 import net.minecraft.world.level.ClipContext
@@ -8,8 +8,8 @@ import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
 import org.cobalt.event.impl.WorldEvent
 import org.cobalt.module.ModuleCategory
-import org.cobalt.module.script.ScriptState
-import org.cobalt.module.script.fishing.state.CastRodState
+import org.cobalt.module.impl.script.ScriptState
+import org.cobalt.module.impl.script.fishing.state.CastRodState
 import org.cobalt.module.type.Script
 import org.cobalt.ui.component.setting.impl.SliderSetting
 import org.cobalt.ui.theme.ThemeManager

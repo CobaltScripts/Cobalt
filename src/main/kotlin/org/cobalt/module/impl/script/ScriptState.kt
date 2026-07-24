@@ -1,4 +1,4 @@
-package org.cobalt.module.script
+package org.cobalt.module.impl.script
 
 import net.minecraft.client.Minecraft
 

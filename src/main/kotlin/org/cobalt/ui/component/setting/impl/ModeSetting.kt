@@ -26,7 +26,7 @@ class ModeSetting(
   override fun write(): JsonElement = JsonPrimitive(value)
 
   override fun renderSetting() {
-    val display = options.getOrNull(value) ?: ""
+    val display = options.getOrNull(value).orEmpty()
     val buttonWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, display, FONT_SIZE) + 30f
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
@@ -61,7 +61,7 @@ class ModeSetting(
       return false
     }
 
-    val display = options.getOrNull(value) ?: ""
+    val display = options.getOrNull(value).orEmpty()
     val buttonWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, display, FONT_SIZE) + 30f
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2

@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack
 object ItemUtils {
 
   fun getLoreLines(stack: ItemStack): List<Component> {
-    return stack.get(DataComponents.LORE)?.lines ?: emptyList()
+    return stack.get(DataComponents.LORE)?.lines.orEmpty()
   }
 
 }

@@ -1,8 +1,8 @@
-package org.cobalt.module.script.fishing.state
+package org.cobalt.module.impl.script.fishing.state
 
 import kotlin.random.Random
-import org.cobalt.module.script.ScriptState
-import org.cobalt.module.script.fishing.FishingScript
+import org.cobalt.module.impl.script.ScriptState
+import org.cobalt.module.impl.script.fishing.FishingScript
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.inventory.InventoryUtils
 

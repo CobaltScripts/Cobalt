@@ -15,7 +15,7 @@ object Tablist {
         .sortedWith(
           compareBy(
             { it.gameMode == GameType.SPECTATOR },
-            { it.team?.name ?: "" },
+            { it.team?.name.orEmpty() },
             { it.profile.name }
           )
         )
