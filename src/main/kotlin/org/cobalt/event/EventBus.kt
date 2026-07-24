@@ -34,16 +34,6 @@ object EventBus {
     dispatchCache.clear()
   }
 
-  /**
-   * Alternative to the [SubscribeEvent] annotation for people that are either too lazy to subscribe their events to the EventBus
-   * or for people that just prefer lambdas to annotation based methods.
-   *
-   * @param priority the priority this handler runs at relative to other handlers for the same event type
-   * @param receiveCancelled whether this handler should still be invoked if the event has already been canceled
-   * @param once if true, this handler is automatically unregistered after it runs once
-   * @param handler the lambda invoked when an event of type [T] is posted
-   * @return a token that can be passed to [unregister] to remove this handler
-   **/
   @JvmStatic
   inline fun <reified T : Event> registerLambda(
     priority: Event.Priority = Event.Priority.MEDIUM,

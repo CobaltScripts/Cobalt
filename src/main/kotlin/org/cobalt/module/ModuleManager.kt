@@ -35,21 +35,14 @@ object ModuleManager {
 
   internal fun registerModules() {
     val builtIn = arrayOf(
-      // Combat
       AutoClickerModule,
-
-      // Misc
       AutoHarpModule,
       AutoSprintModule,
       DebugModule,
       DiscordRPCModule,
       NickHiderModule,
       RotationsModule,
-
-      // Skills
       FishingScript,
-
-      // Visual
       PerformanceHUDModule,
     )
 
