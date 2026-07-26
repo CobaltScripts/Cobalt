@@ -3,18 +3,19 @@ package org.cobalt.module
 import net.minecraft.client.gui.screens.LevelLoadingScreen
 import net.minecraft.client.gui.screens.ProgressScreen
 import org.cobalt.Cobalt.minecraft
+import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.RenderEvent
-import org.cobalt.module.impl.combat.AutoClickerModule
-import org.cobalt.module.impl.misc.AutoHarpModule
-import org.cobalt.module.impl.misc.AutoSprintModule
-import org.cobalt.module.impl.misc.DebugModule
-import org.cobalt.module.impl.misc.DiscordRPCModule
-import org.cobalt.module.impl.misc.NickHiderModule
-import org.cobalt.module.impl.misc.RotationsModule
+import org.cobalt.module.impl.combat.AutoClicker
+import org.cobalt.module.impl.misc.AutoHarp
+import org.cobalt.module.impl.misc.AutoSprint
+import org.cobalt.module.impl.misc.Debug
+import org.cobalt.module.impl.misc.DiscordRPC
+import org.cobalt.module.impl.misc.NickHider
+import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.module.impl.script.fishing.FishingScript
-import org.cobalt.module.impl.visual.PerformanceHUDModule
+import org.cobalt.module.impl.visual.PerformanceHUD
 import org.cobalt.module.type.RenderableModule
 import org.cobalt.module.type.Script
 import org.cobalt.ui.screen.HudEditorScreen
@@ -35,15 +36,15 @@ object ModuleManager {
 
   internal fun registerModules() {
     val builtIn = arrayOf(
-      AutoClickerModule,
-      AutoHarpModule,
-      AutoSprintModule,
-      DebugModule,
-      DiscordRPCModule,
-      NickHiderModule,
-      RotationsModule,
+      AutoClicker,
+      AutoHarp,
+      AutoSprint,
+      Debug,
+      DiscordRPC,
+      NickHider,
+      Rotations,
       FishingScript,
-      PerformanceHUDModule,
+      PerformanceHUD
     )
 
     builtIn.forEach { module ->
@@ -58,6 +59,10 @@ object ModuleManager {
 
     module.loadConfig()
     module.onRegistration()
+
+    if (module.enabled) {
+      EventBus.register(module)
+    }
   }
 
   fun getModule(moduleName: String): Module? {
@@ -68,14 +73,15 @@ object ModuleManager {
 
   fun startScript(script: Script) {
     if (currentScript != null && currentScript != script) {
-      stopAllScripts()
+      stopScript()
       ChatUtils.sendSystemMessage(
-        "<red>Cannot start a different script when one is currently active, disabling all scripts...</red>"
+        "<red>Cannot start a different script when one is currently active, disabling active script...</red>"
       )
 
       return
     }
 
+    FailsafeManager.stopFailsafes()
     currentScript = script
     script.startScript()
   }
@@ -86,19 +92,19 @@ object ModuleManager {
       return
     }
 
+    FailsafeManager.stopFailsafes()
+
     currentScript?.stopScript().also {
       currentScript = null
     }
   }
 
-  fun stopAllScripts() {
-    modules
-      .filterIsInstance<Script>()
-      .forEach { script ->
-        script.stopScript()
-      }
+  fun pauseScript() {
+    currentScript?.pause()
+  }
 
-    currentScript = null
+  fun resumeScript() {
+    currentScript?.resume()
   }
 
   fun getScript(scriptName: String): Script? {

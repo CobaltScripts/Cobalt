@@ -17,7 +17,7 @@ import org.cobalt.util.rotation.RotationMath
 import org.cobalt.util.rotation.data.Rotation
 import org.cobalt.util.rotation.data.RotationTarget
 
-object RotationsModule : Module(
+object Rotations : Module(
   name = "Rotations",
   category = ModuleCategory.MISC,
   toggleable = false,
@@ -31,7 +31,6 @@ object RotationsModule : Module(
   private var target: RotationTarget? = null
   private var lastFrameMs = 0L
   private var returnMouseMode = false
-
 
   val turnSpeedYaw by SliderSetting(
     name = "Turn Speed Yaw",
@@ -119,7 +118,7 @@ object RotationsModule : Module(
   }
 
   @SubscribeEvent
-  fun onRender(ignored: WorldEvent.GizmoRender) {
+  fun onRender(ignored: WorldEvent.BeforeGizmos) {
     if (!running || minecraft.gui.screen() != null) {
       return
     }

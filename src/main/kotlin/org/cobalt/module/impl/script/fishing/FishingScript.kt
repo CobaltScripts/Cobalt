@@ -21,7 +21,7 @@ import org.cobalt.util.scheduling.Clock
 object FishingScript : Script(
   name = "Fishing",
   category = ModuleCategory.SKILLS,
-  backgroundResourcePath = "/assets/cobalt/ui/scripts/fishing.png"
+  backgroundResourcePath = "/assets/cobalt/ui/scripts/fishing.png",
 ) {
 
   val rodSlot by SliderSetting(
@@ -88,7 +88,7 @@ object FishingScript : Script(
   }
 
   @SubscribeEvent
-  fun onRender(ignored: WorldEvent.GizmoRender) {
+  fun onRender(ignored: WorldEvent.BeforeGizmos) {
     if (!enabled) {
       return
     }

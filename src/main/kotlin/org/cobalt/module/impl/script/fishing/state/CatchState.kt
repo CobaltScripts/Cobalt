@@ -2,7 +2,7 @@ package org.cobalt.module.impl.script.fishing.state
 
 import kotlin.random.Random
 import net.minecraft.world.entity.decoration.ArmorStand
-import org.cobalt.module.impl.misc.RotationsModule
+import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.module.impl.script.ScriptState
 import org.cobalt.module.impl.script.fishing.FishingScript
 import org.cobalt.util.input.Mouse
@@ -20,7 +20,7 @@ class CatchState : ScriptState() {
           Random.nextDouble(-0.25, 0.25),
           Random.nextDouble(-0.25, 0.25)
         )?.let {
-          RotationsModule.start(RotationMath.getRotation(it))
+          Rotations.start(RotationMath.getRotation(it))
         }
 
         FishingScript.antiAfkDelay.schedule(Random.nextLong(10_000, 15_000))

@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
-import org.cobalt.module.impl.misc.NickHiderModule;
+import org.cobalt.module.impl.misc.NickHider;
 import org.cobalt.util.client.PlayerUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -82,8 +82,8 @@ public class FontMixin {
     name = "text"
   )
   private FormattedCharSequence cobalt$modifyCharSequence(FormattedCharSequence text) {
-    if (NickHiderModule.INSTANCE.getEnabled()) {
-      MutableComponent component = Component.literal(NickHiderModule.INSTANCE.getNickname());
+    if (NickHider.INSTANCE.getEnabled()) {
+      MutableComponent component = Component.literal(NickHider.INSTANCE.getNickname());
       return cobalt$replaceWordWithText(text, PlayerUtils.getIgn(), component);
     }
 

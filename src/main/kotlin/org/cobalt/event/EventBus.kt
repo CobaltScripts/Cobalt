@@ -123,6 +123,9 @@ object EventBus {
     )
   }
 
+  fun getRegisteredListeners(): List<String> =
+    handlers.map { it.listener.javaClass.name }.distinct()
+
   private fun removeHandlers(toRemove: List<Handler>) {
     if (toRemove.isEmpty()) {
       return

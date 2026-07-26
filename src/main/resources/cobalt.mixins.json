@@ -14,6 +14,7 @@
     "gui.HudMixin",
     "mojang.GpuDeviceAccessor",
     "multiplayer.ClientPacketListenerMixin",
+    "render.LevelRendererMixin",
     "screen.GuiRendererMixin",
     "screen.SplashManagerMixin"
   ],

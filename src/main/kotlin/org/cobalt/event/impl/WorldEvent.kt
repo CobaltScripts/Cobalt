@@ -4,7 +4,7 @@ import org.cobalt.event.Event
 
 interface WorldEvent : Event {
 
-  class GizmoRender : WorldEvent
-  class Load : WorldEvent
+  class BeforeGizmos : WorldEvent
+  class Change : WorldEvent
 
 }

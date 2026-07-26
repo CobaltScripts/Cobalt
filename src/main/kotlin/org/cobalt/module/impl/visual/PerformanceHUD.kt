@@ -6,7 +6,7 @@ import org.cobalt.module.type.RenderableModule
 import org.cobalt.util.render.SkiaRenderer
 import org.cobalt.util.server.ConnectionTracker
 
-object PerformanceHUDModule : RenderableModule(
+object PerformanceHUD : RenderableModule(
   name = "PerformanceHUD",
   category = ModuleCategory.VISUAL,
 ) {

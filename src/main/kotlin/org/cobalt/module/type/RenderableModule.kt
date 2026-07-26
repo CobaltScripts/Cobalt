@@ -5,7 +5,7 @@ import org.cobalt.module.ModuleCategory
 import org.cobalt.ui.theme.Theme
 import org.cobalt.ui.theme.ThemeManager
 
-abstract class RenderableModule(
+abstract class RenderableModule @JvmOverloads constructor(
   name: String,
   category: ModuleCategory,
   var xPos: Float = 5f,

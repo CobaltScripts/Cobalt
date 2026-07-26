@@ -3,7 +3,6 @@ package org.cobalt
 import java.nio.file.Path
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.rendering.v1.PictureInPictureRendererRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
@@ -13,6 +12,7 @@ import org.cobalt.addon.AddonManager
 import org.cobalt.command.CommandManager
 import org.cobalt.event.EventBus
 import org.cobalt.event.impl.WorldEvent
+import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.module.ModuleManager
 import org.cobalt.ui.theme.ThemeManager
 import org.cobalt.util.render.skia.SkiaPIP
@@ -53,8 +53,8 @@ object Cobalt : ClientModInitializer {
     ModuleManager.registerModules()
     CommandManager.registerCommands()
 
-    LevelRenderEvents.BEFORE_GIZMOS.register { EventBus.post(WorldEvent.GizmoRender()) }
-    ServerLevelEvents.LOAD.register { _, _ -> EventBus.post(WorldEvent.Load()) }
+    FailsafeManager.initialize()
+
     PictureInPictureRendererRegistry.register { SkiaPIP() }
   }
 

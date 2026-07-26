@@ -3,12 +3,14 @@ package org.cobalt.mixin.client;
 import java.util.List;
 import kotlin.Pair;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import org.cobalt.Cobalt;
 import org.cobalt.addon.Addon;
 import org.cobalt.addon.AddonManager;
 import org.cobalt.addon.AddonMetadata;
 import org.cobalt.event.EventBus;
 import org.cobalt.event.impl.TickEvent;
+import org.cobalt.event.impl.WorldEvent;
 import org.cobalt.module.ModuleManager;
 import org.cobalt.util.config.SettingContainer;
 import org.cobalt.util.scheduling.Multithreading;
@@ -30,6 +32,12 @@ public class MinecraftMixin {
   @Inject(method = "tick", at = @At("RETURN"))
   private void cobalt$onEndTick(CallbackInfo callbackInfo) {
     TickEvent.End event = new TickEvent.End();
+    EventBus.post(event);
+  }
+
+  @Inject(method = "updateLevelInEngines(Lnet/minecraft/client/multiplayer/ClientLevel;Z)V", at = @At("HEAD"))
+  private void cobalt$onWorldChange(final ClientLevel level, final boolean stopSound, final CallbackInfo ci) {
+    WorldEvent.Change event = new WorldEvent.Change();
     EventBus.post(event);
   }
 

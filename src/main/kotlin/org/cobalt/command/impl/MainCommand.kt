@@ -6,6 +6,8 @@ import org.cobalt.command.annotation.DefaultHandler
 import org.cobalt.command.annotation.SubCommand
 import org.cobalt.ui.screen.ConfigScreen
 import org.cobalt.ui.screen.HudEditorScreen
+import org.cobalt.event.EventBus
+import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.scheduling.TickScheduler
 
 object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
@@ -22,6 +24,11 @@ object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
     TickScheduler.schedule(1L) {
       minecraft.gui.setScreen(HudEditorScreen)
     }
+  }
+
+  @SubCommand
+  fun debug() {
+    EventBus.getRegisteredListeners().forEach { ChatUtils.sendSystemMessage(it) }
   }
 
 }

@@ -16,7 +16,7 @@ import org.cobalt.util.input.Keyboard
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.scheduling.Clock
 
-object AutoClickerModule : Module(
+object AutoClicker : Module(
   name = "AutoClicker",
   category = ModuleCategory.COMBAT
 ) {
@@ -73,7 +73,7 @@ object AutoClickerModule : Module(
   private val rightClickDelay = Clock()
 
   @SubscribeEvent
-  fun onRender(ignored: WorldEvent.GizmoRender) {
+  fun onRender(ignored: WorldEvent.BeforeGizmos) {
     if (!enabled) {
       return
     }

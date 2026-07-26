@@ -8,7 +8,7 @@ import net.minecraft.network.chat.TextColor
 import org.cobalt.Cobalt
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.Cobalt.runOnClientThread
-import org.cobalt.module.impl.misc.DebugModule
+import org.cobalt.module.impl.misc.Debug
 import org.cobalt.util.color.blue
 import org.cobalt.util.color.green
 import org.cobalt.util.color.red
@@ -46,7 +46,7 @@ object ChatUtils {
       MessageType.DEFAULT -> ChatFormatter.parse(defaultPrefix + message)
       MessageType.RAW -> ChatFormatter.parse(message)
       MessageType.DEBUG -> {
-        if (!DebugModule.enabled || lastDebugMessage == message) {
+        if (!Debug.enabled || lastDebugMessage == message) {
           return
         }
 

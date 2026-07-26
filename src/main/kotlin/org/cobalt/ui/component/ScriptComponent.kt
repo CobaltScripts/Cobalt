@@ -1,5 +1,6 @@
 package org.cobalt.ui.component
 
+import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Script
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.animation.ColorAnimation
@@ -106,9 +107,9 @@ class ScriptComponent(val script: Script) : UIComponent(
       colorAnim.start()
 
       if (script.enabled) {
-        script.stopScript()
+        ModuleManager.stopScript()
       } else {
-        script.startScript()
+        ModuleManager.startScript(script)
         TickScheduler.schedule(2L) { ConfigScreen.closeScreen() }
       }
 

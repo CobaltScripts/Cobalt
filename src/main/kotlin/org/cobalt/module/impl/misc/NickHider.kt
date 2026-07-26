@@ -4,7 +4,7 @@ import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
 import org.cobalt.ui.component.setting.impl.TextSetting
 
-object NickHiderModule : Module(
+object NickHider : Module(
   name = "NickHider",
   category = ModuleCategory.MISC,
 ) {
