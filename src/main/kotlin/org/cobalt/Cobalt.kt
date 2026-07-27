@@ -15,6 +15,7 @@ import org.cobalt.event.impl.WorldEvent
 import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.module.ModuleManager
 import org.cobalt.ui.theme.ThemeManager
+import org.cobalt.util.input.KeyMappingHandler
 import org.cobalt.util.render.skia.SkiaPIP
 import org.slf4j.LoggerFactory
 
@@ -31,6 +32,9 @@ object Cobalt : ClientModInitializer {
 
   @JvmField
   val MOD_CONTAINER: ModContainer = FabricLoader.getInstance().getModContainer("cobalt").orElseThrow()
+
+  @JvmField
+  val MOD_ID: String = MOD_CONTAINER.metadata.id
 
   @JvmField
   val MOD_NAME: String = MOD_CONTAINER.metadata.name
@@ -54,6 +58,7 @@ object Cobalt : ClientModInitializer {
     CommandManager.registerCommands()
 
     FailsafeManager.initialize()
+    KeyMappingHandler.registerKeyMappings()
 
     PictureInPictureRendererRegistry.register { SkiaPIP() }
   }

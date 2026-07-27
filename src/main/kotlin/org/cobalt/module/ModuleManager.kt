@@ -28,6 +28,8 @@ import org.cobalt.util.render.skia.SkiaPIP
 object ModuleManager {
 
   val modules = mutableSetOf<Module>()
+
+  var lastScript: Script? = null
   var currentScript: Script? = null
 
   init {
@@ -95,17 +97,15 @@ object ModuleManager {
     FailsafeManager.stopFailsafes()
 
     currentScript?.stopScript().also {
+      lastScript = currentScript
       currentScript = null
     }
   }
 
-  fun pauseScript() {
-    currentScript?.pause()
-  }
+  fun isScriptRunning() = currentScript != null
 
-  fun resumeScript() {
-    currentScript?.resume()
-  }
+  fun pauseScript() = currentScript?.pause()
+  fun resumeScript() = currentScript?.resume()
 
   fun getScript(scriptName: String): Script? {
     return modules
