@@ -24,21 +24,6 @@ fabric-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", versi
 skija-shared = { group = "io.github.humbleui", name = "skija-shared", version.ref = "skija-version" }
 discordIpc = { group = "com.jagrosh", name = "DiscordIPC", version.ref = "discordIpc" }
 
-skija-windows = { group = "io.github.humbleui", name = "skija-windows-x64", version.ref = "skija-version" }
-skija-linux = { group = "io.github.humbleui", name = "skija-linux-x64", version.ref = "skija-version" }
-skija-linux-arm = { group = "io.github.humbleui", name = "skija-linux-arm64", version.ref = "skija-version" }
-skija-macos = { group = "io.github.humbleui", name = "skija-macos-x64", version.ref = "skija-version" }
-skija-macos-arm = { group = "io.github.humbleui", name = "skija-macos-arm64", version.ref = "skija-version" }
-
-[bundles]
-skija-natives = [
-  "skija-windows",
-  "skija-linux",
-  "skija-macos-arm",
-  "skija-linux-arm",
-  "skija-macos",
-]
-
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }
