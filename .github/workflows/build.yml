@@ -48,7 +48,7 @@ jobs:
 
       - name: Read gradle.properties Release Flags
         id: release_props
-        if: steps.build_props.outputs.SHOULD_BUILD == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: steps.build_props.outputs.SHOULD_BUILD == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master' || github.ref == 'refs/heads/26.1.2'
         run: |
           SHOULD_RELEASE=$(grep -Po '^shouldRelease=.*' gradle.properties | cut -d= -f2 | xargs)
 
