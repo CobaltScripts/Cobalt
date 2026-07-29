@@ -49,7 +49,7 @@ object InventoryUtils {
     val inventory = player.inventory
 
     return findSlot(9, { inventory.getItem(it) }) {
-      it.hoverName.string.contains(name, ignoreCase = true)
+      it.displayName.string.contains(name, ignoreCase = true)
     }
   }
 
@@ -69,7 +69,7 @@ object InventoryUtils {
     val inventory = player.inventory
 
     return findSlot(inventory.containerSize, { inventory.getItem(it) }) {
-      it.hoverName.string.contains(name, ignoreCase = true)
+      it.displayName.string.contains(name, ignoreCase = true)
     }
   }
 
@@ -88,7 +88,7 @@ object InventoryUtils {
     val containerSlots = menu.slots.size - player.inventory.nonEquipmentItems.size
 
     return findSlot(containerSlots, { menu.getSlot(it).item }) {
-      it.hoverName.string.contains(name, ignoreCase = true)
+      it.displayName.string.contains(name, ignoreCase = true)
     }
   }
 
