@@ -2,6 +2,7 @@ package org.cobalt.ui.component
 
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.module.ModuleCategory
+import org.cobalt.module.impl.misc.NickHider
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.component.button.SidebarButton
 import org.cobalt.util.render.SkiaRenderer
@@ -118,7 +119,7 @@ object SidebarComponent : UIComponent(
 
     SkiaRenderer.text(
       font = SkiaRenderer.regularFont,
-      text = minecraft.gameProfile.name,
+      text = if (NickHider.enabled && !NickHider.nickname.isEmpty()) NickHider.nickname else minecraft.gameProfile.name,
       x = textX, y = textY,
       size = USER_INFO_TEXT_SIZE,
       color = theme.textPrimary
