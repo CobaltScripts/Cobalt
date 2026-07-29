@@ -48,8 +48,8 @@ object InventoryUtils {
     val player = minecraft.player ?: return -1
     val inventory = player.inventory
 
-    return findSlot(9, { inventory.getItem(it) }) {
-      it.displayName.string.contains(name, ignoreCase = true)
+    return findSlot(9, { inventory.getItem(it) }) { _, stack ->
+      stack.displayName.string.contains(name, ignoreCase = true)
     }
   }
 
@@ -58,7 +58,7 @@ object InventoryUtils {
     val player = minecraft.player ?: return -1
     val inventory = player.inventory
 
-    return findSlot(9, { inventory.getItem(it) }) { stack ->
+    return findSlot(9, { inventory.getItem(it) }) { _, stack ->
       ItemUtils.getLoreLines(stack).any { it.string.contains(lore, ignoreCase = true) }
     }
   }
@@ -66,29 +66,33 @@ object InventoryUtils {
   @JvmStatic
   fun findItemInInventory(name: String): Int {
     val player = minecraft.player ?: return -1
-    val inventory = player.inventory
+    val menu = player.containerMenu
 
-    return findSlot(inventory.containerSize, { inventory.getItem(it) }) {
-      it.displayName.string.contains(name, ignoreCase = true)
+    return findSlot(menu.slots.size, { menu.getSlot(it).item }) { slot, stack ->
+      menu.getSlot(slot).container == player.inventory &&
+        stack.displayName.string.contains(name, ignoreCase = true)
     }
   }
 
   @JvmStatic
   fun findItemInInventory(item: Item): Int {
     val player = minecraft.player ?: return -1
-    val inventory = player.inventory
+    val menu = player.containerMenu
 
-    return findSlot(inventory.containerSize, { inventory.getItem(it) }) { it.item == item }
+    return findSlot(menu.slots.size, { menu.getSlot(it).item }) { slot, stack ->
+      menu.getSlot(slot).container == player.inventory &&
+        stack.item == item
+    }
   }
 
   @JvmStatic
   fun findItemInContainer(name: String): Int {
     val player = minecraft.player ?: return -1
     val menu = player.containerMenu
-    val containerSlots = menu.slots.size - player.inventory.nonEquipmentItems.size
 
-    return findSlot(containerSlots, { menu.getSlot(it).item }) {
-      it.displayName.string.contains(name, ignoreCase = true)
+    return findSlot(menu.slots.size, { menu.getSlot(it).item }) { slot, stack ->
+      menu.getSlot(slot).container != player.inventory &&
+        stack.displayName.string.contains(name, ignoreCase = true)
     }
   }
 
@@ -96,25 +100,28 @@ object InventoryUtils {
   fun findItemInContainer(item: Item): Int {
     val player = minecraft.player ?: return -1
     val menu = player.containerMenu
-    val containerSlots = menu.slots.size - player.inventory.nonEquipmentItems.size
 
-    return findSlot(containerSlots, { menu.getSlot(it).item }) { it.item == item }
+    return findSlot(menu.slots.size, { menu.getSlot(it).item }) { slot, stack ->
+      menu.getSlot(slot).container != player.inventory &&
+        stack.item == item
+    }
   }
 
   @JvmStatic
   fun findItemInInventoryWithLore(lore: String): Int {
     val player = minecraft.player ?: return -1
-    val inventory = player.inventory
+    val menu = player.containerMenu
 
-    return findSlot(inventory.containerSize, { inventory.getItem(it) }) { stack ->
-      ItemUtils.getLoreLines(stack).any { it.string.contains(lore, ignoreCase = true) }
+    return findSlot(menu.slots.size, { menu.getSlot(it).item }) { slot, stack ->
+      menu.getSlot(slot).container == player.inventory &&
+        ItemUtils.getLoreLines(stack).any { it.string.contains(lore, ignoreCase = true) }
     }
   }
 
   private inline fun findSlot(
     size: Int,
     getStack: (Int) -> ItemStack,
-    predicate: (ItemStack) -> Boolean,
+    predicate: (slot: Int, stack: ItemStack) -> Boolean,
   ): Int {
     for (slot in 0 until size) {
       val stack = getStack(slot)
@@ -123,7 +130,7 @@ object InventoryUtils {
         continue
       }
 
-      if (predicate(stack)) {
+      if (predicate(slot, stack)) {
         return slot
       }
     }
