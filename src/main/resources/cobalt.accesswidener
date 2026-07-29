@@ -1,9 +1,5 @@
 accessWidener v1 official
 
-accessible field net/minecraft/client/player/AbstractClientPlayer playerInfo Lnet/minecraft/client/multiplayer/PlayerInfo;
-
 accessible field net/minecraft/client/KeyMapping key Lcom/mojang/blaze3d/platform/InputConstants$Key;
 
 accessible method net/minecraft/client/renderer/culling/Frustum cubeInFrustum (DDDDDD)I
-
-accessible field net/minecraft/client/gui/components/ChatComponent commandHistory Lnet/minecraft/client/CommandHistory;
