@@ -12,7 +12,8 @@ import org.cobalt.Cobalt.minecraft
 import org.cobalt.util.render.skia.surface.SkiaSurface
 import org.joml.Matrix3x2f
 
-class SkiaPIP(bufferSource: MultiBufferSource.BufferSource) : PictureInPictureRenderer<SkiaPIP.SkiaRenderState>(bufferSource) {
+class SkiaPIP(bufferSource: MultiBufferSource.BufferSource)
+  : PictureInPictureRenderer<SkiaPIP.SkiaRenderState>(bufferSource) {
 
   private val surface = SkiaSurface.getInstance()
 
