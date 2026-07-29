@@ -56,17 +56,19 @@ jobs:
           fi
 
           MOD_VERSION=$(grep -Po '^modVersion=.*' gradle.properties | cut -d= -f2 | xargs)
+          MC_VERSION=$(grep -Po '^minecraft-version = "\K[^"]*' gradle/libs.versions.toml)
 
           echo "SHOULD_RELEASE=$SHOULD_RELEASE" >> $GITHUB_OUTPUT
           echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           echo "MOD_VERSION=$MOD_VERSION" >> $GITHUB_OUTPUT
+          echo "MC_VERSION=$MC_VERSION" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         if: steps.release_props.outputs.SHOULD_RELEASE == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.release_props.outputs.MOD_VERSION }}.${{ steps.release_props.outputs.SHA_SHORT }}
-          name: Cobalt v${{ steps.release_props.outputs.MOD_VERSION }}
+          tag_name: ${{ steps.release_props.outputs.MC_VERSION }}-${{ steps.release_props.outputs.MOD_VERSION }}.${{ steps.release_props.outputs.SHA_SHORT }}
+          name: Cobalt v${{ steps.release_props.outputs.MOD_VERSION }} (Minecraft ${{ steps.release_props.outputs.MC_VERSION }})
           files: build/libs/*.jar
           body: ${{ github.event.head_commit.message }}
         env:
