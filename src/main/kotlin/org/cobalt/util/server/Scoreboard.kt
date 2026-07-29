@@ -5,7 +5,7 @@ import net.minecraft.network.chat.numbers.StyledFormat
 import net.minecraft.world.scores.DisplaySlot
 import net.minecraft.world.scores.PlayerTeam
 import org.cobalt.Cobalt.minecraft
-import org.cobalt.mixin.gui.HudAccessor
+import org.cobalt.mixin.gui.GuiAccessor
 
 object Scoreboard {
 
@@ -28,7 +28,7 @@ object Scoreboard {
       return scoreboard.listPlayerScores(objective)
         .asSequence()
         .filter { !it.isHidden }
-        .sortedWith(HudAccessor.`cobalt$getScoreDisplayOrder`())
+        .sortedWith(GuiAccessor.`cobalt$getScoreDisplayOrder`())
         .take(15)
         .map { entry ->
           val team = scoreboard.getPlayersTeam(entry.owner())

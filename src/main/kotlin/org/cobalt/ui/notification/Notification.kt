@@ -78,10 +78,10 @@ class Notification(
     val hasDescription = description.isNotBlank()
     val titleFontSize = if (hasDescription) TITLE_FONT_SIZE else TITLE_FONT_SIZE_ALONE
 
-    val titleHeight = SkiaRenderer.wrappedTextHeight(SkiaRenderer.boldFont, title, contentWidth, titleFontSize)
+    val titleHeight = SkiaRenderer.wrappedTextHeight(SkiaRenderer.regularFont, title, contentWidth, titleFontSize)
 
     SkiaRenderer.wrappedText(
-      font = SkiaRenderer.boldFont,
+      font = SkiaRenderer.regularFont,
       text = title,
       x = xPos + CONTENT_PADDING,
       y = yPos + CONTENT_PADDING,
@@ -92,7 +92,7 @@ class Notification(
 
     if (hasDescription) {
       SkiaRenderer.wrappedText(
-        font = SkiaRenderer.boldFont,
+        font = SkiaRenderer.regularFont,
         text = description,
         x = xPos + CONTENT_PADDING,
         y = yPos + CONTENT_PADDING + titleHeight + TITLE_DESCRIPTION_GAP,
@@ -163,7 +163,7 @@ class Notification(
       val titleFontSize = if (description.isNotBlank()) TITLE_FONT_SIZE else TITLE_FONT_SIZE_ALONE
 
       val titleHeight = SkiaRenderer.wrappedTextHeight(
-        SkiaRenderer.boldFont, title,
+        SkiaRenderer.regularFont, title,
         DEFAULT_WIDTH - CONTENT_PADDING * 2,
         titleFontSize
       )
@@ -172,7 +172,7 @@ class Notification(
 
       if (description.isNotBlank()) {
         descHeight = SkiaRenderer.wrappedTextHeight(
-          SkiaRenderer.boldFont, description,
+          SkiaRenderer.regularFont, description,
           DEFAULT_WIDTH - CONTENT_PADDING * 2,
           DESCRIPTION_FONT_SIZE
         )

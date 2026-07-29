@@ -78,7 +78,7 @@ object AutoClicker : Module(
       return
     }
 
-    if (minecraft.gui.screen() != null) {
+    if (minecraft.screen != null) {
       return
     }
 

@@ -45,7 +45,7 @@ object CommandManager {
 
     try {
       dispatcher.execute(commandLine, player.connection.suggestionsProvider)
-      minecraft.gui.hud.chat.commandHistory.addCommand(content)
+      minecraft.commandHistory().addCommand(content)
     } catch (exception: CommandSyntaxException) {
       ChatUtils.sendSystemMessage("<red>${exception.message}</red>")
     }

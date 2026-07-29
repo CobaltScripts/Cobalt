@@ -3,6 +3,7 @@ package org.cobalt
 import java.nio.file.Path
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.rendering.v1.PictureInPictureRendererRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
@@ -60,7 +61,8 @@ object Cobalt : ClientModInitializer {
     FailsafeManager.initialize()
     KeyMappingHandler.registerKeyMappings()
 
-    PictureInPictureRendererRegistry.register { SkiaPIP() }
+    LevelRenderEvents.BEFORE_GIZMOS.register { EventBus.post(WorldEvent.BeforeGizmos()) }
+    PictureInPictureRendererRegistry.register { SkiaPIP(it.bufferSource()) }
   }
 
   @JvmStatic

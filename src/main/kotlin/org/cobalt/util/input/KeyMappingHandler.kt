@@ -48,7 +48,7 @@ object KeyMappingHandler {
 
     if (openGui.consumeClick()) {
       TickScheduler.schedule(1L) {
-        minecraft.gui.setScreen(ConfigScreen)
+        minecraft.setScreen(ConfigScreen)
       }
     } else if (toggleScript.consumeClick()) {
       if (ModuleManager.isScriptRunning()) {

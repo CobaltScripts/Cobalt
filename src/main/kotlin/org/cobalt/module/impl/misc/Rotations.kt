@@ -119,7 +119,7 @@ object Rotations : Module(
 
   @SubscribeEvent
   fun onRender(ignored: WorldEvent.BeforeGizmos) {
-    if (!running || minecraft.gui.screen() != null) {
+    if (!running || minecraft.screen != null) {
       return
     }
 

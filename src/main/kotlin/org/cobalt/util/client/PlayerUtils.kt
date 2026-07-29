@@ -97,7 +97,7 @@ object PlayerUtils {
 
   @JvmStatic
   fun closeScreen() {
-    if (minecraft.gui.screen() == null) {
+    if (minecraft.screen == null) {
       return
     }
 

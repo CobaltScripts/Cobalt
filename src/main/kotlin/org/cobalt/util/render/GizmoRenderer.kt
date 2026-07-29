@@ -56,7 +56,7 @@ object GizmoRenderer {
     esp: Boolean = true,
     lineWidth: Float = 1f,
   ) {
-    val camera = Cobalt.minecraft.gameRenderer.mainCamera()
+    val camera = Cobalt.minecraft.gameRenderer.mainCamera
     val from = camera
       .position()
       .add(Vec3.directionFromRotation(camera.xRot(), camera.yRot()))

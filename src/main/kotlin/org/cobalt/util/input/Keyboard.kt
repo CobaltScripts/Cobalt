@@ -32,7 +32,7 @@ object Keyboard {
 
   @JvmStatic
   fun press(keyMapping: KeyMapping) {
-    if (minecraft.gui.screen() != null) {
+    if (minecraft.screen != null) {
       return
     }
 
@@ -41,7 +41,7 @@ object Keyboard {
 
   @JvmStatic
   fun setKeyState(keyMapping: KeyMapping, pressed: Boolean) {
-    val shouldBePressed = pressed && minecraft.gui.screen() == null
+    val shouldBePressed = pressed && minecraft.screen == null
 
     if (shouldBePressed) {
       if (!keyMapping.isDown) {

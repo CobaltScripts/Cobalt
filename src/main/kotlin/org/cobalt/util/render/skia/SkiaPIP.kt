@@ -5,13 +5,14 @@ import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.util.render.skia.surface.SkiaSurface
 import org.joml.Matrix3x2f
 
-class SkiaPIP : PictureInPictureRenderer<SkiaPIP.SkiaRenderState>() {
+class SkiaPIP(bufferSource: MultiBufferSource.BufferSource) : PictureInPictureRenderer<SkiaPIP.SkiaRenderState>(bufferSource) {
 
   private val surface = SkiaSurface.getInstance()
 
@@ -19,7 +20,7 @@ class SkiaPIP : PictureInPictureRenderer<SkiaPIP.SkiaRenderState>() {
   override fun getRenderStateClass() = SkiaRenderState::class.java
   override fun getTextureLabel(): String = "Skia"
 
-  override fun renderToTexture(state: SkiaRenderState, poseStack: PoseStack, submitNodeCollector: SubmitNodeCollector) {
+  override fun renderToTexture(state: SkiaRenderState, poseStack: PoseStack) {
     val colorView = RenderSystem.outputColorTextureOverride ?: return
     val width = colorView.getWidth(0).takeIf { it > 0 } ?: return
     val height = colorView.getHeight(0).takeIf { it > 0 } ?: return

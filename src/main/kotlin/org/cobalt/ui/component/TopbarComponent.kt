@@ -31,7 +31,7 @@ object TopbarComponent : UIComponent() {
 
   private val actionButtons = listOf(
     IconButton("/assets/cobalt/ui/hud.svg") {
-      TickScheduler.schedule(1L) { minecraft.gui.setScreen(HudEditorScreen) }
+      TickScheduler.schedule(1L) { minecraft.setScreen(HudEditorScreen) }
     },
 
     IconButton("/assets/cobalt/ui/themes.svg") {

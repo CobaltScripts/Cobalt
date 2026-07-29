@@ -25,7 +25,7 @@ object AutoHarp : Module(
     }
 
     val menu = minecraft.player?.containerMenu as? ChestMenu ?: return
-    val screen = minecraft.gui.screen() ?: return
+    val screen = minecraft.screen ?: return
 
     if (!screen.title.string.startsWith("Harp -") || menu.slots.size < 54) {
       return
