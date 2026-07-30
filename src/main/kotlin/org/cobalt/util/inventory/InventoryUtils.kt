@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package org.cobalt.util.inventory
 
 import net.minecraft.world.inventory.ContainerInput
