@@ -33,8 +33,9 @@ object InventoryUtils {
   }
 
   @JvmStatic
-  fun holdItem(name: String): Boolean {
-    val slot = findItemInHotbar(name)
+  @JvmOverloads
+  fun holdItem(name: String, exactMatch: Boolean = false): Boolean {
+    val slot = findItemInHotbar(name, exactMatch)
 
     if (slot == -1) {
       return false
@@ -44,33 +45,38 @@ object InventoryUtils {
   }
 
   @JvmStatic
-  fun findItemInHotbar(name: String): Int {
+  @JvmOverloads
+  fun findItemInHotbar(name: String, exactMatch: Boolean = false): Int {
     val player = minecraft.player ?: return -1
     val inventory = player.inventory
 
     return findSlot(9, { inventory.getItem(it) }) { _, stack ->
-      stack.displayName.string.contains(name, ignoreCase = true)
+      matches(stack.displayName.string, name, exactMatch)
     }
   }
 
   @JvmStatic
-  fun findItemInHotbarWithLore(lore: String): Int {
+  @JvmOverloads
+  fun findItemInHotbarWithLore(lore: String, exactMatch: Boolean = false): Int {
     val player = minecraft.player ?: return -1
     val inventory = player.inventory
 
     return findSlot(9, { inventory.getItem(it) }) { _, stack ->
-      ItemUtils.getLoreLines(stack).any { it.string.contains(lore, ignoreCase = true) }
+      ItemUtils.getLoreLines(stack).any {
+        matches(it.string, lore, exactMatch)
+      }
     }
   }
 
   @JvmStatic
-  fun findItemInInventory(name: String): Int {
+  @JvmOverloads
+  fun findItemInInventory(name: String, exactMatch: Boolean = false): Int {
     val player = minecraft.player ?: return -1
     val menu = player.containerMenu
 
     return findSlot(menu.slots.size, { menu.getSlot(it).item }) { slot, stack ->
       menu.getSlot(slot).container == player.inventory &&
-        stack.displayName.string.contains(name, ignoreCase = true)
+        matches(stack.displayName.string, name, exactMatch)
     }
   }
 
@@ -86,13 +92,14 @@ object InventoryUtils {
   }
 
   @JvmStatic
-  fun findItemInContainer(name: String): Int {
+  @JvmOverloads
+  fun findItemInContainer(name: String, exactMatch: Boolean = false): Int {
     val player = minecraft.player ?: return -1
     val menu = player.containerMenu
 
     return findSlot(menu.slots.size, { menu.getSlot(it).item }) { slot, stack ->
       menu.getSlot(slot).container != player.inventory &&
-        stack.displayName.string.contains(name, ignoreCase = true)
+        matches(stack.displayName.string, name, exactMatch)
     }
   }
 
@@ -108,17 +115,28 @@ object InventoryUtils {
   }
 
   @JvmStatic
-  fun findItemInInventoryWithLore(lore: String): Int {
+  @JvmOverloads
+  fun findItemInInventoryWithLore(lore: String, exactMatch: Boolean = false): Int {
     val player = minecraft.player ?: return -1
     val menu = player.containerMenu
 
     return findSlot(menu.slots.size, { menu.getSlot(it).item }) { slot, stack ->
       menu.getSlot(slot).container == player.inventory &&
-        ItemUtils.getLoreLines(stack).any { it.string.contains(lore, ignoreCase = true) }
+        ItemUtils.getLoreLines(stack).any {
+          matches(it.string, lore, exactMatch)
+        }
     }
   }
 
-  private inline fun findSlot(
+  private fun matches(text: String, query: String, exactMatch: Boolean): Boolean {
+    return if (exactMatch) {
+      text.equals(query, ignoreCase = true)
+    } else {
+      text.contains(query, ignoreCase = true)
+    }
+  }
+
+  private fun findSlot(
     size: Int,
     getStack: (Int) -> ItemStack,
     predicate: (slot: Int, stack: ItemStack) -> Boolean,
