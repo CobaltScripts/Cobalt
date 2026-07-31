@@ -1,6 +1,7 @@
 package org.cobalt.ui.notification
 
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.RenderEvent
@@ -15,6 +16,11 @@ object NotificationManager {
   init {
     EventBus.register(this)
   }
+  // Java cant use kotlin.time.Duration
+  @JvmStatic
+  fun queue(title: String, description: String, duration: java.time.Duration) {
+    queue(title,description,duration.toMillis().milliseconds)
+  }
 
   fun queue(title: String, description: String, duration: Duration) {
     val notification = Notification(
@@ -26,6 +32,7 @@ object NotificationManager {
     notifQueue.add(notification)
   }
 
+  @JvmStatic
   fun clear() {
     notifQueue.clear()
     activeNotifications.clear()
