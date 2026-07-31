@@ -53,6 +53,7 @@ object ModuleManager {
       addModule(module)
     }
   }
+
   @JvmStatic
   fun addModule(module: Module) {
     if (!modules.add(module)) {
@@ -66,12 +67,14 @@ object ModuleManager {
       EventBus.register(module)
     }
   }
+
   @JvmStatic
   fun getModule(moduleName: String): Module? {
     return modules.find { module ->
       module.name.equals(moduleName, true)
     }
   }
+
   @JvmStatic
   fun startScript(script: Script) {
     if (currentScript != null && currentScript != script) {
@@ -87,6 +90,7 @@ object ModuleManager {
     currentScript = script
     script.startScript()
   }
+
   @JvmStatic
   fun stopScript() {
     if (currentScript == null) {
@@ -101,8 +105,10 @@ object ModuleManager {
       currentScript = null
     }
   }
+
   @JvmStatic
   fun isScriptRunning() = currentScript != null
+
   @JvmStatic
   fun pauseScript() = currentScript?.pause()
   @JvmStatic
