@@ -5,6 +5,7 @@ import com.mojang.blaze3d.opengl.GlTexture
 import com.mojang.blaze3d.textures.GpuTexture
 import io.github.humbleui.skija.*
 import org.cobalt.util.render.SkiaRenderer
+import org.cobalt.util.render.skia.gl.States
 import org.lwjgl.opengl.GL11C
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL33C
@@ -29,39 +30,36 @@ internal class GlSurface : SkiaSurface {
   ) {
     val colorTexId = (texture as? GlTexture)?.glId() ?: return
     val previousFbo = GL11C.glGetInteger(GL30C.GL_FRAMEBUFFER_BINDING)
-    val previousViewport = IntArray(4)
-    GL11C.glGetIntegerv(GL11C.GL_VIEWPORT, previousViewport)
 
-    bindTarget(colorTexId, width, height)
-
-    GlStateManager._viewport(0, 0, width, height)
-    GL33C.glBindSampler(0, 0)
-
-    val directContext = context ?: DirectContext.makeGL().also { context = it }
-    directContext.resetGLAll()
-
-    val skijaSurface = surfaceFor(width, height, colorTexId)
-
-    SkiaRenderer.beginFrame(skijaSurface.canvas)
+    States.push()
 
     try {
-      draw(skijaSurface.canvas)
+      bindTarget(colorTexId, width, height)
+
+      GlStateManager._viewport(0, 0, width, height)
+      GL33C.glBindSampler(0, 0)
+
+      val directContext = context ?: DirectContext.makeGL().also {
+        context = it
+      }
+
+      directContext.resetGLAll()
+
+      val skijaSurface = surfaceFor(width, height, colorTexId)
+
+      SkiaRenderer.beginFrame(skijaSurface.canvas)
+
+      try {
+        draw(skijaSurface.canvas)
+      } finally {
+        SkiaRenderer.endFrame()
+      }
+
+      directContext.flushAndSubmit(skijaSurface, true)
     } finally {
-      SkiaRenderer.endFrame()
+      GL30C.glBindFramebuffer(GL30C.GL_FRAMEBUFFER, previousFbo)
+      States.pop()
     }
-
-    directContext.flushAndSubmit(skijaSurface, true)
-
-    GL30C.glBindVertexArray(0)
-    GL30C.glUseProgram(0)
-
-    GlStateManager._disableDepthTest()
-    GlStateManager._disableCull()
-    GlStateManager._enableBlend(0)
-    GlStateManager._blendFuncSeparate(770, 771, 1, 0)
-
-    GlStateManager._glBindFramebuffer(GL30C.GL_FRAMEBUFFER, previousFbo)
-    GlStateManager._viewport(previousViewport[0], previousViewport[1], previousViewport[2], previousViewport[3])
   }
 
   private fun bindTarget(colorTexId: Int, width: Int, height: Int) {

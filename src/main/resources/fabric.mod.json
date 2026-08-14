@@ -20,7 +20,7 @@
     "preLaunch": [
       {
         "adapter": "kotlin",
-        "value": "org.cobalt.util.render.skia.SkiaBootstrap"
+        "value": "org.cobalt.PreLaunch"
       }
     ],
     "client": [

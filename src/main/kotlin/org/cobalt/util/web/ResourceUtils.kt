@@ -1,4 +1,4 @@
-package org.cobalt.util.render.skia
+package org.cobalt.util.web
 
 import java.io.File
 import java.io.FileNotFoundException

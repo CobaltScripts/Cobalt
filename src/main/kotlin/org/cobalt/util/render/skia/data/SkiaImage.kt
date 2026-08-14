@@ -1,6 +1,6 @@
 package org.cobalt.util.render.skia.data
 
-import org.cobalt.util.render.skia.ResourceUtils
+import org.cobalt.util.web.ResourceUtils
 
 class SkiaImage(
   val location: String,

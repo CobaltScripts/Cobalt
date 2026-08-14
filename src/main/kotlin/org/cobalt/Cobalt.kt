@@ -49,7 +49,6 @@ object Cobalt : ClientModInitializer {
     logger.info("Initializing $MOD_NAME $MINECRAFT_VERSION (v$MOD_VERSION)")
 
     ThemeManager.loadThemes()
-    AddonManager.loadAddons()
 
     ModuleManager.registerModules()
     CommandManager.registerCommands()

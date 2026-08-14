@@ -56,6 +56,7 @@ style:
   WildcardImport:
     active: true
     excludeImports:
+      - 'org.lwjgl.opengl.GL45.*'
       - 'org.lwjgl.vulkan.*'
       - 'io.github.humbleui.skija.*'
       - 'net.minecraft.world.level.block.*'

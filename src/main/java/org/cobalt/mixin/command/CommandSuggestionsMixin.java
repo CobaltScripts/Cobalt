@@ -72,7 +72,7 @@ public abstract class CommandSuggestionsMixin {
     reader.skip();
 
     int cursor = this.input.getCursorPosition();
-    CommandDispatcher<ClientSuggestionProvider> dispatcher = CommandManager.getDispatcher$cobalt();
+    CommandDispatcher<ClientSuggestionProvider> dispatcher = CommandManager.getDispatcher$org_cobalt_cobalt();
 
     if (this.currentParse == null) {
       ClientSuggestionProvider suggestionProvider = this.minecraft.player.connection.getSuggestionsProvider();

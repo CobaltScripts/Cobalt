@@ -1,4 +1,4 @@
-package org.cobalt.util.render.skia
+package org.cobalt
 
 import java.net.URI
 import java.nio.file.Files
@@ -7,24 +7,30 @@ import java.nio.file.StandardCopyOption
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint
 import net.fabricmc.loader.impl.launch.FabricLauncherBase
+import org.cobalt.addon.AddonManager
 import org.slf4j.LoggerFactory
 
-class SkiaBootstrap : PreLaunchEntrypoint {
+class PreLaunch : PreLaunchEntrypoint {
 
-  private val cacheDir: Path =
-    FabricLoader.getInstance().gameDir
-      .resolve("config/cobalt/cache")
+  private val logger =
+    LoggerFactory.getLogger(this::class.java)
 
-  private val logger = LoggerFactory.getLogger(this::class.java)
+  private val cacheDir = FabricLoader.getInstance()
+    .gameDir
+    .resolve("config/cobalt/cache")
 
   override fun onPreLaunch() {
+    loadSkia()
+    AddonManager.loadAddons()
+  }
+
+  private fun loadSkia() {
     logger.info("Initializing Skija native bootstrap.")
 
     val artifactId = resolvePlatformArtifact()
     val nativeJar = downloadIfMissing(artifactId)
 
-    FabricLauncherBase.getLauncher()
-      .addToClassPath(nativeJar)
+    FabricLauncherBase.getLauncher().addToClassPath(nativeJar)
 
     logger.info("Added Skija native library to classpath.")
   }
@@ -48,15 +54,18 @@ class SkiaBootstrap : PreLaunchEntrypoint {
     val fileName = "$artifactId-$SKIJA_VERSION.jar"
     val target = cacheDir.resolve(fileName)
 
-    if (Files.exists(target)) {
-      logger.info("Using cached Skija native library: {}", target.fileName)
+    if (Files.isRegularFile(target)) {
+      logger.info("Using cached Skija native library: {}", fileName)
       return target
     }
 
-    logger.info("Downloading Skija native library ({}).", artifactId)
+    logger.info("Downloading Skija native library: {}", artifactId)
 
-    val url = "https://repo1.maven.org/maven2/$SKIJA_GROUP/$artifactId/$SKIJA_VERSION/$fileName"
-    val tmp = Files.createTempFile(cacheDir, "skija-dl", ".jar.tmp")
+    val url =
+      "https://repo1.maven.org/maven2/io/github/humbleui/" +
+        "$artifactId/$SKIJA_VERSION/$fileName"
+
+    val tmp = Files.createTempFile(cacheDir, "skija-", ".tmp")
 
     try {
       URI(url).toURL().openStream().use { input ->
@@ -73,7 +82,6 @@ class SkiaBootstrap : PreLaunchEntrypoint {
 
   companion object {
     private const val SKIJA_VERSION = "0.143.11"
-    private const val SKIJA_GROUP = "io/github/humbleui"
   }
 
 }

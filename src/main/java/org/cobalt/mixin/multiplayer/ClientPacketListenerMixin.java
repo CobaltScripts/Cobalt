@@ -14,7 +14,7 @@ public class ClientPacketListenerMixin {
 
   @Inject(method = "sendChat", at = @At("HEAD"), cancellable = true)
   public void cobalt$sendChatMessage(String content, CallbackInfo callbackInfo) {
-    if (CommandManager.handleCommandExecution$cobalt(content)) {
+    if (CommandManager.handleCommandExecution$org_cobalt_cobalt(content)) {
       callbackInfo.cancel();
       return;
     }

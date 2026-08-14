@@ -7,7 +7,6 @@ import java.util.zip.ZipFile
 import kotlin.io.path.extension
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.impl.launch.FabricLauncherBase
-import org.cobalt.Cobalt.configDir
 import org.slf4j.LoggerFactory
 import org.spongepowered.asm.mixin.Mixins
 
@@ -25,8 +24,9 @@ object AddonManager {
       loadDevelopmentAddons()
     }
 
-    val folder = configDir
-      .resolve("addons")
+    val folder = FabricLoader.getInstance()
+      .gameDir
+      .resolve("config/cobalt/addons")
       .apply(Files::createDirectories)
 
     Files.list(folder).use { paths ->
