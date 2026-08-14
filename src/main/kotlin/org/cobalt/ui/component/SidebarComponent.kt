@@ -1,5 +1,6 @@
 package org.cobalt.ui.component
 
+import net.fabricmc.loader.api.FabricLoader
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.module.ModuleCategory
 import org.cobalt.module.impl.misc.NickHider
@@ -127,7 +128,7 @@ object SidebarComponent : UIComponent(
 
     SkiaRenderer.text(
       font = SkiaRenderer.regularFont,
-      text = "User",
+      text = if (FabricLoader.getInstance().isDevelopmentEnvironment) "Dev" else "User",
       x = textX,
       y = textY + USER_INFO_TEXT_SIZE + 2f,
       size = USER_INFO_TEXT_SIZE,
