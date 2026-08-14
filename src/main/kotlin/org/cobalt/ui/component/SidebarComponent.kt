@@ -126,9 +126,11 @@ object SidebarComponent : UIComponent(
       color = theme.textPrimary
     )
 
+    val role = if (FabricLoader.getInstance().isDevelopmentEnvironment) "Dev" else "User"
+
     SkiaRenderer.text(
       font = SkiaRenderer.regularFont,
-      text = if (FabricLoader.getInstance().isDevelopmentEnvironment) "Dev" else "User",
+      text = role,
       x = textX,
       y = textY + USER_INFO_TEXT_SIZE + 2f,
       size = USER_INFO_TEXT_SIZE,

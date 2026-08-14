@@ -57,6 +57,10 @@ object GizmoRenderer {
     esp: Boolean = true,
     lineWidth: Float = 1f,
   ) {
+    if (color.alpha == 0) {
+      return
+    }
+
     val camera = Cobalt.minecraft.gameRenderer.mainCamera()
     val from = camera
       .position()
@@ -127,7 +131,9 @@ object GizmoRenderer {
     lineWidth: Float = 2f,
     speedMs: Double = 1500.0
   ) {
-    if (color.alpha == 0) return
+    if (color.alpha == 0) {
+      return
+    }
 
     val partialTicks = Cobalt.minecraft.deltaTracker.getGameTimeDeltaPartialTick(true)
     val box = entity.boundingBox.move(
@@ -160,4 +166,5 @@ object GizmoRenderer {
       circle2.setAlwaysOnTop()
     }
   }
+
 }

@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
+
   @Inject(method = "extractRenderState", at = @At("TAIL"))
   private void cobalt$setOutline(
     Entity entity,
@@ -24,4 +25,5 @@ public abstract class EntityRendererMixin {
 
     state.outlineColor = PlayerESP.INSTANCE.getOutlineColor();
   }
+
 }

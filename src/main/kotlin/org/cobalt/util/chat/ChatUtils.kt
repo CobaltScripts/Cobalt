@@ -1,6 +1,8 @@
 package org.cobalt.util.chat
 
+import java.net.URI
 import kotlin.math.roundToInt
+import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
@@ -23,24 +25,15 @@ object ChatUtils {
 
   private val logger = LoggerFactory.getLogger(this::class.java)
 
-  private const val DARK_GRAY = "<dark_gray>"
-  private const val RESET = "<reset>"
-  private const val GRADIENT_END = "</gradient>"
+  private val defaultPrefix = formatPrefix(Cobalt.MOD_NAME, "#4CADD0", "#B2F9FF")
+  private val debugPrefix = formatPrefix("${Cobalt.MOD_NAME} Debug", "#369876", "#71FF9E")
 
-  private const val DEFAULT_GRADIENT = "<gradient:#4CADD0:#B2F9FF>"
-  private const val DEBUG_GRADIENT = "<gradient:#369876:#71FF9E>"
-
-  private const val PREFIX_START = "$DARK_GRAY[$DARK_GRAY"
-  private const val PREFIX_END = "$DARK_GRAY] $RESET"
-
-  private val defaultPrefix =
-    "$PREFIX_START$DEFAULT_GRADIENT${Cobalt.MOD_NAME}$GRADIENT_END$PREFIX_END"
-
-  private val debugPrefix =
-    "$PREFIX_START$DEBUG_GRADIENT${Cobalt.MOD_NAME} Debug$GRADIENT_END$PREFIX_END"
+  private fun formatPrefix(title: String, startHex: String, endHex: String): String =
+    "<dark_gray>[<gradient:$startHex:$endHex>$title</gradient><dark_gray>] <reset>"
 
   private var lastDebugMessage: String? = null
 
+  @JvmOverloads
   @JvmStatic
   fun sendSystemMessage(message: String, type: MessageType = MessageType.DEFAULT) {
     val component = when (type) {
@@ -60,24 +53,17 @@ object ChatUtils {
   }
 
   @JvmOverloads
+  @JvmStatic
   fun sendSystemMessage(component: Component, type: MessageType = MessageType.DEFAULT) {
     val message = when (type) {
-      MessageType.DEFAULT -> {
-        ChatFormatter.parse(defaultPrefix)
-          .append(component)
-      }
-
-      MessageType.RAW -> {
-        component
-      }
-
+      MessageType.DEFAULT -> ChatFormatter.parse(defaultPrefix).append(component)
+      MessageType.RAW -> component
       MessageType.DEBUG -> {
         if (!Debug.enabled) {
           return
         }
 
-        ChatFormatter.parse(debugPrefix)
-          .append(component)
+        ChatFormatter.parse(debugPrefix).append(component)
       }
     }
 
@@ -117,10 +103,16 @@ object ChatUtils {
   }
 
   @JvmStatic
-  fun sendLineBreak(amount: Int = 45, color: String = "aqua") {
-    sendSystemMessage("<$color>" + "-".repeat(amount) + "</$color>")
+  fun sendLineBreak(amount: Int = 60, color: String = "dark_grey") {
+    sendSystemMessage("<bold><$color><st>${" ".repeat(amount)}<reset>", MessageType.RAW)
   }
 
+  @JvmStatic
+  fun sendEmptyLine() {
+    sendSystemMessage("", MessageType.RAW)
+  }
+
+  @JvmOverloads
   @JvmStatic
   fun buildGradientComponent(
     text: String,

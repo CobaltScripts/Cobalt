@@ -1,20 +1,19 @@
 package org.cobalt
 
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.rendering.v1.PictureInPictureRendererRegistry
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.minecraft.SharedConstants
 import net.minecraft.client.Minecraft
-import org.cobalt.addon.AddonManager
 import org.cobalt.command.CommandManager
-import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.module.ModuleManager
 import org.cobalt.ui.theme.ThemeManager
+import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.input.KeyMappingHandler
 import org.cobalt.util.render.skia.SkiaPIP
+import org.cobalt.util.scheduling.Multithreading
 import org.cobalt.util.web.UpdateChecker
 import org.slf4j.LoggerFactory
 
@@ -58,7 +57,7 @@ object Cobalt : ClientModInitializer {
     FailsafeManager.initialize()
     KeyMappingHandler.registerKeyMappings()
 
-    CompletableFuture.runAsync {
+    Multithreading.runAsync {
       UpdateChecker.runCheck()
     }
 
