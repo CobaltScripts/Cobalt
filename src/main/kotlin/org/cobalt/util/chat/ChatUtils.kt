@@ -58,6 +58,35 @@ object ChatUtils {
     addToChat(component)
   }
 
+  @JvmOverloads
+  fun sendSystemMessage(component: Component, type: MessageType = MessageType.DEFAULT) {
+    val message = when (type) {
+      MessageType.DEFAULT -> {
+        ChatFormatter.parse(defaultPrefix)
+          .append(component)
+      }
+
+      MessageType.RAW -> {
+        component
+      }
+
+      MessageType.DEBUG -> {
+        if (!Debug.enabled) {
+          return
+        }
+
+        ChatFormatter.parse(debugPrefix)
+          .append(component)
+      }
+    }
+
+    addToChat(message.toMutable())
+  }
+
+  fun Component.toMutable(): MutableComponent {
+    return Component.empty().append(this)
+  }
+
   @JvmStatic
   fun sendPlayerMessage(message: String) {
     runOnClientThread {
