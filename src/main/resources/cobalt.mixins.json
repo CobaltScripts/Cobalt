@@ -15,6 +15,7 @@
     "mojang.GpuDeviceAccessor",
     "multiplayer.ClientPacketListenerMixin",
     "render.LevelRendererMixin",
+    "render.EntityRendererMixin",
     "screen.GuiRendererMixin",
     "screen.SplashManagerMixin"
   ],

@@ -16,6 +16,7 @@ import org.cobalt.module.impl.misc.NickHider
 import org.cobalt.module.impl.misc.Rotations
 import org.cobalt.module.impl.script.fishing.FishingScript
 import org.cobalt.module.impl.visual.PerformanceHUD
+import org.cobalt.module.impl.visual.PlayerESP
 import org.cobalt.module.type.RenderableModule
 import org.cobalt.module.type.Script
 import org.cobalt.ui.screen.HudEditorScreen
@@ -46,7 +47,8 @@ object ModuleManager {
       NickHider,
       Rotations,
       FishingScript,
-      PerformanceHUD
+      PerformanceHUD,
+      PlayerESP
     )
 
     builtIn.forEach { module ->
