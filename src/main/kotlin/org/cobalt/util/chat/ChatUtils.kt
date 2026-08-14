@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.TextColor
+import net.minecraft.util.ARGB.color
 import org.cobalt.Cobalt
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.Cobalt.runOnClientThread
@@ -113,6 +114,11 @@ object ChatUtils {
 
       player.connection.sendCommand(command)
     }
+  }
+
+  @JvmStatic
+  fun sendLineBreak(amount: Int = 45, color: String = "aqua") {
+    sendSystemMessage("<$color>" + "-".repeat(amount) + "</$color>")
   }
 
   @JvmStatic
