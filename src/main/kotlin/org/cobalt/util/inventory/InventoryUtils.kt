@@ -59,6 +59,17 @@ object InventoryUtils {
 
   @JvmStatic
   @JvmOverloads
+  fun findItemInHotbarRegex(name: Regex): Int {
+    val player = minecraft.player ?: return -1
+    val inventory = player.inventory
+
+    return findSlot(9, { inventory.getItem(it) }) { _, stack ->
+      matchesRegex(stack.displayName.string, name)
+    }
+  }
+
+  @JvmStatic
+  @JvmOverloads
   fun findItemInHotbarWithLore(lore: String, exactMatch: Boolean = false): Int {
     val player = minecraft.player ?: return -1
     val inventory = player.inventory
@@ -130,12 +141,29 @@ object InventoryUtils {
     }
   }
 
+  @JvmStatic
+  fun getHeldItemName(): String? {
+    val player = minecraft.player ?: return null
+    val held = player.mainHandItem
+
+    if (held.isEmpty) {
+      return null
+    }
+
+    return held.displayName.string
+  }
+
   private fun matches(text: String, query: String, exactMatch: Boolean): Boolean {
     return if (exactMatch) {
       text.equals(query, ignoreCase = true)
     } else {
       text.contains(query, ignoreCase = true)
     }
+  }
+
+  @JvmStatic
+  private fun matchesRegex(text: String, query: Regex): Boolean {
+    return query.containsMatchIn(text)
   }
 
   private fun findSlot(

@@ -1,5 +1,6 @@
 package org.cobalt.util.failsafe
 
+import java.util.concurrent.ConcurrentHashMap
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
@@ -11,11 +12,14 @@ import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.input.MouseMode
+import org.cobalt.util.scheduling.TickScheduler
 import org.lwjgl.glfw.GLFW
 
 object FailsafeManager {
 
   var failsafes = mutableListOf<Failsafe>()
+
+  private val tempIgnored = ConcurrentHashMap.newKeySet<Failsafe>()
   private var triggeredFailsafe: Failsafe? = null
 
   private var queueTimer = 0
@@ -41,6 +45,11 @@ object FailsafeManager {
     EventBus.register(this)
   }
 
+  fun ignoreFailsafe(failsafe: Failsafe) {
+    tempIgnored.add(failsafe) // I'm not entirely sure if this is the best method if doing this, change if there's a better one
+    // this will just prevent the user from being alerted for 10 ticks, should be long enough?, nothing else
+    TickScheduler.schedule(10L, Runnable { tempIgnored.remove(failsafe) })
+  }
 
   fun isFailsafeTriggered() = triggeredFailsafe != null
   fun hasActiveReaction() = triggeredFailsafe != null
@@ -80,6 +89,7 @@ object FailsafeManager {
 
 
   fun alertUser(fsType: Failsafe) {
+    if (fsType in tempIgnored) return
     ChatUtils.sendSystemMessage("POTENTIAL STAFF CHECK (${fsType.name})", MessageType.FAILSAFE)
     Mouse.mouseMode = MouseMode.DEFAULT
     grabWindow()

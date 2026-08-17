@@ -7,7 +7,8 @@ abstract class PacketEvent(
   val packet: Packet<*>,
 ) : Event.Cancellable() {
 
-  class Send(packet: Packet<*>) : PacketEvent(packet)
-  class Receive(packet: Packet<*>) : PacketEvent(packet)
+  open class Any(packet: Packet<*>) : PacketEvent(packet)
 
+  class Send(packet: Packet<*>) : Any(packet)
+  class Receive(packet: Packet<*>) : Any(packet)
 }
