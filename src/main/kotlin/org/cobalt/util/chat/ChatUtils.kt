@@ -18,7 +18,7 @@ import org.cobalt.util.color.red
 import org.slf4j.LoggerFactory
 
 enum class MessageType {
-  DEFAULT, RAW, DEBUG
+  DEFAULT, RAW, DEBUG, FAILSAFE
 }
 
 object ChatUtils {
@@ -27,7 +27,7 @@ object ChatUtils {
 
   private val defaultPrefix = formatPrefix(Cobalt.MOD_NAME, "#4CADD0", "#B2F9FF")
   private val debugPrefix = formatPrefix("${Cobalt.MOD_NAME} Debug", "#369876", "#71FF9E")
-
+  private var failsafePrefix = formatPrefix("${Cobalt.MOD_NAME} Failsafes", "#FF2D55", "#FF9500")
   private fun formatPrefix(title: String, startHex: String, endHex: String): String =
     "<dark_gray>[<gradient:$startHex:$endHex>$title</gradient><dark_gray>] <reset>"
 
@@ -39,6 +39,7 @@ object ChatUtils {
     val component = when (type) {
       MessageType.DEFAULT -> ChatFormatter.parse(defaultPrefix + message)
       MessageType.RAW -> ChatFormatter.parse(message)
+      MessageType.FAILSAFE -> ChatFormatter.parse(failsafePrefix + message)
       MessageType.DEBUG -> {
         if (!Debug.enabled || lastDebugMessage == message) {
           return
@@ -58,6 +59,7 @@ object ChatUtils {
     val message = when (type) {
       MessageType.DEFAULT -> ChatFormatter.parse(defaultPrefix).append(component)
       MessageType.RAW -> component
+      MessageType.FAILSAFE -> ChatFormatter.parse(failsafePrefix).append(component)
       MessageType.DEBUG -> {
         if (!Debug.enabled) {
           return

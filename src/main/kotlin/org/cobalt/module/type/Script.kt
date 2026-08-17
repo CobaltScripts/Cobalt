@@ -11,7 +11,6 @@ open class Script @JvmOverloads constructor(
   name: String,
   category: ModuleCategory,
   val backgroundResourcePath: String = "",
-  val failsafes: List<Failsafe> = emptyList(),
 ) : Module(
   name, category,
   toggleable = false,
@@ -58,10 +57,6 @@ open class Script @JvmOverloads constructor(
     paused = false
     EventBus.register(this)
     onResume()
-  }
-
-  open fun failsafeDelayTicks(): Int {
-    return 5
   }
 
   open fun onPause() {}

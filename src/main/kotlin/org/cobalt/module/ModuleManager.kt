@@ -3,7 +3,6 @@ package org.cobalt.module
 import net.minecraft.client.gui.screens.LevelLoadingScreen
 import net.minecraft.client.gui.screens.ProgressScreen
 import org.cobalt.Cobalt.minecraft
-import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.RenderEvent
@@ -88,7 +87,6 @@ object ModuleManager {
       return
     }
 
-    FailsafeManager.stopFailsafes()
     currentScript = script
     script.startScript()
   }
@@ -100,7 +98,6 @@ object ModuleManager {
       return
     }
 
-    FailsafeManager.stopFailsafes()
 
     currentScript?.stopScript().also {
       lastScript = currentScript

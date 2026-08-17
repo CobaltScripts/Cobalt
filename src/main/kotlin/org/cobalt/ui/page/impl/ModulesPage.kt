@@ -1,11 +1,14 @@
 package org.cobalt.ui.page.impl
 
+import org.cobalt.module.Module
+import org.cobalt.module.ModuleCategory
 import org.cobalt.module.ModuleManager
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.ModuleComponent
 import org.cobalt.ui.helper.ScrollHelper
 import org.cobalt.ui.page.Page
 import org.cobalt.ui.screen.ConfigScreen
+import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.render.SkiaRenderer
 
@@ -27,30 +30,30 @@ object ModulesPage : Page() {
     resetComponents(query)
   }
 
+  private fun addModuleComponentAndChild(module: Module) {
+    val component = ModuleComponent(module)
+    moduleComponents.add(component)
+    addChild(component)
+  }
+
   private fun resetComponents(query: String = "") {
     moduleComponents.clear()
     scrollHelper.reset()
-
     removeAllChildren()
 
-    ModuleManager.modules
+    val modules = ModuleManager.modules
       .filter { module ->
-        val matchesCategory = module.category == ConfigScreen.selectedCategory
-        val matchesQuery = query.isBlank() ||
-          module.name.contains(query, ignoreCase = true) ||
-          module.getSettings().any { setting ->
-            setting.name.contains(query, ignoreCase = true) ||
-              setting.description.contains(query, ignoreCase = true)
-          }
-
-        matchesCategory && matchesQuery
+        module.category == ConfigScreen.selectedCategory
       }
-      .forEach { module ->
-        val component = ModuleComponent(module)
 
-        moduleComponents.add(component)
-        addChild(component)
-      }
+    val failsafes = FailsafeManager.failsafes
+      .filter { ConfigScreen.selectedCategory == ModuleCategory.FAILSAFE }
+
+    (modules + failsafes).filter { module ->
+      query.isBlank() || module.name.contains(query, ignoreCase = true) || module.getSettings().any { setting -> setting.name.contains(query, ignoreCase = true) || setting.description.contains(query, ignoreCase = true) }
+    }.forEach { module ->
+      addModuleComponentAndChild(module)
+    }
   }
 
   override fun renderComponent() {
