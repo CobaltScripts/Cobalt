@@ -6,6 +6,7 @@ import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
 import org.cobalt.module.ModuleManager
 import org.cobalt.Cobalt
+import org.cobalt.module.impl.failsafes.SlotChangeFailsafe
 import org.cobalt.module.impl.failsafes.TeleportFailsafe
 import org.cobalt.module.type.Failsafe
 import org.cobalt.util.chat.ChatUtils
@@ -28,7 +29,8 @@ object FailsafeManager {
 
   private fun registerDefaultFailsafe() {
     val builtInFailsafe = listOf<Failsafe>(
-      TeleportFailsafe
+      TeleportFailsafe,
+      SlotChangeFailsafe
     )
 
     builtInFailsafe.forEach { registerFailsafe(it) }
