@@ -33,8 +33,7 @@ object TeleportFailsafe: Failsafe("Teleport", 10, true) {
           event.packet.change.position.z.toInt()
         )
 
-        FailsafeManager.alertUser(this)
-        ChatUtils.sendSystemMessage("FROM $oldBP TO $newBP", MessageType.FAILSAFE)
+        FailsafeManager.alertUser(this, "FROM $oldBP TO $newBP")
       }
 
       is ServerboundChatCommandPacket -> {

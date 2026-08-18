@@ -20,6 +20,7 @@ object FailsafeManager {
   var failsafes = mutableListOf<Failsafe>()
 
   private val tempIgnored = ConcurrentHashMap.newKeySet<Failsafe>()
+  private val ignoreGens = mutableMapOf<Failsafe, Long>()
   private var triggeredFailsafe: Failsafe? = null
 
   private var queueTimer = 0
@@ -46,9 +47,17 @@ object FailsafeManager {
   }
 
   fun ignoreFailsafe(failsafe: Failsafe) {
+    val gen = (ignoreGens[failsafe] ?: 0L) + 1L
+    ignoreGens[failsafe] = gen
+
     tempIgnored.add(failsafe) // I'm not entirely sure if this is the best method if doing this, change if there's a better one
     // this will just prevent the user from being alerted for 10 ticks, should be long enough?, nothing else
-    TickScheduler.schedule(10L, Runnable { tempIgnored.remove(failsafe) })
+    TickScheduler.schedule(10L, Runnable {
+      if (ignoreGens[failsafe] == gen) {
+        tempIgnored.remove(failsafe)
+        ignoreGens.remove(failsafe)
+      }
+    })
   }
 
   fun isFailsafeTriggered() = triggeredFailsafe != null
@@ -88,12 +97,14 @@ object FailsafeManager {
   }
 
 
-  fun alertUser(fsType: Failsafe) {
+  fun alertUser(fsType: Failsafe, extraInfo: String? = null) {
     if (fsType in tempIgnored) return
     ChatUtils.sendSystemMessage("POTENTIAL STAFF CHECK (${fsType.name})", MessageType.FAILSAFE)
     Mouse.mouseMode = MouseMode.DEFAULT
     grabWindow()
     ChatUtils.sendSystemMessage("DO NOT LEAVE THE GAME", MessageType.FAILSAFE)
+    if (extraInfo == null) return
+    ChatUtils.sendSystemMessage(extraInfo, MessageType.FAILSAFE)
 
   }
 
