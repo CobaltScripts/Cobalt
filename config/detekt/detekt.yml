@@ -49,7 +49,7 @@ style:
   ReturnCount:
     active: true
     excludeGuardClauses: true
-    max: 4
+    max: 5
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 3

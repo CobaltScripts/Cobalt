@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
 import org.cobalt.module.ModuleManager
+import org.cobalt.module.type.Failsafe
 import org.cobalt.ui.UIScreen
 import org.cobalt.ui.animation.BounceAnimation
 import org.cobalt.ui.animation.EaseOutAnimation
@@ -15,6 +16,7 @@ import org.cobalt.ui.theme.Theme
 import org.cobalt.ui.theme.ThemeManager
 import org.cobalt.util.client.WindowUtils.windowHeight
 import org.cobalt.util.client.WindowUtils.windowWidth
+import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.render.SkiaRenderer
 import org.cobalt.util.scheduling.Multithreading
 
@@ -145,6 +147,7 @@ object ConfigScreen : UIScreen() {
 
     Multithreading.runAsync {
       ModuleManager.modules.forEach(Module::saveConfig)
+      FailsafeManager.failsafes.forEach(Failsafe::saveConfig)
     }
 
     closing = true

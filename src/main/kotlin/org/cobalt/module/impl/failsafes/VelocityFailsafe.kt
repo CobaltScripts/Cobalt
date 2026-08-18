@@ -20,6 +20,7 @@ object VelocityFailsafe: Failsafe("Velocity", 10, true) {
     1.3500579869376792,
     1.7000549349935907,
     2.09998168833547,
+    1.5999511688945858
   )
 
   @SubscribeEvent

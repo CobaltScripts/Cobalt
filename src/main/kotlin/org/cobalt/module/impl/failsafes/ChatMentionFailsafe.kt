@@ -65,11 +65,11 @@ object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
 
     currScript.pause()
 
-    TickScheduler.schedule(23L, Runnable {
+    TickScheduler.schedule(23L) {
       ChatUtils.sendSystemMessage("should reply", MessageType.DEBUG)
       ChatUtils.sendPlayerMessage(listOfResponses.random())
       currScript.resume()
-    })
+    }
 
     return ReactionResult.FINISHED
   }
