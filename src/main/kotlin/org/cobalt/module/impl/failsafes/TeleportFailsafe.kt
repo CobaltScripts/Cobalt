@@ -17,6 +17,7 @@ import org.cobalt.util.inventory.ItemUtils
 object TeleportFailsafe: Failsafe("Teleport", 10, true) {
   @SubscribeEvent
   fun onTeleport(event: PacketEvent.Any) {
+    if (minecraft.level == null) return
     when (val packet = event.packet) {
       is ClientboundPlayerPositionPacket -> {
         val oldBP

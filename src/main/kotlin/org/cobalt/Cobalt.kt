@@ -11,6 +11,7 @@ import org.cobalt.command.CommandManager
 import org.cobalt.module.ModuleManager
 import org.cobalt.ui.theme.ThemeManager
 import org.cobalt.util.failsafe.FailsafeManager
+import org.cobalt.util.failsafe.FailsafeUtils
 import org.cobalt.util.input.KeyMappingHandler
 import org.cobalt.util.render.skia.SkiaPIP
 import org.cobalt.util.scheduling.Multithreading
@@ -55,6 +56,7 @@ object Cobalt : ClientModInitializer {
     CommandManager.registerCommands()
 
     FailsafeManager.initialize()
+    FailsafeUtils.init()
     KeyMappingHandler.registerKeyMappings()
 
     Multithreading.runAsync {

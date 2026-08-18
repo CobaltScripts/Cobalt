@@ -52,7 +52,7 @@ object FailsafeManager {
 
     tempIgnored.add(failsafe) // I'm not entirely sure if this is the best method if doing this, change if there's a better one
     // this will just prevent the user from being alerted for 10 ticks, should be long enough?, nothing else
-    TickScheduler.schedule(10L, Runnable {
+    TickScheduler.schedule(15L, Runnable {
       if (ignoreGens[failsafe] == gen) {
         tempIgnored.remove(failsafe)
         ignoreGens.remove(failsafe)
