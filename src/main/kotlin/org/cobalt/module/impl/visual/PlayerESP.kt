@@ -18,11 +18,11 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
     name = "ESP Type",
     description = "The type of ESP to use",
     defaultValue = 0,
-    options = arrayOf("Box", "Target Beam", "Outline")
+    options = arrayOf("Box", "Target Beam", "Outline", "Beam & Outline")
   )
 
   fun shouldOutline(entity: Entity): Boolean {
-    if (espType != 2) {
+    if (espType != 2 && espType != 3) {
       return false
     }
 
@@ -62,6 +62,12 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
         )
 
         1 -> GizmoRenderer.drawTargetBeam(
+          entity = player,
+          color = ThemeManager.activeTheme.accentPrimary,
+          esp = true
+        )
+
+        3 -> GizmoRenderer.drawTargetBeam( // both beam and esp
           entity = player,
           color = ThemeManager.activeTheme.accentPrimary,
           esp = true

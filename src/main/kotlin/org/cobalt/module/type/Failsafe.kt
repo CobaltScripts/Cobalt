@@ -14,7 +14,7 @@ abstract class Failsafe @JvmOverloads constructor(
 ) {
 
   abstract fun resetStates()
-  abstract fun performReaction(): ReactionResult
+  abstract fun performReaction(): ReactionResult?
 
   enum class ReactionResult {
     CONTINUE,

@@ -14,7 +14,7 @@ object SlotChangeFailsafe: Failsafe("Slot Change", 10, true) {
     val player = Cobalt.minecraft.player ?: return
     val packet = event.packet as? ClientboundSetHeldSlotPacket ?: return
 
-    val oldSlot = Cobalt.minecraft.player?.inventory?.selectedSlot
+    val oldSlot = player.inventory.selectedSlot
     val newSlot = event.packet.slot
 
     if (oldSlot == newSlot) return

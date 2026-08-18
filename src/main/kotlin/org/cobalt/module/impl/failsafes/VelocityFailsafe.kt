@@ -25,9 +25,8 @@ object VelocityFailsafe: Failsafe("Velocity", 10, true) {
   @SubscribeEvent
   fun onVelo(event: PacketEvent.Receive) {
     val player = Cobalt.minecraft.player ?: return
-    val packet = event.packet
+    val packet = event.packet as? ClientboundSetEntityMotionPacket ?: return
 
-    if (packet !is ClientboundSetEntityMotionPacket) return
     if (packet.id != player.id) return
 
     val velocity = packet.movement
