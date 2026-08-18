@@ -8,6 +8,7 @@ import org.cobalt.module.ModuleManager
 import org.cobalt.Cobalt
 import org.cobalt.module.impl.failsafes.SlotChangeFailsafe
 import org.cobalt.module.impl.failsafes.TeleportFailsafe
+import org.cobalt.module.impl.failsafes.VelocityFailsafe
 import org.cobalt.module.type.Failsafe
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
@@ -30,7 +31,8 @@ object FailsafeManager {
   private fun registerDefaultFailsafe() {
     val builtInFailsafe = listOf<Failsafe>(
       TeleportFailsafe,
-      SlotChangeFailsafe
+      SlotChangeFailsafe,
+      VelocityFailsafe
     )
 
     builtInFailsafe.forEach { registerFailsafe(it) }
