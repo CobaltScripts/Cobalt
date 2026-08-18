@@ -11,8 +11,9 @@ import org.cobalt.util.inventory.InventoryUtils
 object SlotChangeFailsafe: Failsafe("Slot Change", 10, true) {
   @SubscribeEvent
   fun onServerItemChange(event: PacketEvent.Receive) {
-    if (Cobalt.minecraft.player == null) return
-    if (event.packet !is ClientboundSetHeldSlotPacket) return
+    val player = Cobalt.minecraft.player ?: return
+    val packet = event.packet as? ClientboundSetHeldSlotPacket ?: return
+
     val oldSlot = Cobalt.minecraft.player?.inventory?.selectedSlot
     val newSlot = event.packet.slot
 
