@@ -3,7 +3,7 @@
   "id": "cobalt",
   "version": "${version}",
   "name": "Cobalt",
-  "description": "A Hypixel Skyblock QoL mod for Fabric 1.21.10",
+  "description": "A Hypixel Skyblock QoL mod for Fabric 26.2",
   "authors": [
     "quiteboring",
     "Twiston",

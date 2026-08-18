@@ -7,6 +7,7 @@ import org.cobalt.event.impl.TickEvent
 import org.cobalt.module.ModuleManager
 import org.cobalt.Cobalt
 import org.cobalt.module.impl.failsafes.ChatMentionFailsafe
+import org.cobalt.module.impl.failsafes.RotationFailsafe
 import org.cobalt.module.impl.failsafes.SlotChangeFailsafe
 import org.cobalt.module.impl.failsafes.TeleportFailsafe
 import org.cobalt.module.impl.failsafes.VelocityFailsafe
@@ -34,7 +35,8 @@ object FailsafeManager {
       TeleportFailsafe,
       SlotChangeFailsafe,
       VelocityFailsafe,
-      ChatMentionFailsafe
+      ChatMentionFailsafe,
+      RotationFailsafe,
     )
 
     builtInFailsafe.forEach { registerFailsafe(it) }

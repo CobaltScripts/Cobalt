@@ -9,6 +9,7 @@ import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Failsafe
 import org.cobalt.ui.component.setting.impl.CheckboxSetting
 import org.cobalt.ui.component.setting.impl.ModeSetting
+import org.cobalt.ui.component.setting.impl.TextSetting
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
 import org.cobalt.util.client.PlayerUtils
@@ -16,13 +17,16 @@ import org.cobalt.util.scheduling.TickScheduler
 
 object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
   private var respond by CheckboxSetting("Respond to chat messages", "respond", false)
-  private var listOfResponses = listOf(
-    "?",
-    "wha",
-    "what",
-    "ig", // TODO: add gui thing for this, idk how id do it so ill leave it as this
-    "i guess",
-    "waht",
+  private var badPhrases by TextSetting(
+    "Other phrases",
+    "Enter words that you want to trigger the failsafe, seperated by commas",
+    "wdr,macro,cheat,admin,botting"
+  )
+
+  private var listOfResponses by TextSetting(
+    "Responses",
+    "Enter what you want Cobalt to reply to people mentioning your name with",
+    "what,?,??,???,wha,waht,wsp"
   )
 
   @SubscribeEvent
@@ -31,13 +35,24 @@ object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
 
     val chatMessage = packet.content.string
     val sender = getSenderFromComponent(packet.content)
-
-    if (chatMessage.contains(PlayerUtils.ign) && sender != PlayerUtils.ign) {
-      if (respond) {
+    val badWord = getBadWords().any { chatMessage.contains(it, ignoreCase = true) }
+    if ((chatMessage.contains(PlayerUtils.ign) || badWord) && sender != PlayerUtils.ign) {
+      if (respond && !badWord) { // incase they check someone else we wouldnt want to respond :pray:
         performReaction()
       }
-      ChatUtils.sendSystemMessage("You were mentioned in chat by $sender!", MessageType.FAILSAFE)
+      ChatUtils.sendSystemMessage("Bad phrase in chat found by $sender! ($chatMessage)", MessageType.FAILSAFE)
     }
+  }
+
+  private fun getBadWords(): List<String> {
+    return badPhrases
+      .split(",")
+      .map { it.trim() }
+      .filter { it.isNotEmpty() }
+  }
+
+  private fun getResponses(): List<String> {
+    return listOfResponses.split(',').map { it.trim() }.filter { it.isNotEmpty() }
   }
 
   private fun getSenderFromComponent(component: Component): String? {
@@ -63,11 +78,11 @@ object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
     if (!respond) return null
     val currScript = ModuleManager.currentScript ?: return null
 
-    currScript.pause()
+   currScript.pause()
 
     TickScheduler.schedule(23L) {
       ChatUtils.sendSystemMessage("should reply", MessageType.DEBUG)
-      ChatUtils.sendPlayerMessage(listOfResponses.random())
+      ChatUtils.sendPlayerMessage(getResponses().random())
       currScript.resume()
     }
 
