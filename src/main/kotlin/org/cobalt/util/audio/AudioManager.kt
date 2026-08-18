@@ -6,8 +6,11 @@ import javax.sound.sampled.Clip
 import javax.sound.sampled.FloatControl
 import kotlin.math.log10
 import net.minecraft.client.Minecraft
+import org.slf4j.LoggerFactory
 
 object AudioManager {
+  private val logger =
+    LoggerFactory.getLogger(this::class.java)
   private val clips = mutableListOf<Clip>()
 // YES I KNOW THIS PLAYS THRU SPEAKERS ISNTEAD OF HEADPHONES IDK WHY
   fun play(file: File, volume: Float = 1.0f) {
@@ -43,7 +46,7 @@ object AudioManager {
       clip.start()
 
     } catch (e: Exception) {
-      e.printStackTrace()
+      logger.error("Error while playing audio", e)
     }
   }
 

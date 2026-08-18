@@ -58,7 +58,6 @@ object InventoryUtils {
   }
 
   @JvmStatic
-  @JvmOverloads
   fun findItemInHotbarRegex(name: Regex): Int {
     val player = minecraft.player ?: return -1
     val inventory = player.inventory

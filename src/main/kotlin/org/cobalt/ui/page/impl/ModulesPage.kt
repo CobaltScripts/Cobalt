@@ -50,7 +50,10 @@ object ModulesPage : Page() {
       .filter { ConfigScreen.selectedCategory == ModuleCategory.FAILSAFE }
 
     (modules + failsafes).filter { module ->
-      query.isBlank() || module.name.contains(query, ignoreCase = true) || module.getSettings().any { setting -> setting.name.contains(query, ignoreCase = true) || setting.description.contains(query, ignoreCase = true) }
+      query.isBlank()
+        || module.name.contains(query, ignoreCase = true)
+        || module.getSettings().any { setting -> setting.name.contains(query, ignoreCase = true)
+        || setting.description.contains(query, ignoreCase = true) }
     }.forEach { module ->
       addModuleComponentAndChild(module)
     }

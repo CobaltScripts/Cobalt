@@ -54,8 +54,10 @@ object FailsafeManager {
     val gen = (ignoreGens[failsafe] ?: 0L) + 1L
     ignoreGens[failsafe] = gen
 
-    tempIgnored.add(failsafe) // I'm not entirely sure if this is the best method if doing this, change if there's a better one
-    // this will just prevent the user from being alerted for 10 ticks, should be long enough?, nothing else
+    tempIgnored.add(failsafe) // I'm not entirely sure if this is the best method if doing this
+    // change if there's a better one
+    // this will just prevent the user from being alerted for 10 ticks,
+    // should be long enough?, nothing else
     TickScheduler.schedule(15L, Runnable {
       if (ignoreGens[failsafe] == gen) {
         tempIgnored.remove(failsafe)
@@ -96,7 +98,7 @@ object FailsafeManager {
     try {
       GLFW.glfwFocusWindow(Cobalt.minecraft.window.handle())
     } catch (e: Exception) {
-      ChatUtils.sendSystemMessage("FAILED TO GRAB WINDOW, PLEASE REPORT THIS! ERROR: ${e.message}", MessageType.FAILSAFE)
+      ChatUtils.sendSystemMessage("ERROR GRABBING WINDOW! ${e.message}", MessageType.FAILSAFE)
     }
   }
 

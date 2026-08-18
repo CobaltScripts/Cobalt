@@ -14,7 +14,7 @@ object SlotChangeFailsafe: Failsafe("Slot Change", 10, true) {
     if (Cobalt.minecraft.player == null) return
     if (event.packet !is ClientboundSetHeldSlotPacket) return
     val oldSlot = Cobalt.minecraft.player?.inventory?.selectedSlot
-    val newSlot = event.packet.slot ?: return // this should never return? idk
+    val newSlot = event.packet.slot
 
     if (oldSlot == newSlot) return
 
