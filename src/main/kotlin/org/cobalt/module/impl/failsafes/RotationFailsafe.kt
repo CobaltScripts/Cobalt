@@ -18,7 +18,10 @@ object RotationFailsafe: Failsafe("Rotation", 10, true) {
 
       FailsafeManager.alertUser(
         this,
-        "ROTATED FROM ${currentRot.pitch} & ${currentRot.yaw} TO ${newRot.pitch} & ${newRot.yaw}"
+        "<red>ROTATED FROM</red>" +
+          " <yellow>${currentRot.pitch} & ${currentRot.yaw}</yellow>" +
+          " <red>TO</red>" +
+          " <yellow>${newRot.pitch} & ${newRot.yaw}</yellow>"
       )
     }
 

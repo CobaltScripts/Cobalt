@@ -109,10 +109,10 @@ object FailsafeManager {
 
   fun alertUser(fsType: Failsafe, extraInfo: String? = null) {
     if (fsType in tempIgnored) return
-    ChatUtils.sendSystemMessage("POTENTIAL STAFF CHECK (${fsType.name})", MessageType.FAILSAFE)
+    ChatUtils.sendSystemMessage("<red>POTENTIAL STAFF CHECK</red> <grey>(${fsType.name})</grey>", MessageType.FAILSAFE)
     Mouse.mouseMode = MouseMode.DEFAULT
     grabWindow()
-    ChatUtils.sendSystemMessage("DO NOT LEAVE THE GAME", MessageType.FAILSAFE)
+    ChatUtils.sendSystemMessage("<red><b>DO NOT LEAVE THE GAME</b></red>", MessageType.FAILSAFE)
     if (extraInfo == null) return
     ChatUtils.sendSystemMessage(extraInfo, MessageType.FAILSAFE)
 

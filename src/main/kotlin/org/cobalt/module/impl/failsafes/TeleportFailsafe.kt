@@ -52,7 +52,12 @@ object TeleportFailsafe: Failsafe("Teleport", 10, true) {
           return
         }
 
-        FailsafeManager.alertUser(this, "FROM $oldBP TO $newBP")
+        FailsafeManager.alertUser(
+          this,
+          "<red>FROM</red> <yellow>$oldBP</yellow>" +
+          " <red>TO</red>" +
+          " <yellow>$newBP</yellow>"
+        )
       }
 
       is ServerboundChatCommandPacket -> {

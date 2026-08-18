@@ -19,7 +19,12 @@ object SlotChangeFailsafe: Failsafe("Slot Change", 10, true) {
 
     if (oldSlot == newSlot) return
 
-    FailsafeManager.alertUser(this, "FROM SLOT $oldSlot TO SLOT $newSlot")
+    FailsafeManager.alertUser(this,
+      "<red>FROM SLOT</red>" +
+      " <yellow>$oldSlot</yellow>" +
+      " <red>TO SLOT</red>" +
+      " <yellow>$newSlot</yellow>"
+    )
   }
 
   override fun resetStates() {

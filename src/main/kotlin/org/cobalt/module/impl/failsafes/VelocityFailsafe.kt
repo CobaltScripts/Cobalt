@@ -36,7 +36,11 @@ object VelocityFailsafe: Failsafe("Velocity", 10, true) {
 
     if (state.block == Blocks.SLIME_BLOCK && velocity.y in bouncePadVelocities) return
 
-    FailsafeManager.alertUser(this, "VELOCITY CHANGE: $velocity")
+    FailsafeManager.alertUser(
+      this,
+      "<red>VELOCITY CHANGE</red>: " +
+        "<yellow>${"%.2f".format(velocity.x)}, ${"%.2f".format(velocity.y)}, ${"%.2f".format(velocity.z)}</yellow>"
+    )
   }
 
 

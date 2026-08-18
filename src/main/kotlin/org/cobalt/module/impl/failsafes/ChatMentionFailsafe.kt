@@ -40,7 +40,11 @@ object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
       if (respond && !badWord) { // incase they check someone else we wouldnt want to respond :pray:
         performReaction()
       }
-      ChatUtils.sendSystemMessage("Bad phrase in chat found by $sender! ($chatMessage)", MessageType.FAILSAFE)
+      ChatUtils.sendSystemMessage("<red>Bad phrase in chat found by</red>" +
+        " <yellow>$sender</yellow>!" +
+        " <grey>($chatMessage)</grey>",
+        MessageType.FAILSAFE
+      )
     }
   }
 
@@ -78,7 +82,7 @@ object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
     if (!respond) return null
     val currScript = ModuleManager.currentScript ?: return null
 
-   currScript.pause()
+    currScript.pause()
 
     TickScheduler.schedule(23L) {
       ChatUtils.sendSystemMessage("should reply", MessageType.DEBUG)
