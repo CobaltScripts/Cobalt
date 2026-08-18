@@ -34,6 +34,11 @@ object TeleportFailsafe: Failsafe("Teleport", 10, true) {
           event.packet.change.position.z.toInt()
         )
 
+        if (newBP.x == 0 && newBP.y == 0 && newBP.z == 0) {
+          ChatUtils.sendSystemMessage("ignoring teleport failsafe (0,0,0 pos)", MessageType.FAILSAFE)
+          return
+        }
+
         FailsafeManager.alertUser(this, "FROM $oldBP TO $newBP")
       }
 
