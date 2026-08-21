@@ -18,6 +18,7 @@ import org.cobalt.util.chat.MessageType
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.input.MouseMode
 import org.cobalt.util.scheduling.TickScheduler
+import org.cobalt.util.server.Scoreboard
 import org.lwjgl.glfw.GLFW
 
 object FailsafeManager {
@@ -110,6 +111,7 @@ object FailsafeManager {
 
 
   fun alertUser(fsType: Failsafe, extraInfo: String? = null) {
+    if (!Scoreboard.isInSkyblock()) return
     if (fsType in tempIgnored) return
     ChatUtils.sendSystemMessage("<red>POTENTIAL STAFF CHECK</red> <grey>(${fsType.name})</grey>", MessageType.FAILSAFE)
     Mouse.mouseMode = MouseMode.DEFAULT

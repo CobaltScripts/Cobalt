@@ -1,5 +1,6 @@
 package org.cobalt.module.impl.failsafes
 
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket
@@ -31,22 +32,27 @@ object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
 
   @SubscribeEvent
   fun onChatMessage(event: PacketEvent.Receive) {
+    if (!ModuleManager.isScriptRunning() && !FabricLoader.getInstance().isDevelopmentEnvironment) return
     val packet = event.packet as? ClientboundSystemChatPacket ?: return
-
-    val chatMessage = packet.content.string
+    val message = packet.content.string
     val sender = getSenderFromComponent(packet.content)
-    val badWord = getBadWords().any { chatMessage.contains(it, ignoreCase = true) }
-    if ((chatMessage.contains(PlayerUtils.ign) || badWord) && sender != PlayerUtils.ign) {
-      if (respond && !badWord) { // incase they check someone else we wouldnt want to respond :pray:
-        performReaction()
-      }
-      ChatUtils.sendSystemMessage("<red>Bad phrase in chat found by</red>" +
-        " <yellow>$sender</yellow>!" +
-        " <grey>($chatMessage)</grey>",
-        MessageType.FAILSAFE
-      )
+
+    if (!isTriggerMessage(message, sender)) return
+
+    val badWord = getBadWords().any { message.contains(it, ignoreCase = true) }
+
+    if (respond && !badWord) {
+      performReaction()
     }
+
+    ChatUtils.sendSystemMessage(
+      "<red>Bad phrase in chat found by</red> " +
+        "<yellow>$sender</yellow>!" +
+        " <grey>($message)</grey>",
+      MessageType.FAILSAFE
+    )
   }
+
 
   private fun getBadWords(): List<String> {
     return badPhrases
@@ -73,6 +79,14 @@ object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
       .trim()
       .ifEmpty { null }
   }
+
+  private fun isTriggerMessage(message: String, sender: String?): Boolean {
+    val mentioned = message.contains(PlayerUtils.ign, ignoreCase = true)
+    val badWord = getBadWords().any { message.contains(it, ignoreCase = true) }
+
+    return (mentioned || badWord) && sender != PlayerUtils.ign
+  }
+
 
   override fun resetStates() {
     TODO("Not yet implemented")

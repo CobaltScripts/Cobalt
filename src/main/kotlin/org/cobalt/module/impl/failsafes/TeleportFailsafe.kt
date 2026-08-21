@@ -1,5 +1,6 @@
 package org.cobalt.module.impl.failsafes
 
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.BlockPos
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket
 import net.minecraft.network.protocol.game.ServerboundChatCommandPacket
@@ -7,6 +8,7 @@ import net.minecraft.network.protocol.game.ServerboundUseItemPacket
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.PacketEvent
+import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Failsafe
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
@@ -16,9 +18,10 @@ import org.cobalt.util.inventory.InventoryUtils
 import org.cobalt.util.inventory.ItemUtils
 import org.cobalt.util.rotation.data.Rotation
 
-object TeleportFailsafe: Failsafe("Teleport", 10, true) {
+object TeleportFailsafe: Failsafe("Teleport", 10, false) {
   @SubscribeEvent
   fun onTeleport(event: PacketEvent.Any) {
+    if (!ModuleManager.isScriptRunning() && !FabricLoader.getInstance().isDevelopmentEnvironment) return
     if (minecraft.level == null) return
     when (val packet = event.packet) {
       is ClientboundPlayerPositionPacket -> {
@@ -76,6 +79,7 @@ object TeleportFailsafe: Failsafe("Teleport", 10, true) {
 
         if (player.inventory.selectedSlot == aotvSlot) {
           FailsafeManager.ignoreFailsafe(this)
+          FailsafeManager.ignoreFailsafe(RotationFailsafe)
         }
       }
     }

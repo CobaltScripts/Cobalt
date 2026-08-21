@@ -45,4 +45,9 @@ object Scoreboard {
         .toList()
     }
 
+
+  @JvmStatic
+  fun isInSkyblock(): Boolean {
+    return title?.string?.lowercase()?.contains("skyblock") == true && minecraft.currentServer?.ip?.contains("hypixel") == true
+  }
 }
