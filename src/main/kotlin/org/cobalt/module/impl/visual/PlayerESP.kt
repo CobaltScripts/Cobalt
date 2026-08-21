@@ -29,7 +29,7 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
     val mc = Minecraft.getInstance()
     val localPlayer = mc.player ?: return false
 
-    return entity is Player && entity != localPlayer
+    return entity is Player && entity != localPlayer && entity.uuid.version() != 2
   }
 
   fun getOutlineColor(): Int {
@@ -53,6 +53,8 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
       if (player.gameProfile.name == minecraft.gameProfile.name) {
         return@forEach
       }
+
+      if (player.uuid.version() == 2) return@forEach
 
       when (espType) {
         0 -> GizmoRenderer.drawEntityOutline(

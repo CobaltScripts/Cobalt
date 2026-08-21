@@ -1,6 +1,10 @@
 package org.cobalt.command.impl
 
 import java.io.File
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.phys.EntityHitResult
+import net.minecraft.world.phys.HitResult
 import org.cobalt.Cobalt.minecraft
 import org.cobalt.command.Command
 import org.cobalt.command.annotation.DefaultHandler
@@ -37,6 +41,20 @@ object MainCommand : Command(name = "cobalt", aliases = listOf("cb")) {
   fun debug() {
     EventBus.getRegisteredListeners().forEach { ChatUtils.sendSystemMessage(it) }
     ChatUtils.sendSystemMessage("Is In Skyblock: ${Scoreboard.isInSkyblock()}")
+
+    val hitRes = minecraft.hitResult!!
+    if (hitRes.type == HitResult.Type.ENTITY) {
+      val entityHit = hitRes as EntityHitResult
+      val entity = entityHit.entity
+
+      ChatUtils.sendSystemMessage(entity.toString())
+      ChatUtils.sendSystemMessage("Entity: ${entity.type}")
+      ChatUtils.sendSystemMessage("Class: ${entity.javaClass.name}")
+      ChatUtils.sendSystemMessage("Name: ${entity.name.string}")
+      ChatUtils.sendSystemMessage("UUID: ${entity.uuid}, UUID Version: ${entity.uuid.version()}")
+      ChatUtils.sendSystemMessage("Profile: ${(entity as? Player)?.gameProfile}")
+
+    }
   }
 
   @SubCommand
