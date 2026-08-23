@@ -18,6 +18,7 @@ base {
 detekt {
   buildUponDefaultConfig = true
   config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+  failOnSeverity = FailOnSeverity.Never
   allRules = false
   ignoredBuildTypes = listOf()
 }
@@ -76,12 +77,6 @@ tasks {
       )
     }
   }
-}
-
-tasks.named("check").configure {
-  this.setDependsOn(this.dependsOn.filterNot {
-    it is TaskProvider<*> && it.name == "detekt"
-  })
 }
 
 tasks.withType<JavaCompile>().configureEach {
