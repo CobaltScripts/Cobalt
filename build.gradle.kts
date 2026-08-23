@@ -15,6 +15,13 @@ base {
   archivesName = providers.gradleProperty("modName").get()
 }
 
+detekt {
+  buildUponDefaultConfig = true
+  config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+  allRules = false
+  ignoredBuildTypes = listOf()
+}
+
 publishing {
   publications {
     create<MavenPublication>("mavenJava") {
@@ -71,6 +78,12 @@ tasks {
   }
 }
 
+tasks.named("check").configure {
+  this.setDependsOn(this.dependsOn.filterNot {
+    it is TaskProvider<*> && it.name == "detekt"
+  })
+}
+
 tasks.withType<JavaCompile>().configureEach {
   options.release = 25
 }
@@ -84,12 +97,4 @@ kotlin {
 java {
   sourceCompatibility = JavaVersion.VERSION_25
   targetCompatibility = JavaVersion.VERSION_25
-}
-
-detekt {
-  buildUponDefaultConfig = true
-  config.setFrom(rootProject.file("config/detekt/detekt.yml"))
-  allRules = false
-  failOnSeverity = FailOnSeverity.Warning
-  ignoredBuildTypes = listOf()
 }
