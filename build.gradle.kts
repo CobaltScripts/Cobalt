@@ -1,3 +1,4 @@
+import dev.detekt.gradle.extensions.FailOnSeverity
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -89,5 +90,6 @@ detekt {
   buildUponDefaultConfig = true
   config.setFrom(rootProject.file("config/detekt/detekt.yml"))
   allRules = false
+  failOnSeverity = FailOnSeverity.Warning
   ignoredBuildTypes = listOf()
 }
