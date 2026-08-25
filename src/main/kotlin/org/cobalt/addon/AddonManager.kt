@@ -19,7 +19,7 @@ object AddonManager {
   val addons = mutableListOf<Pair<AddonMetadata, Addon>>()
 
   @JvmStatic
-  internal fun loadAddons() {
+  internal fun onPreLaunch() {
     if (FabricLauncherBase.getLauncher().isDevelopment) {
       loadDevelopmentAddons()
     }
@@ -41,9 +41,11 @@ object AddonManager {
           }
         }
     }
+  }
 
-    for (pair in addons) {
-      val addon = pair.second
+  @JvmStatic
+  internal fun loadAddons() {
+    addons.forEach { (_, addon) ->
       addon.onLoad()
     }
   }

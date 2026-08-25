@@ -21,7 +21,7 @@ class PreLaunch : PreLaunchEntrypoint {
 
   override fun onPreLaunch() {
     loadSkia()
-    AddonManager.loadAddons()
+    AddonManager.onPreLaunch()
   }
 
   private fun loadSkia() {

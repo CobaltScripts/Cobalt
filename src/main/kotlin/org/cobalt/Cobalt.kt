@@ -7,6 +7,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.minecraft.SharedConstants
 import net.minecraft.client.Minecraft
+import org.cobalt.addon.AddonManager
 import org.cobalt.command.CommandManager
 import org.cobalt.module.ModuleManager
 import org.cobalt.ui.theme.ThemeManager
@@ -51,6 +52,7 @@ object Cobalt : ClientModInitializer {
     logger.info("Initializing $MOD_NAME $MINECRAFT_VERSION (v$MOD_VERSION)")
 
     ThemeManager.loadThemes()
+    AddonManager.loadAddons()
 
     ModuleManager.registerModules()
     CommandManager.registerCommands()
