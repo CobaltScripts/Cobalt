@@ -92,7 +92,7 @@ class Notification(
 
     if (hasDescription) {
       SkiaRenderer.wrappedText(
-        font = SkiaRenderer.boldFont,
+        font = SkiaRenderer.regularFont,
         text = description,
         x = xPos + CONTENT_PADDING,
         y = yPos + CONTENT_PADDING + titleHeight + TITLE_DESCRIPTION_GAP,
