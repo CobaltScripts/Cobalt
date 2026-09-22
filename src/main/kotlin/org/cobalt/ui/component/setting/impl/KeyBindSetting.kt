@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.input.KeyEvent
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.component.setting.Setting
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.render.SkiaRenderer

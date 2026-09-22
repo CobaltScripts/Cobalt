@@ -2,8 +2,8 @@ package org.cobalt.ui.component.setting.impl
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
-import org.cobalt.ui.animation.ColorAnimation
-import org.cobalt.ui.animation.EaseOutAnimation
+import org.cobalt.ui.PADDING
+import org.cobalt.ui.animation.HoverFade
 import org.cobalt.ui.component.setting.Setting
 import org.cobalt.util.color.updateAlpha
 import org.cobalt.util.input.Mouse
@@ -19,29 +19,21 @@ class ButtonSetting(
   override fun read(element: JsonElement) = Unit
   override fun write(): JsonElement = JsonPrimitive("")
 
-  private val colorAnim = ColorAnimation(150L)
-  private val alphaAnim = EaseOutAnimation(150L)
-  private var wasHovering = false
+  private val hoverFade = HoverFade()
 
   private val buttonWidth =
     SkiaRenderer.textWidth(SkiaRenderer.regularFont, buttonLabel, FONT_SIZE) + 30f
 
   override fun renderSetting() {
-    val buttonWidth = buttonWidth
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
 
     val hovering = Mouse.isHoveringOver(startX, startY, buttonWidth, BUTTON_HEIGHT)
+    hoverFade.update(hovering)
 
-    if (hovering != wasHovering) {
-      colorAnim.start()
-      alphaAnim.start()
-      wasHovering = hovering
-    }
-
-    val alpha = alphaAnim.get(0f, 40f, !hovering).toInt()
-    val borderColor = colorAnim.get(theme.border, theme.accentPrimary, !hovering)
-    val textColor = colorAnim.get(theme.textPrimary, theme.accentPrimary, !hovering)
+    val alpha = hoverFade.overlayAlpha(hovering)
+    val borderColor = hoverFade.color(theme.border, theme.accentPrimary, hovering)
+    val textColor = hoverFade.color(theme.textPrimary, theme.accentPrimary, hovering)
 
     SkiaRenderer.roundedRect(
       x = startX,

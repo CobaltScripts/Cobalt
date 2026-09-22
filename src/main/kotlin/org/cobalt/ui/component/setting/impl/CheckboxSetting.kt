@@ -2,6 +2,7 @@ package org.cobalt.ui.component.setting.impl
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.animation.ColorAnimation
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.setting.Setting

@@ -3,9 +3,9 @@ package org.cobalt.ui.component.setting.impl
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.component.setting.Setting
 import org.cobalt.util.input.Mouse
-import org.cobalt.util.render.SkiaRenderer
 
 class RangeSetting(
   name: String,
@@ -35,72 +35,36 @@ class RangeSetting(
   private var rawEnd: Float = defaultValue.second.toFloat()
 
   override val height: Float
-    get() = BASE_HEIGHT + TRACK_ROW_HEIGHT
+    get() = BASE_HEIGHT + TrackSettingHelper.TRACK_ROW_HEIGHT
 
   override fun renderSetting() {
     val text = "${value.first} – ${value.second}"
-    val boxWidth = boxWidth(text)
+    val boxWidth = TrackSettingHelper.valueBoxWidth(text)
     val boxX = xPos + width - PADDING - boxWidth
-    val boxY = yPos + (BASE_HEIGHT - VALUE_BOX_HEIGHT) / 2
+    val boxY = yPos + (BASE_HEIGHT - TrackSettingHelper.VALUE_BOX_HEIGHT) / 2
 
-    SkiaRenderer.roundedRect(
+    TrackSettingHelper.drawValueBox(
       x = boxX,
       y = boxY,
       width = boxWidth,
-      height = VALUE_BOX_HEIGHT,
-      radius = 5f,
-      color = theme.backgroundPrimary
-    )
-
-    SkiaRenderer.roundedOutline(
-      x = boxX,
-      y = boxY,
-      width = boxWidth,
-      height = VALUE_BOX_HEIGHT,
-      thickness = 1f,
-      radius = 5f,
-      color = theme.border
-    )
-
-    val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, text, FONT_SIZE)
-
-    SkiaRenderer.text(
-      font = SkiaRenderer.regularFont,
       text = text,
-      x = boxX + (boxWidth - textWidth) / 2,
-      y = boxY + (VALUE_BOX_HEIGHT - FONT_SIZE) / 2,
-      size = FONT_SIZE,
-      color = theme.textPrimary
+      background = theme.backgroundPrimary,
+      border = theme.border,
+      textColor = theme.textPrimary
     )
 
     val geometry = trackGeometry()
 
-    SkiaRenderer.roundedRect(
-      x = geometry.startX,
-      y = geometry.trackY - 2f,
-      width = geometry.trackWidth,
-      height = 4f,
-      radius = 3f,
-      color = theme.backgroundPrimary
-    )
-
-    SkiaRenderer.roundedRect(
-      x = geometry.startKnobX,
-      y = geometry.trackY - 2f,
-      width = (geometry.endKnobX - geometry.startKnobX).coerceAtLeast(0f),
-      height = 4f,
-      radius = 3f,
-      color = theme.accentPrimary
-    )
-
-    SkiaRenderer.circle(
-      geometry.startKnobX, geometry.trackY,
-      KNOB_RADIUS, theme.textPrimary
-    )
-
-    SkiaRenderer.circle(
-      geometry.endKnobX, geometry.trackY,
-      KNOB_RADIUS, theme.textPrimary
+    TrackSettingHelper.drawTrack(
+      startX = geometry.startX,
+      trackWidth = geometry.trackWidth,
+      trackY = geometry.trackY,
+      fillStartX = geometry.startKnobX,
+      fillEndX = geometry.endKnobX,
+      knobXs = listOf(geometry.startKnobX, geometry.endKnobX),
+      trackBackground = theme.backgroundPrimary,
+      fillColor = theme.accentPrimary,
+      knobColor = theme.textPrimary
     )
   }
 
@@ -111,19 +75,21 @@ class RangeSetting(
 
     val geometry = trackGeometry()
 
+    val knobRadius = TrackSettingHelper.KNOB_RADIUS
+
     dragging = when {
       Mouse.isHoveringOver(
-        geometry.startKnobX - KNOB_RADIUS,
-        geometry.trackY - KNOB_RADIUS,
-        KNOB_RADIUS * 2,
-        KNOB_RADIUS * 2
+        geometry.startKnobX - knobRadius,
+        geometry.trackY - knobRadius,
+        knobRadius * 2,
+        knobRadius * 2
       ) -> Knob.START
 
       Mouse.isHoveringOver(
-        geometry.endKnobX - KNOB_RADIUS,
-        geometry.trackY - KNOB_RADIUS,
-        KNOB_RADIUS * 2,
-        KNOB_RADIUS * 2
+        geometry.endKnobX - knobRadius,
+        geometry.trackY - knobRadius,
+        knobRadius * 2,
+        knobRadius * 2
       ) -> Knob.END
 
       else -> return false
@@ -197,7 +163,7 @@ class RangeSetting(
   private fun trackGeometry(): TrackGeometry {
     val startX = xPos + PADDING
     val trackWidth = width - PADDING * 2
-    val trackY = yPos + BASE_HEIGHT + TRACK_MARGIN
+    val trackY = yPos + BASE_HEIGHT + TrackSettingHelper.TRACK_MARGIN
     val range = (max - min).toFloat().takeIf { it != 0f } ?: 1f
     val startKnobX = startX + (rawStart - min) / range * trackWidth
     val endKnobX = startX + (rawEnd - min) / range * trackWidth
@@ -211,9 +177,6 @@ class RangeSetting(
     )
   }
 
-  private fun boxWidth(text: String): Float =
-    SkiaRenderer.textWidth(SkiaRenderer.regularFont, text, FONT_SIZE) + VALUE_BOX_PADDING_X * 2f
-
   private data class TrackGeometry(
     val startX: Float,
     val trackWidth: Float,
@@ -224,15 +187,6 @@ class RangeSetting(
 
   private enum class Knob {
     START, END, NONE
-  }
-
-  companion object {
-    private const val KNOB_RADIUS = 5f
-    private const val FONT_SIZE = 12f
-    private const val VALUE_BOX_HEIGHT = 30f
-    private const val VALUE_BOX_PADDING_X = 14f
-    private const val TRACK_ROW_HEIGHT = 15f
-    private const val TRACK_MARGIN = 5f
   }
 
 }

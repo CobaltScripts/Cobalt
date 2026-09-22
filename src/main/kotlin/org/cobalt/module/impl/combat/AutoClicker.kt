@@ -56,6 +56,9 @@ object AutoClicker : Module(
     options = arrayOf("All", "Entity Only", "No Blocks"),
   )
 
+  private val attackModeType: AttackMode
+    get() = AttackMode.fromOptionIndex(attackMode)
+
   private val mobFilter by TextSetting(
     name = "Mob Filter",
     description = "Only attack listed names (comma-separated)",
@@ -104,11 +107,10 @@ object AutoClicker : Module(
     val player = minecraft.player ?: return false
     val hit = minecraft.hitResult
 
-    val attackAllowed = when (attackMode) {
-      0 -> true
-      1 -> hit?.type == HitResult.Type.ENTITY
-      2 -> hit?.type != HitResult.Type.BLOCK
-      else -> false
+    val attackAllowed = when (attackModeType) {
+      AttackMode.ALL -> true
+      AttackMode.ENTITY_ONLY -> hit?.type == HitResult.Type.ENTITY
+      AttackMode.NO_BLOCKS -> hit?.type != HitResult.Type.BLOCK
     }
 
     if (!attackAllowed || (waitForReload && player.getAttackStrengthScale(0f) < 1.0f)) {
@@ -132,6 +134,16 @@ object AutoClicker : Module(
     val base = 1000.0 / cps
     val jitter = (Math.random() - 0.5) * 60.0
     return (base + jitter).coerceAtLeast(1.0).toLong()
+  }
+
+  private enum class AttackMode(val optionIndex: Int) {
+    ALL(0),
+    ENTITY_ONLY(1),
+    NO_BLOCKS(2);
+
+    companion object {
+      fun fromOptionIndex(index: Int): AttackMode = entries.firstOrNull { it.optionIndex == index } ?: ALL
+    }
   }
 
 }

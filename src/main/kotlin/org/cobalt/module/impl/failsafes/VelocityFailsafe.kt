@@ -1,13 +1,11 @@
 package org.cobalt.module.impl.failsafes
 
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
 import org.cobalt.Cobalt
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.PacketEvent
-import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Failsafe
 import org.cobalt.util.client.PlayerUtils
 import org.cobalt.util.failsafe.FailsafeManager
@@ -27,7 +25,7 @@ object VelocityFailsafe : Failsafe("Velocity", 10, false) {
 
   @SubscribeEvent
   fun onVelo(event: PacketEvent.Receive) {
-    if (!ModuleManager.isScriptRunning() && !FabricLoader.getInstance().isDevelopmentEnvironment) return
+    if (!shouldReactToEvents()) return
     val player = Cobalt.minecraft.player ?: return
     val packet = event.packet as? ClientboundSetEntityMotionPacket ?: return
 

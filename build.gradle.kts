@@ -18,7 +18,7 @@ base {
 detekt {
   buildUponDefaultConfig = true
   config.setFrom(rootProject.file("config/detekt/detekt.yml"))
-  failOnSeverity = FailOnSeverity.Never
+  failOnSeverity = FailOnSeverity.Warning
   allRules = false
   ignoredBuildTypes = listOf()
 }
@@ -55,7 +55,7 @@ dependencies {
   jij(libs.skija.shared)
   jij(libs.discordIpc)
 
-  runtimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
+  runtimeOnly(libs.devAuth)
 }
 
 addResolvedDependencies(jij, "compileOnly", "include", "api")

@@ -13,9 +13,7 @@ import org.lwjgl.vulkan.VK12.*
 
 internal class VulkanSurface : SkiaSurface {
 
-  private var context: DirectContext? = null
-  private var renderTarget: BackendRenderTarget? = null
-  private var surface: Surface? = null
+  private val skija = SkijaSurfaceCache()
 
   private var cachedWidth = 0
   private var cachedHeight = 0
@@ -31,7 +29,7 @@ internal class VulkanSurface : SkiaSurface {
     val vkImage = vkTexture.vkImage()
     val vkFormat = gpuFormatToVkFormat(vkTexture.format)
 
-    val directContext = context ?: makeContext().also { context = it }
+    val directContext = skija.context ?: makeContext().also { skija.context = it }
 
     RenderSystem.getDevice().createCommandEncoder().submit()
     directContext.resetAll()
@@ -87,14 +85,11 @@ internal class VulkanSurface : SkiaSurface {
     vkImage: Long,
     vkFormat: Int,
   ): Surface {
-    val existing = surface
+    val existing = skija.surface
 
     if (existing != null && cachedWidth == width && cachedHeight == height && cachedVkImage == vkImage) {
       return existing
     }
-
-    surface?.close()
-    renderTarget?.close()
 
     val rt = BackendRenderTarget.makeVulkan(
       width, height,
@@ -116,8 +111,7 @@ internal class VulkanSurface : SkiaSurface {
       ColorSpace.getSRGB(),
     )
 
-    renderTarget = rt
-    surface = surf
+    skija.replaceSurface(rt, surf)
     cachedWidth = width
     cachedHeight = height
     cachedVkImage = vkImage
@@ -126,14 +120,7 @@ internal class VulkanSurface : SkiaSurface {
   }
 
   override fun close() {
-    surface?.close()
-    surface = null
-
-    renderTarget?.close()
-    renderTarget = null
-
-    context?.close()
-    context = null
+    skija.close()
   }
 
   companion object {

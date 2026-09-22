@@ -1,6 +1,6 @@
 package org.cobalt.util.scheduling
 
-import java.util.PriorityQueue
+import java.util.concurrent.PriorityBlockingQueue
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
@@ -8,7 +8,8 @@ import org.cobalt.event.impl.TickEvent
 object TickScheduler {
 
   private var currentTick: Long = 0
-  private val taskQueue = PriorityQueue<ScheduledTask>(
+  private val taskQueue = PriorityBlockingQueue(
+    11,
     Comparator.comparingLong(ScheduledTask::executeTick)
   )
 
