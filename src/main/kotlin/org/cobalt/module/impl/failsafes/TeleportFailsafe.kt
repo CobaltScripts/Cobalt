@@ -4,92 +4,79 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket
 import net.minecraft.network.protocol.game.ServerboundChatCommandPacket
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket
-import org.cobalt.Cobalt.minecraft
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.PacketEvent
 import org.cobalt.module.type.Failsafe
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
-import org.cobalt.util.client.PlayerUtils.player
 import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.inventory.InventoryUtils
-import org.cobalt.util.rotation.data.Rotation
 
 object TeleportFailsafe : Failsafe("Teleport", 10, false) {
   @SubscribeEvent
   fun onTeleport(event: PacketEvent.Any) {
     if (!shouldReactToEvents()) return
     if (minecraft.level == null) return
+
     when (val packet = event.packet) {
-      is ClientboundPlayerPositionPacket -> {
-        // I'll be honest I'm not entirely sure what else to do here since they both use the same packet?
-        // this will indeed flag both teleport and rotation on rotation check rn i can't think of a way to
-        // distinguish them (tired zzz)
-        val currentRot = try {
-          Rotation(player!!.yRot, player!!.xRot)
-        } catch (_: NullPointerException) {
-          return
-        }
+      is ClientboundPlayerPositionPacket -> handlePositionPacket(packet)
+      is ServerboundChatCommandPacket -> handleChatCommandPacket(packet)
+      is ServerboundUseItemPacket -> handleUseItemPacket()
+    }
+  }
 
-        val newRot = Rotation(packet.change.yRot, packet.change.xRot)
+  private fun handlePositionPacket(packet: ClientboundPlayerPositionPacket) {
+    val oldBP = try {
+      BlockPos(
+        minecraft.player!!.x.toInt(),
+        minecraft.player!!.y.toInt(),
+        minecraft.player!!.z.toInt()
+      )
+    } catch (_: NullPointerException) {
+      return
+    }
 
-        if (currentRot != newRot) {
-          RotationFailsafe.onRotation(currentRot, newRot)
-        }
+    val newBlockPosition = BlockPos(
+      packet.change.position.x.toInt(),
+      packet.change.position.y.toInt(),
+      packet.change.position.z.toInt()
+    )
 
-        val oldBP = try {
-          BlockPos(
-            minecraft.player!!.x.toInt(),
-            minecraft.player!!.y.toInt(),
-            minecraft.player!!.z.toInt()
-          )
-        } catch (_: NullPointerException) {
-          return
-        }
+    if (newBlockPosition.x == 0 && newBlockPosition.y == 0 && newBlockPosition.z == 0) {
+      ChatUtils.sendSystemMessage("ignoring teleport failsafe (0,0,0 pos)", MessageType.FAILSAFE)
+      return
+    }
 
-        val newBP = BlockPos(
-          event.packet.change.position.x.toInt(),
-          event.packet.change.position.y.toInt(),
-          event.packet.change.position.z.toInt()
-        )
+    FailsafeManager.alertUser(
+      this,
+      "<red>FROM</red> <yellow>$oldBP</yellow>" +
+        " <red>TO</red>" +
+        " <yellow>$newBlockPosition</yellow>"
+    )
+  }
 
-        if (newBP.x == 0 && newBP.y == 0 && newBP.z == 0) {
-          ChatUtils.sendSystemMessage("ignoring teleport failsafe (0,0,0 pos)", MessageType.FAILSAFE)
-          return
-        }
+  private fun handleChatCommandPacket(packet: ServerboundChatCommandPacket) {
+    if (!packet.command.contains("warp")) return
+    FailsafeManager.ignoreFailsafe(this)
+  }
 
-        FailsafeManager.alertUser(
-          this,
-          "<red>FROM</red> <yellow>$oldBP</yellow>" +
-            " <red>TO</red>" +
-            " <yellow>$newBP</yellow>"
-        )
-      }
+  private fun handleUseItemPacket() {
+    val aotvSlot = InventoryUtils.findItemInHotbarRegex(
+      Regex("""(Ender Pearl|Aspect Of The (End|Void))\b""", RegexOption.IGNORE_CASE)
+    )
 
-      is ServerboundChatCommandPacket -> {
-        if (!packet.command.contains("warp")) return
-        FailsafeManager.ignoreFailsafe(this)
-      }
+    if (aotvSlot == -1) return
 
-      is ServerboundUseItemPacket -> {
-        val aotvSlot = InventoryUtils.findItemInHotbarRegex(
-          Regex("""(Ender Pearl|Aspect Of The (End|Void))\b""", RegexOption.IGNORE_CASE)
-        )
+    val player = minecraft.player ?: return
 
-        if (aotvSlot == -1) return
-
-        val player = minecraft.player ?: return
-
-        if (player.inventory.selectedSlot == aotvSlot) {
-          FailsafeManager.ignoreFailsafe(this)
-          FailsafeManager.ignoreFailsafe(RotationFailsafe)
-        }
-      }
+    if (player.inventory.selectedSlot == aotvSlot) {
+      FailsafeManager.ignoreFailsafe(this)
+      FailsafeManager.ignoreFailsafe(RotationFailsafe)
     }
   }
 
   override fun resetStates() {
-    // TODO
+    return
   }
 
   override fun performReaction(): ReactionResult? {

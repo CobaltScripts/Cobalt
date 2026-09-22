@@ -1,28 +1,54 @@
 package org.cobalt.module.impl.failsafes
 
-import org.cobalt.Cobalt
+import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket
+import net.minecraft.network.protocol.game.ServerboundChatCommandPacket
+import org.cobalt.event.annotation.SubscribeEvent
+import org.cobalt.event.impl.PacketEvent
 import org.cobalt.module.type.Failsafe
+import org.cobalt.util.client.PlayerUtils.player
 import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.rotation.data.Rotation
 
 object RotationFailsafe : Failsafe("Rotation", 10, false) {
-  fun onRotation(currentRot: Rotation, newRot: Rotation) {
+  @SubscribeEvent
+  fun onRotation(event: PacketEvent.Any) {
     if (!shouldReactToEvents()) return
-    val player = Cobalt.minecraft.player ?: return
+    if (minecraft.level == null) return
 
-    if (currentRot == newRot) return // I think this is needed? not sure
+    when (val packet = event.packet) {
+      is ClientboundPlayerPositionPacket -> handlePositionPacket(packet)
+      is ServerboundChatCommandPacket -> handleChatCommandPacket(packet)
+    }
+  }
+
+  private fun handlePositionPacket(packet: ClientboundPlayerPositionPacket) {
+    val currentRotation = try {
+      Rotation(player!!.yRot, player!!.xRot)
+    } catch (_: NullPointerException) {
+      return
+    }
+
+    val newRotation = Rotation(packet.change.yRot, packet.change.xRot)
+
+    if (currentRotation == newRotation) {
+      return
+    }
 
     FailsafeManager.alertUser(
       this,
-      "<red>ROTATED FROM</red>" +
-        " <yellow>${currentRot.pitch} & ${currentRot.yaw}</yellow>" +
+      "<red>FROM</red> <yellow>Pitch: ${currentRotation.pitch}, Yaw: ${currentRotation.yaw}</yellow>" +
         " <red>TO</red>" +
-        " <yellow>${newRot.pitch} & ${newRot.yaw}</yellow>"
+        " <yellow>Pitch: ${newRotation.pitch}, Yaw: ${newRotation.yaw}</yellow>"
     )
   }
 
+  private fun handleChatCommandPacket(packet: ServerboundChatCommandPacket) {
+    if (!packet.command.contains("warp")) return
+    FailsafeManager.ignoreFailsafe(this)
+  }
+
   override fun resetStates() {
-    // TODO
+    return
   }
 
   override fun performReaction(): ReactionResult? {
