@@ -7,6 +7,7 @@ import org.cobalt.ui.PADDING
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.ModuleComponent
 import org.cobalt.ui.helper.ScrollHelper
+import org.cobalt.ui.helper.layoutMasonryColumns
 import org.cobalt.ui.page.Page
 import org.cobalt.ui.screen.ConfigScreen
 import org.cobalt.util.failsafe.FailsafeManager
@@ -66,37 +67,23 @@ object ModulesPage : Page() {
     super.renderComponent()
 
     val pageOffset = openingOffset.get(-30f, 0f)
-
-    val leftX = xPos + PADDING
-    var leftY = yPos + PADDING + pageOffset - scrollHelper.scrollOffset
-    val rightX = xPos + PADDING + ModuleComponent.WIDTH + COLUMN_GAP
-    var rightY = yPos + PADDING + pageOffset - scrollHelper.scrollOffset
+    val startY = yPos + PADDING + pageOffset - scrollHelper.scrollOffset
 
     SkiaRenderer.pushScissor(xPos, yPos, width, height)
 
-    moduleComponents.forEachIndexed { index, component ->
-      if (index % 2 == 0) {
-        component
-          .updateBounds(leftX, leftY)
-          .renderComponent()
-
-        leftY += component.height + PADDING
-      } else {
-        component
-          .updateBounds(rightX, rightY)
-          .renderComponent()
-
-        rightY += component.height + PADDING
-      }
-    }
+    val maxColumnY = layoutMasonryColumns(
+      items = moduleComponents,
+      columns = 2,
+      startY = startY,
+      gap = PADDING,
+      columnX = { col -> xPos + PADDING + col * (ModuleComponent.WIDTH + COLUMN_GAP) },
+      heightOf = { it.height },
+      place = { component, x, y -> component.updateBounds(x, y).renderComponent() }
+    )
 
     SkiaRenderer.popScissor()
 
-    val contentHeight = maxOf(
-      leftY + scrollHelper.scrollOffset,
-      rightY + scrollHelper.scrollOffset
-    ) - yPos
-
+    val contentHeight = maxColumnY + scrollHelper.scrollOffset - yPos
     scrollHelper.updateMaxScroll(contentHeight, height)
   }
 
