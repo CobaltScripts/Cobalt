@@ -1,7 +1,5 @@
 package org.cobalt.command.impl
 
-import java.io.File
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
@@ -12,11 +10,8 @@ import org.cobalt.command.annotation.SubCommand
 import org.cobalt.ui.screen.ConfigScreen
 import org.cobalt.ui.screen.HudEditorScreen
 import org.cobalt.event.EventBus
-import org.cobalt.module.impl.failsafes.TeleportFailsafe
 import org.cobalt.module.impl.misc.Rotations
-import org.cobalt.util.audio.AudioManager
 import org.cobalt.util.chat.ChatUtils
-import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.rotation.data.Rotation
 import org.cobalt.util.scheduling.TickScheduler
 import org.cobalt.util.server.Scoreboard

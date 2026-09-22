@@ -13,7 +13,6 @@ import org.cobalt.util.chat.MessageType
 import org.cobalt.util.client.PlayerUtils.player
 import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.inventory.InventoryUtils
-import org.cobalt.util.inventory.ItemUtils
 import org.cobalt.util.rotation.data.Rotation
 
 object TeleportFailsafe : Failsafe("Teleport", 10, false) {

@@ -6,7 +6,6 @@ import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.FloatControl
 import kotlin.math.log10
-import net.minecraft.client.Minecraft
 import org.slf4j.LoggerFactory
 
 object AudioManager {

@@ -1,8 +1,6 @@
 package org.cobalt.module.impl.failsafes
 
 import net.minecraft.core.BlockPos
-import net.minecraft.world.phys.EntityHitResult
-import net.minecraft.world.phys.HitResult
 import org.cobalt.Cobalt
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent

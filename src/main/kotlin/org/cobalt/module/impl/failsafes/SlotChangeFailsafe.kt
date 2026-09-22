@@ -6,7 +6,6 @@ import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.PacketEvent
 import org.cobalt.module.type.Failsafe
 import org.cobalt.util.failsafe.FailsafeManager
-import org.cobalt.util.inventory.InventoryUtils
 
 object SlotChangeFailsafe : Failsafe("Slot Change", 10, false) {
   @SubscribeEvent
