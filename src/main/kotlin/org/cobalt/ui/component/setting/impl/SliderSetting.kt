@@ -15,7 +15,7 @@ class SliderSetting(
 ) : Setting<Int>(name, description, defaultValue) {
 
   override val height: Float
-    get() = BASE_HEIGHT + TrackSettingSupport.TRACK_ROW_HEIGHT
+    get() = BASE_HEIGHT + TrackSettingHelper.TRACK_ROW_HEIGHT
 
   override fun read(element: JsonElement) {
     value = element.asInt.coerceIn(min, max)
@@ -29,11 +29,11 @@ class SliderSetting(
 
   override fun renderSetting() {
     val text = value.toString()
-    val boxWidth = TrackSettingSupport.valueBoxWidth(text)
+    val boxWidth = TrackSettingHelper.valueBoxWidth(text)
     val boxX = xPos + width - PADDING - boxWidth
-    val boxY = yPos + (BASE_HEIGHT - TrackSettingSupport.VALUE_BOX_HEIGHT) / 2
+    val boxY = yPos + (BASE_HEIGHT - TrackSettingHelper.VALUE_BOX_HEIGHT) / 2
 
-    TrackSettingSupport.drawValueBox(
+    TrackSettingHelper.drawValueBox(
       x = boxX,
       y = boxY,
       width = boxWidth,
@@ -45,7 +45,7 @@ class SliderSetting(
 
     val (startX, trackWidth, trackY, knobX) = trackGeometry()
 
-    TrackSettingSupport.drawTrack(
+    TrackSettingHelper.drawTrack(
       startX = startX,
       trackWidth = trackWidth,
       trackY = trackY,
@@ -64,7 +64,7 @@ class SliderSetting(
     }
 
     val (_, _, trackY, knobX) = trackGeometry()
-    val knobRadius = TrackSettingSupport.KNOB_RADIUS
+    val knobRadius = TrackSettingHelper.KNOB_RADIUS
 
     if (
       !Mouse.isHoveringOver(
@@ -111,7 +111,7 @@ class SliderSetting(
   private fun trackGeometry(): TrackGeometry {
     val startX = xPos + PADDING
     val trackWidth = width - PADDING * 2
-    val trackY = yPos + BASE_HEIGHT + TrackSettingSupport.TRACK_MARGIN
+    val trackY = yPos + BASE_HEIGHT + TrackSettingHelper.TRACK_MARGIN
     val range = (max - min).toFloat().takeIf { it != 0f } ?: 1f
     val displayValue = if (dragging) rawValue else value.toFloat()
     val knobX = startX + (displayValue - min) / range * trackWidth
