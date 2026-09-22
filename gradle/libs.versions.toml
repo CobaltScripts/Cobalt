@@ -8,6 +8,7 @@ fabric-kotlin = "1.13.12+kotlin.2.4.0"
 
 skija-version = "0.143.11"
 discordIpc = "0.6.0-SNAPSHOT"
+devAuth = "1.2.2"
 
 # Plugins Versions
 kotlin = "2.4.0"
@@ -23,6 +24,7 @@ fabric-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", versi
 
 skija-shared = { group = "io.github.humbleui", name = "skija-shared", version.ref = "skija-version" }
 discordIpc = { group = "com.jagrosh", name = "DiscordIPC", version.ref = "discordIpc" }
+devAuth = { group = "me.djtheredstoner", name = "DevAuth-fabric", version.ref = "devAuth" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
