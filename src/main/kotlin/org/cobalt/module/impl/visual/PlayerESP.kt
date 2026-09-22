@@ -21,8 +21,19 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
     options = arrayOf("Box", "Target Beam", "Outline", "Beam & Outline")
   )
 
+  // Ordinal must match the "ESP Type" ModeSetting options order above.
+  private enum class EspType {
+    BOX,
+    TARGET_BEAM,
+    OUTLINE,
+    BEAM_AND_OUTLINE,
+  }
+
+  private val espTypeMode: EspType
+    get() = EspType.entries.getOrElse(espType) { EspType.BOX }
+
   fun shouldOutline(entity: Entity): Boolean {
-    if (espType != 2 && espType != 3) {
+    if (espTypeMode != EspType.OUTLINE && espTypeMode != EspType.BEAM_AND_OUTLINE) {
       return false
     }
 
@@ -45,7 +56,7 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
 
   @SubscribeEvent
   fun onWorldRender(ignored: WorldEvent.BeforeGizmos) {
-    if (espType == 2) {
+    if (espTypeMode == EspType.OUTLINE) {
       return
     }
 
@@ -56,24 +67,20 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
 
       if (player.uuid.version() == 2) return@forEach
 
-      when (espType) {
-        0 -> GizmoRenderer.drawEntityOutline(
+      when (espTypeMode) {
+        EspType.BOX -> GizmoRenderer.drawEntityOutline(
           entity = player,
           color = ThemeManager.activeTheme.accentPrimary,
           esp = true
         )
 
-        1 -> GizmoRenderer.drawTargetBeam(
+        EspType.TARGET_BEAM, EspType.BEAM_AND_OUTLINE -> GizmoRenderer.drawTargetBeam(
           entity = player,
           color = ThemeManager.activeTheme.accentPrimary,
           esp = true
         )
 
-        3 -> GizmoRenderer.drawTargetBeam( // both beam and esp
-          entity = player,
-          color = ThemeManager.activeTheme.accentPrimary,
-          esp = true
-        )
+        EspType.OUTLINE -> Unit // handled by shouldOutline(), not drawn in this loop
       }
     }
   }
