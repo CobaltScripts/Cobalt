@@ -2,6 +2,7 @@ package org.cobalt.ui.page.impl
 
 import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Script
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.ScriptComponent
 import org.cobalt.ui.helper.ScrollHelper
@@ -109,7 +110,6 @@ object ScriptsPage : Page() {
     return false
   }
 
-  private const val PADDING = 20f
   private const val COLUMN_GAP = 20f
   private const val GROUP_GAP = 28f
   private const val CATEGORY_FONT_SIZE = 12f

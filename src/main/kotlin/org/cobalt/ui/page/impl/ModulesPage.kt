@@ -3,6 +3,7 @@ package org.cobalt.ui.page.impl
 import org.cobalt.module.Module
 import org.cobalt.module.ModuleCategory
 import org.cobalt.module.ModuleManager
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.ModuleComponent
 import org.cobalt.ui.helper.ScrollHelper
@@ -109,7 +110,6 @@ object ModulesPage : Page() {
     return false
   }
 
-  private const val PADDING = 20f
   private const val COLUMN_GAP = 20f
 
 }

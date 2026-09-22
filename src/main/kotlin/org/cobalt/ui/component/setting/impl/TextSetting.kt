@@ -2,6 +2,7 @@ package org.cobalt.ui.component.setting.impl
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.component.TextInputComponent
 import org.cobalt.ui.component.setting.Setting
 

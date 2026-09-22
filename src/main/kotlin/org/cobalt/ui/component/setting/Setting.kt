@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import kotlin.properties.PropertyDelegateProvider
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.component.ModuleComponent
 import org.cobalt.ui.component.setting.impl.InfoSetting
@@ -76,7 +77,6 @@ abstract class Setting<T>(
 
   companion object {
     protected const val BASE_HEIGHT = 60f
-    protected const val PADDING = 20f
     protected const val NAME_SIZE = 14f
     protected const val DESCRIPTION_SIZE = 12f
     protected const val TEXT_SPACING_Y = 5f

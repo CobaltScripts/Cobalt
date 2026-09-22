@@ -5,6 +5,9 @@ import net.minecraft.client.input.KeyEvent
 import org.cobalt.ui.theme.Theme
 import org.cobalt.ui.theme.ThemeManager
 
+/** Standard edge padding shared by components, pages, and settings throughout the UI. */
+const val PADDING = 20f
+
 abstract class UIComponent(
   var xPos: Float = 0f,
   var yPos: Float = 0f,
