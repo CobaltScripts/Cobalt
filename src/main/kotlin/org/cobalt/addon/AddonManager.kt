@@ -3,6 +3,7 @@ package org.cobalt.addon
 import com.google.gson.Gson
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.zip.ZipFile
 import kotlin.io.path.extension
 import net.fabricmc.loader.api.FabricLoader
@@ -16,7 +17,7 @@ object AddonManager {
   private val gson = Gson()
 
   @JvmStatic
-  val addons = mutableListOf<Pair<AddonMetadata, Addon>>()
+  val addons = CopyOnWriteArrayList<Pair<AddonMetadata, Addon>>()
 
   @JvmStatic
   internal fun onPreLaunch() {

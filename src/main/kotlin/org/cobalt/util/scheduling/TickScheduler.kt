@@ -1,6 +1,6 @@
 package org.cobalt.util.scheduling
 
-import java.util.PriorityQueue
+import java.util.concurrent.PriorityBlockingQueue
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
@@ -8,7 +8,11 @@ import org.cobalt.event.impl.TickEvent
 object TickScheduler {
 
   private var currentTick: Long = 0
-  private val taskQueue = PriorityQueue<ScheduledTask>(
+
+  // PriorityBlockingQueue rather than PriorityQueue: schedule() can be called from Multithreading's worker
+  // threads while onClientTick concurrently drains this on the client thread.
+  private val taskQueue = PriorityBlockingQueue<ScheduledTask>(
+    11,
     Comparator.comparingLong(ScheduledTask::executeTick)
   )
 

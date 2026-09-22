@@ -1,6 +1,7 @@
 package org.cobalt.util.audio
 
 import java.io.File
+import java.util.concurrent.CopyOnWriteArrayList
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.FloatControl
@@ -11,7 +12,9 @@ import org.slf4j.LoggerFactory
 object AudioManager {
   private val logger =
     LoggerFactory.getLogger(this::class.java)
-  private val clips = mutableListOf<Clip>()
+
+  // clip.addLineListener callbacks fire on the Java Sound line-event thread, not the caller's thread
+  private val clips = CopyOnWriteArrayList<Clip>()
 
   // YES I KNOW THIS PLAYS THRU SPEAKERS ISNTEAD OF HEADPHONES IDK WHY
   fun play(file: File, volume: Float = 1.0f) {

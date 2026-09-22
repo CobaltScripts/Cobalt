@@ -26,7 +26,7 @@ object FailsafeManager {
   var failsafes = mutableListOf<Failsafe>()
 
   private val tempIgnored = ConcurrentHashMap.newKeySet<Failsafe>()
-  private val ignoreGens = mutableMapOf<Failsafe, Long>()
+  private val ignoreGens = ConcurrentHashMap<Failsafe, Long>()
   private var triggeredFailsafe: Failsafe? = null
 
   private var queueTimer = 0
