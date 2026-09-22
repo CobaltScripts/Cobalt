@@ -57,7 +57,7 @@ object AutoClicker : Module(
   )
 
   private val attackModeType: AttackMode
-    get() = AttackMode.entries.getOrElse(attackMode) { AttackMode.ALL }
+    get() = AttackMode.fromOptionIndex(attackMode)
 
   private val mobFilter by TextSetting(
     name = "Mob Filter",
@@ -136,11 +136,14 @@ object AutoClicker : Module(
     return (base + jitter).coerceAtLeast(1.0).toLong()
   }
 
-  // Ordinal must match the "Attack Mode" ModeSetting options order above.
-  private enum class AttackMode {
-    ALL,
-    ENTITY_ONLY,
-    NO_BLOCKS,
+  private enum class AttackMode(val optionIndex: Int) {
+    ALL(0),
+    ENTITY_ONLY(1),
+    NO_BLOCKS(2);
+
+    companion object {
+      fun fromOptionIndex(index: Int): AttackMode = entries.firstOrNull { it.optionIndex == index } ?: ALL
+    }
   }
 
 }

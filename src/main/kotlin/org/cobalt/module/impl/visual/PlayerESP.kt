@@ -21,16 +21,19 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
     options = arrayOf("Box", "Target Beam", "Outline", "Beam & Outline")
   )
 
-  // Ordinal must match the "ESP Type" ModeSetting options order above.
-  private enum class EspType {
-    BOX,
-    TARGET_BEAM,
-    OUTLINE,
-    BEAM_AND_OUTLINE,
+  private enum class EspType(val optionIndex: Int) {
+    BOX(0),
+    TARGET_BEAM(1),
+    OUTLINE(2),
+    BEAM_AND_OUTLINE(3);
+
+    companion object {
+      fun fromOptionIndex(index: Int): EspType = entries.firstOrNull { it.optionIndex == index } ?: BOX
+    }
   }
 
   private val espTypeMode: EspType
-    get() = EspType.entries.getOrElse(espType) { EspType.BOX }
+    get() = EspType.fromOptionIndex(espType)
 
   fun shouldOutline(entity: Entity): Boolean {
     if (espTypeMode != EspType.OUTLINE && espTypeMode != EspType.BEAM_AND_OUTLINE) {
