@@ -18,7 +18,7 @@ base {
 detekt {
   buildUponDefaultConfig = true
   config.setFrom(rootProject.file("config/detekt/detekt.yml"))
-  failOnSeverity = FailOnSeverity.Never
+  failOnSeverity = FailOnSeverity.Warning
   allRules = false
   ignoredBuildTypes = listOf()
 }
