@@ -5,7 +5,6 @@ import com.google.gson.JsonPrimitive
 import org.cobalt.ui.PADDING
 import org.cobalt.ui.component.setting.Setting
 import org.cobalt.util.input.Mouse
-import org.cobalt.util.render.SkiaRenderer
 
 class SliderSetting(
   name: String,
@@ -16,7 +15,7 @@ class SliderSetting(
 ) : Setting<Int>(name, description, defaultValue) {
 
   override val height: Float
-    get() = BASE_HEIGHT + TRACK_ROW_HEIGHT
+    get() = BASE_HEIGHT + TrackSettingSupport.TRACK_ROW_HEIGHT
 
   override fun read(element: JsonElement) {
     value = element.asInt.coerceIn(min, max)
@@ -30,63 +29,32 @@ class SliderSetting(
 
   override fun renderSetting() {
     val text = value.toString()
-    val boxWidth = valueBoxWidth(text)
+    val boxWidth = TrackSettingSupport.valueBoxWidth(text)
     val boxX = xPos + width - PADDING - boxWidth
-    val boxY = yPos + (BASE_HEIGHT - VALUE_BOX_HEIGHT) / 2
+    val boxY = yPos + (BASE_HEIGHT - TrackSettingSupport.VALUE_BOX_HEIGHT) / 2
 
-    SkiaRenderer.roundedRect(
+    TrackSettingSupport.drawValueBox(
       x = boxX,
       y = boxY,
       width = boxWidth,
-      height = VALUE_BOX_HEIGHT,
-      radius = 5f,
-      color = theme.backgroundPrimary
-    )
-
-    SkiaRenderer.roundedOutline(
-      x = boxX,
-      y = boxY,
-      width = boxWidth,
-      height = VALUE_BOX_HEIGHT,
-      thickness = 1f,
-      radius = 5f,
-      color = theme.border
-    )
-
-    val textWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, text, FONT_SIZE)
-
-    SkiaRenderer.text(
-      font = SkiaRenderer.regularFont,
       text = text,
-      x = boxX + (boxWidth - textWidth) / 2,
-      y = boxY + (VALUE_BOX_HEIGHT - FONT_SIZE) / 2,
-      size = FONT_SIZE,
-      color = theme.textPrimary
+      background = theme.backgroundPrimary,
+      border = theme.border,
+      textColor = theme.textPrimary
     )
 
     val (startX, trackWidth, trackY, knobX) = trackGeometry()
 
-    SkiaRenderer.roundedRect(
-      x = startX,
-      y = trackY - 2f,
-      width = trackWidth,
-      height = 4f,
-      radius = 3f,
-      color = theme.backgroundPrimary
-    )
-
-    SkiaRenderer.roundedRect(
-      x = startX,
-      y = trackY - 2f,
-      width = (knobX - startX).coerceAtLeast(0f),
-      height = 4f,
-      radius = 3f,
-      color = theme.accentPrimary
-    )
-
-    SkiaRenderer.circle(
-      knobX, trackY,
-      KNOB_RADIUS, theme.textPrimary
+    TrackSettingSupport.drawTrack(
+      startX = startX,
+      trackWidth = trackWidth,
+      trackY = trackY,
+      fillStartX = startX,
+      fillEndX = knobX,
+      knobXs = listOf(knobX),
+      trackBackground = theme.backgroundPrimary,
+      fillColor = theme.accentPrimary,
+      knobColor = theme.textPrimary
     )
   }
 
@@ -96,11 +64,12 @@ class SliderSetting(
     }
 
     val (_, _, trackY, knobX) = trackGeometry()
+    val knobRadius = TrackSettingSupport.KNOB_RADIUS
 
     if (
       !Mouse.isHoveringOver(
-        knobX - KNOB_RADIUS, trackY - KNOB_RADIUS,
-        KNOB_RADIUS * 2, KNOB_RADIUS * 2
+        knobX - knobRadius, trackY - knobRadius,
+        knobRadius * 2, knobRadius * 2
       )
     ) {
       return false
@@ -142,15 +111,12 @@ class SliderSetting(
   private fun trackGeometry(): TrackGeometry {
     val startX = xPos + PADDING
     val trackWidth = width - PADDING * 2
-    val trackY = yPos + BASE_HEIGHT + TRACK_MARGIN
+    val trackY = yPos + BASE_HEIGHT + TrackSettingSupport.TRACK_MARGIN
     val range = (max - min).toFloat().takeIf { it != 0f } ?: 1f
     val displayValue = if (dragging) rawValue else value.toFloat()
     val knobX = startX + (displayValue - min) / range * trackWidth
     return TrackGeometry(startX, trackWidth, trackY, knobX)
   }
-
-  private fun valueBoxWidth(text: String): Float =
-    SkiaRenderer.textWidth(SkiaRenderer.regularFont, text, FONT_SIZE) + VALUE_BOX_PADDING_X * 2f
 
   private data class TrackGeometry(
     val startX: Float,
@@ -158,14 +124,5 @@ class SliderSetting(
     val trackY: Float,
     val knobX: Float,
   )
-
-  companion object {
-    private const val KNOB_RADIUS = 5f
-    private const val FONT_SIZE = 12f
-    private const val VALUE_BOX_HEIGHT = 30f
-    private const val VALUE_BOX_PADDING_X = 14f
-    private const val TRACK_ROW_HEIGHT = 15f
-    private const val TRACK_MARGIN = 5f
-  }
 
 }
