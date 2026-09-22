@@ -22,26 +22,32 @@ object TeleportFailsafe : Failsafe("Teleport", 10, false) {
     if (minecraft.level == null) return
     when (val packet = event.packet) {
       is ClientboundPlayerPositionPacket -> {
-        if (player == null) return
+        // I'll be honest I'm not entirely sure what else to do here since they both use the same packet?
+        // this will indeed flag both teleport and rotation on rotation check rn i can't think of a way to
+        // distinguish them (tired zzz)
+        val currentRot = try {
+          Rotation(player!!.yRot, player!!.xRot)
+        } catch (_: NullPointerException) {
+          return
+        }
 
-        val currentRot = Rotation(player!!.yRot, player!!.xRot)
         val newRot = Rotation(packet.change.yRot, packet.change.xRot)
 
         if (currentRot != newRot) {
           RotationFailsafe.onRotation(currentRot, newRot)
-        } // I'll be honest I'm not entirely sure what else to do here since they both use the same packet?
-        // this will indeed flag both teleport and rotation on rotation check rn i can't think of a way to
-        // distinguish them (tired zzz)
+        }
 
-        val oldBP
-          : BlockPos = BlockPos(
-          minecraft.player!!.x.toInt(),
-          minecraft.player!!.y.toInt(),
-          minecraft.player!!.z.toInt()
-        )
+        val oldBP = try {
+          BlockPos(
+            minecraft.player!!.x.toInt(),
+            minecraft.player!!.y.toInt(),
+            minecraft.player!!.z.toInt()
+          )
+        } catch (_: NullPointerException) {
+          return
+        }
 
-        val newBP
-          : BlockPos = BlockPos(
+        val newBP = BlockPos(
           event.packet.change.position.x.toInt(),
           event.packet.change.position.y.toInt(),
           event.packet.change.position.z.toInt()
