@@ -44,13 +44,6 @@ object PlayerUtils {
     get() = player?.onGround() ?: false
 
   @JvmStatic
-  val rotation: Rotation
-    get() {
-      val player = player ?: return Rotation.ZERO
-      return Rotation(player.yRot, player.xRot, true)
-    }
-
-  @JvmStatic
   val velocity: Vec3
     get() {
       val player = player ?: return Vec3.ZERO
@@ -84,7 +77,7 @@ object PlayerUtils {
   fun setRotation(rotation: Rotation) {
     val player = minecraft.player ?: return
 
-    rotation.normalize().let { rot ->
+    rotation.normalize(Rotation(player.yRot, player.xRot, true)).let { rot ->
       player.xRotO = player.xRot
       player.yRotO = player.yRot
       player.yBob = player.yRot

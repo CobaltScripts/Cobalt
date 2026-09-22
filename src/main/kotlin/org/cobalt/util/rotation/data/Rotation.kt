@@ -11,7 +11,7 @@ data class Rotation(
 ) {
 
   fun normalize(
-    currentRotation: Rotation = PlayerUtils.rotation,
+    currentRotation: Rotation,
   ): Rotation {
     if (isNormalized) {
       return this

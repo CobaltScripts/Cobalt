@@ -4,6 +4,8 @@ import kotlin.math.abs
 import kotlin.math.exp
 import kotlin.math.pow
 import kotlin.random.Random
+import net.minecraft.client.player.LocalPlayer
+import org.cobalt.Cobalt
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.WorldEvent
@@ -128,7 +130,9 @@ object Rotations : Module(
 
     val now = System.currentTimeMillis()
     val deltaTime = ((now - lastFrameMs) / 50f).coerceIn(0f, 1f)
-    val current = PlayerUtils.rotation
+
+    val player = Cobalt.minecraft.player ?: return
+    val current =  Rotation(player.yRot, player.xRot, true)
 
     lastFrameMs = now
 
