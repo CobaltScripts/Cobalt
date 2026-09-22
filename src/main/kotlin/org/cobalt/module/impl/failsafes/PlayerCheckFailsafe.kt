@@ -66,7 +66,8 @@ object PlayerCheckFailsafe : Failsafe("Player Check", 10, false) {
   }
 
   override fun performReaction(): ReactionResult? {
-    TODO("Not yet implemented")
+    // TODO
+    return null
   }
 
 }

@@ -86,7 +86,7 @@ object ChatMentionFailsafe : Failsafe("Chat Mention", 10, false) {
 
 
   override fun resetStates() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun performReaction(): ReactionResult? {

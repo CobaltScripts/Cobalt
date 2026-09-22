@@ -22,10 +22,11 @@ object RotationFailsafe : Failsafe("Rotation", 10, false) {
   }
 
   override fun resetStates() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun performReaction(): ReactionResult? {
-    TODO("Not yet implemented")
+    // TODO
+    return null
   }
 }

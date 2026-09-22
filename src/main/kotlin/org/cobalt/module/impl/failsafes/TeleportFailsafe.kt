@@ -83,11 +83,12 @@ object TeleportFailsafe : Failsafe("Teleport", 10, false) {
   }
 
   override fun resetStates() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
-  override fun performReaction(): ReactionResult {
-    TODO("Not yet implemented")
+  override fun performReaction(): ReactionResult? {
+    // TODO
+    return null
   }
 
 }
