@@ -49,8 +49,8 @@ object RotationMath {
   }
 
   @JvmStatic
-  fun getRotation(end: Vec3): Rotation {
-    val start = Cobalt.minecraft.player?.eyePosition ?: return Rotation.ZERO
+  fun getRotation(end: Vec3): Rotation? {
+    val start = Cobalt.minecraft.player?.eyePosition ?: return null
     return getRotation(start, end)
   }
 
