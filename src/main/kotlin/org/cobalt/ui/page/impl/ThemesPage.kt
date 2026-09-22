@@ -1,6 +1,7 @@
 package org.cobalt.ui.page.impl
 
 import kotlin.math.ceil
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.ThemeComponent
 import org.cobalt.ui.component.button.IconButton
@@ -95,7 +96,6 @@ object ThemesPage : Page() {
     return false
   }
 
-  private const val PADDING = 20f
   private const val COLUMNS = 3
   private const val SPACING = 20f
 

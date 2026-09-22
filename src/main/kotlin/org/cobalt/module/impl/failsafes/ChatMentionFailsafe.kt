@@ -1,15 +1,12 @@
 package org.cobalt.module.impl.failsafes
 
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.chat.Component
-import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.PacketEvent
 import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Failsafe
 import org.cobalt.ui.component.setting.impl.CheckboxSetting
-import org.cobalt.ui.component.setting.impl.ModeSetting
 import org.cobalt.ui.component.setting.impl.TextSetting
 import org.cobalt.util.chat.ChatUtils
 import org.cobalt.util.chat.MessageType
@@ -32,7 +29,7 @@ object ChatMentionFailsafe : Failsafe("Chat Mention", 10, false) {
 
   @SubscribeEvent
   fun onChatMessage(event: PacketEvent.Receive) {
-    if (!ModuleManager.isScriptRunning() && !FabricLoader.getInstance().isDevelopmentEnvironment) return
+    if (!shouldReactToEvents()) return
     val packet = event.packet as? ClientboundSystemChatPacket ?: return
     val message = packet.content.string
     val sender = getSenderFromComponent(packet.content)

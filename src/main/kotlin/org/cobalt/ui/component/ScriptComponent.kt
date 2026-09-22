@@ -2,6 +2,7 @@ package org.cobalt.ui.component
 
 import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Script
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.animation.ColorAnimation
 import org.cobalt.ui.animation.EaseOutAnimation
@@ -123,7 +124,6 @@ class ScriptComponent(val script: Script) : UIComponent(
     val WIDTH = (TopbarComponent.width - 60) / 2f
     val pauseIcon = SkiaRenderer.createImage("/assets/cobalt/ui/pause.svg")
 
-    private const val PADDING = 20f
     private const val FONT_SIZE = 20f
     private const val ICON_SIZE = 30f
   }
