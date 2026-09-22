@@ -1,7 +1,7 @@
 package org.cobalt.util.rotation.data
 
+import kotlin.math.floor
 import kotlin.math.roundToInt
-import org.cobalt.util.client.PlayerUtils
 import org.cobalt.util.rotation.RotationMath
 
 data class Rotation(
@@ -23,7 +23,9 @@ data class Rotation(
     val g1 = (diff.deltaYaw / gcd).roundToInt() * gcd
     val g2 = (diff.deltaPitch / gcd).roundToInt() * gcd
 
-    val yaw = currentRotation.yaw + g1.toFloat()
+    val rawYaw = currentRotation.yaw + g1.toFloat()
+    val yaw = rawYaw - 360f * floor((rawYaw + 180f) / 360f)
+
     val pitch = currentRotation.pitch + g2.toFloat()
 
     return Rotation(yaw, pitch.coerceIn(-90f, 90f), isNormalized = true)
