@@ -1,6 +1,7 @@
 package org.cobalt.util.failsafe
 
 import java.util.concurrent.ConcurrentHashMap
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
@@ -54,7 +55,20 @@ object FailsafeManager {
 
   fun initialize() {
     registerDefaultFailsafe()
+    registerWorldChangeIgnores()
     EventBus.register(this)
+  }
+
+  private fun registerWorldChangeIgnores() {
+    ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+      val falseFlagOnWorldChange = listOf(
+        TeleportFailsafe,
+        SlotChangeFailsafe,
+        RotationFailsafe
+      )
+
+      falseFlagOnWorldChange.forEach { ignoreFailsafe(it) }
+    }
   }
 
   fun ignoreFailsafe(failsafe: Failsafe) {
