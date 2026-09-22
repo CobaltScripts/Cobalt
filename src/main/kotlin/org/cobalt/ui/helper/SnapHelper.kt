@@ -32,50 +32,39 @@ class SnapHelper(private val snapThreshold: Float = 5f) {
       yTargets.add(bounds.y + bounds.h / 2f)
     }
 
-    var snappedX = moduleX
-    var snappedY = moduleY
-    val bestXDiff = snapThreshold + 1f
-    val bestYDiff = snapThreshold + 1f
-    var xGuide: GuideLine? = null
-    var yGuide: GuideLine? = null
+    val xEdges = listOf(moduleX to 0f, centerX to moduleW / 2f, right to moduleW)
+    val yEdges = listOf(moduleY to 0f, centerY to moduleH / 2f, bottom to moduleH)
 
-    fun checkX(target: Float, edge: Float, newX: Float) {
-      val diff = abs(edge - target)
-      if (diff <= snapThreshold && diff < bestXDiff) {
-        snappedX = newX
-        xGuide = GuideLine(true, target)
-      }
-    }
+    val xMatch = findClosestSnap(xTargets, xEdges)
+    val yMatch = findClosestSnap(yTargets, yEdges)
 
-    fun checkY(target: Float, edge: Float, newY: Float) {
-      val diff = abs(edge - target)
-      if (diff <= snapThreshold && diff < bestYDiff) {
-        snappedY = newY
-        yGuide = GuideLine(false, target)
-      }
-    }
+    activeGuides = listOfNotNull(
+      xMatch?.let { GuideLine(isVertical = true, position = it.target) },
+      yMatch?.let { GuideLine(isVertical = false, position = it.target) },
+    )
 
-    xTargets.forEach { target ->
-      checkX(target, moduleX, target)
-      checkX(target, centerX, target - moduleW / 2f)
-      checkX(target, right, target - moduleW)
-    }
-
-    yTargets.forEach { target ->
-      checkY(target, moduleY, target)
-      checkY(target, centerY, target - moduleH / 2f)
-      checkY(target, bottom, target - moduleH)
-    }
-
-    activeGuides = listOfNotNull(xGuide, yGuide)
-    return snappedX to snappedY
+    return (xMatch?.snappedOrigin ?: moduleX) to (yMatch?.snappedOrigin ?: moduleY)
   }
 
   fun clearGuides() {
     activeGuides = emptyList()
   }
 
+  private fun findClosestSnap(targets: List<Float>, edges: List<Pair<Float, Float>>): SnapMatch? {
+    var best: SnapMatch? = null
+    for (target in targets) {
+      for ((edgePosition, offset) in edges) {
+        val diff = abs(edgePosition - target)
+        if (diff <= snapThreshold && (best == null || diff < best.diff)) {
+          best = SnapMatch(diff = diff, target = target, snappedOrigin = target - offset)
+        }
+      }
+    }
+    return best
+  }
+
+  private data class SnapMatch(val diff: Float, val target: Float, val snappedOrigin: Float)
+
   data class GuideLine(val isVertical: Boolean, val position: Float)
   data class ModuleBounds(val x: Float, val y: Float, val w: Float, val h: Float)
-
 }

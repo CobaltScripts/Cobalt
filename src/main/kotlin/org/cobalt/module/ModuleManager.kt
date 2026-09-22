@@ -1,5 +1,6 @@
 package org.cobalt.module
 
+import java.util.concurrent.CopyOnWriteArraySet
 import net.minecraft.client.gui.screens.LevelLoadingScreen
 import net.minecraft.client.gui.screens.ProgressScreen
 import org.cobalt.Cobalt.minecraft
@@ -27,7 +28,7 @@ import org.cobalt.util.render.skia.SkiaPIP
 
 object ModuleManager {
 
-  val modules = mutableSetOf<Module>()
+  val modules = CopyOnWriteArraySet<Module>()
 
   var lastScript: Script? = null
   var currentScript: Script? = null

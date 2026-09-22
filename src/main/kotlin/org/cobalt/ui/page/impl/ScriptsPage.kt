@@ -2,9 +2,11 @@ package org.cobalt.ui.page.impl
 
 import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Script
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.ui.component.ScriptComponent
 import org.cobalt.ui.helper.ScrollHelper
+import org.cobalt.ui.helper.layoutMasonryColumns
 import org.cobalt.ui.page.Page
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.render.SkiaRenderer
@@ -75,23 +77,17 @@ object ScriptsPage : Page() {
 
         currentY += CATEGORY_FONT_SIZE + CATEGORY_MARGIN
 
-        val columnY = floatArrayOf(currentY, currentY)
-        val columnX = floatArrayOf(
-          xPos + PADDING,
-          xPos + PADDING + ScriptComponent.WIDTH + COLUMN_GAP
+        val maxColumnY = layoutMasonryColumns(
+          items = components,
+          columns = 2,
+          startY = currentY,
+          gap = PADDING,
+          columnX = { col -> xPos + PADDING + col * (ScriptComponent.WIDTH + COLUMN_GAP) },
+          heightOf = { (component, _) -> component.height },
+          place = { (component, _), x, y -> component.updateBounds(x, y).renderComponent() }
         )
 
-        components.forEachIndexed { index, (component, _) ->
-          val col = index % 2
-
-          component
-            .updateBounds(columnX[col], columnY[col])
-            .renderComponent()
-
-          columnY[col] += component.height + PADDING
-        }
-
-        currentY = columnY.max() + GROUP_GAP
+        currentY = maxColumnY + GROUP_GAP
       }
 
     SkiaRenderer.popScissor()
@@ -109,7 +105,6 @@ object ScriptsPage : Page() {
     return false
   }
 
-  private const val PADDING = 20f
   private const val COLUMN_GAP = 20f
   private const val GROUP_GAP = 28f
   private const val CATEGORY_FONT_SIZE = 12f

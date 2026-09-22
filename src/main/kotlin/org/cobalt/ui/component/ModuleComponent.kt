@@ -1,6 +1,7 @@
 package org.cobalt.ui.component
 
 import org.cobalt.module.Module
+import org.cobalt.ui.PADDING
 import org.cobalt.ui.UIComponent
 import org.cobalt.ui.animation.EaseOutAnimation
 import org.cobalt.util.render.SkiaRenderer
@@ -126,7 +127,6 @@ class ModuleComponent(
 
     private const val BASE_HEIGHT = 60f
     private const val FONT_SIZE = 16f
-    private const val PADDING = 20f
   }
 
 }

@@ -12,10 +12,10 @@ class ColorAnimation(duration: Long) {
 
   fun get(start: Color, end: Color, reverse: Boolean): Color =
     Color(
-      animation.get(start.red.toFloat(), end.red.toFloat(), reverse) / 255,
-      animation.get(start.green.toFloat(), end.green.toFloat(), reverse) / 255,
-      animation.get(start.blue.toFloat(), end.blue.toFloat(), reverse) / 255,
-      animation.get(start.alpha.toFloat(), end.alpha.toFloat(), reverse) / 255,
+      animation.get(start.red.toFloat(), end.red.toFloat(), reverse).roundToInt().coerceIn(0, 255) / 255,
+      animation.get(start.green.toFloat(), end.green.toFloat(), reverse).roundToInt().coerceIn(0, 255) / 255,
+      animation.get(start.blue.toFloat(), end.blue.toFloat(), reverse).roundToInt().coerceIn(0, 255) / 255,
+      animation.get(start.alpha.toFloat(), end.alpha.toFloat(), reverse).roundToInt().coerceIn(0, 255) / 255,
     )
 
   fun get(start: Int, end: Int, reverse: Boolean): Int {

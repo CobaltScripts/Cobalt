@@ -1,6 +1,8 @@
 package org.cobalt.util.failsafe
 
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import org.cobalt.event.EventBus
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
@@ -23,10 +25,10 @@ import org.lwjgl.glfw.GLFW
 
 object FailsafeManager {
 
-  var failsafes = mutableListOf<Failsafe>()
+  var failsafes = CopyOnWriteArrayList<Failsafe>()
 
   private val tempIgnored = ConcurrentHashMap.newKeySet<Failsafe>()
-  private val ignoreGens = mutableMapOf<Failsafe, Long>()
+  private val ignoreGens = ConcurrentHashMap<Failsafe, Long>()
   private var triggeredFailsafe: Failsafe? = null
 
   private var queueTimer = 0
@@ -54,7 +56,20 @@ object FailsafeManager {
 
   fun initialize() {
     registerDefaultFailsafe()
+    registerWorldChangeIgnores()
     EventBus.register(this)
+  }
+
+  private fun registerWorldChangeIgnores() {
+    ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+      val falseFlagOnWorldChange = listOf(
+        TeleportFailsafe,
+        SlotChangeFailsafe,
+        RotationFailsafe
+      )
+
+      falseFlagOnWorldChange.forEach { ignoreFailsafe(it) }
+    }
   }
 
   fun ignoreFailsafe(failsafe: Failsafe) {
