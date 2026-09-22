@@ -5,38 +5,28 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import org.cobalt.util.rotation.RotationMath
 
-class RotationTarget {
+sealed interface RotationTarget {
 
-  private var entity: Entity? = null
-  private var vector: Vec3? = null
-  private var blockPos: BlockPos? = null
-  private var rotation: Rotation? = null
+  val targetRotation: Rotation?
 
-  val targetRotation: Rotation
-    get() {
-      val vec = vector
-        ?: entity?.position()
-        ?: blockPos?.let { Vec3.atCenterOf(it) }
-
-      return rotation
-        ?: vec?.let(RotationMath::getRotation)
-        ?: error("No rotation target set..?")
-    }
-
-  constructor(entityTarget: Entity) {
-    entity = entityTarget
+  class OfEntity(val entity: Entity) : RotationTarget {
+    override val targetRotation: Rotation?
+      get() = RotationMath.getRotation(entity.position())
   }
 
-  constructor(vectorTarget: Vec3) {
-    vector = vectorTarget
+  class OfVector(val vector: Vec3) : RotationTarget {
+    override val targetRotation: Rotation?
+      get() = RotationMath.getRotation(vector)
   }
 
-  constructor(blockPosTarget: BlockPos) {
-    blockPos = blockPosTarget
+  class OfBlockPos(val blockPos: BlockPos) : RotationTarget {
+    override val targetRotation: Rotation?
+      get() = RotationMath.getRotation(Vec3.atCenterOf(blockPos))
   }
 
-  constructor(rotationTarget: Rotation) {
-    rotation = rotationTarget
+  class Fixed(val rotation: Rotation) : RotationTarget {
+    override val targetRotation: Rotation
+      get() = rotation
   }
 
 }

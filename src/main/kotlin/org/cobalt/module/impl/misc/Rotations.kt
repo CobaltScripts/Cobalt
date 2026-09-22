@@ -88,7 +88,7 @@ object Rotations : Module(
 
   fun start(rotationTarget: Rotation) {
     mode = RotationType.ROTATE
-    target = RotationTarget(rotationTarget)
+    target = RotationTarget.Fixed(rotationTarget)
     lastFrameMs = System.currentTimeMillis()
     running = true
 
@@ -126,12 +126,12 @@ object Rotations : Module(
     }
 
     val targetObj = target ?: return
-    val currentTargetRotation = targetObj.targetRotation
+    val player = Cobalt.minecraft.player ?: return
+    val currentTargetRotation = targetObj.targetRotation ?: return
 
     val now = System.currentTimeMillis()
     val deltaTime = ((now - lastFrameMs) / 50f).coerceIn(0f, 1f)
 
-    val player = Cobalt.minecraft.player ?: return
     val current =  Rotation(player.yRot, player.xRot, true)
 
     lastFrameMs = now
