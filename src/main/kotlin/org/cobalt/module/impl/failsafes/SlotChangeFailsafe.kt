@@ -1,11 +1,9 @@
 package org.cobalt.module.impl.failsafes
 
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket
 import org.cobalt.Cobalt
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.PacketEvent
-import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Failsafe
 import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.inventory.InventoryUtils
@@ -13,7 +11,7 @@ import org.cobalt.util.inventory.InventoryUtils
 object SlotChangeFailsafe : Failsafe("Slot Change", 10, false) {
   @SubscribeEvent
   fun onServerItemChange(event: PacketEvent.Receive) {
-    if (!ModuleManager.isScriptRunning() && !FabricLoader.getInstance().isDevelopmentEnvironment) return
+    if (!shouldReactToEvents()) return
     val player = Cobalt.minecraft.player ?: return
     val packet = event.packet as? ClientboundSetHeldSlotPacket ?: return
 

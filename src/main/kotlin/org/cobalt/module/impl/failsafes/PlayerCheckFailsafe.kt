@@ -1,13 +1,11 @@
 package org.cobalt.module.impl.failsafes
 
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import org.cobalt.Cobalt
 import org.cobalt.event.annotation.SubscribeEvent
 import org.cobalt.event.impl.TickEvent
-import org.cobalt.module.ModuleManager
 import org.cobalt.module.type.Failsafe
 import org.cobalt.util.client.PlayerUtils
 import org.cobalt.util.failsafe.FailsafeManager
@@ -17,7 +15,7 @@ object PlayerCheckFailsafe : Failsafe("Player Check", 10, false) {
 
   @SubscribeEvent
   fun onTick(ignored: TickEvent.End) {
-    if (!ModuleManager.isScriptRunning() && !FabricLoader.getInstance().isDevelopmentEnvironment) return
+    if (!shouldReactToEvents()) return
 
     val player = PlayerUtils.player ?: return
     val level = Cobalt.minecraft.level ?: return
