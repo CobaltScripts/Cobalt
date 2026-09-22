@@ -17,9 +17,13 @@
 
 ## About The Project
 
-Cobalt is an open-source Hypixel Skyblock mod built for the Fabric mod loader. It provides a variety of features designed to improve the Skyblock experience by enhancing the interface, simplifying common tasks, and adding helpful utilities for everyday gameplay.
+Cobalt is an open-source Hypixel Skyblock mod built for the Fabric mod loader. It provides a variety of features
+designed to improve the Skyblock experience by enhancing the interface, simplifying common tasks, and adding helpful
+utilities for everyday gameplay.
 
-Cobalt is designed to be modular and supports addons, allowing additional features and integrations to be developed by others. This makes it possible for the mod to expand with new ideas and tools created by the community.
+Cobalt is designed to be modular and supports addons, allowing additional features and integrations to be developed by
+others. This makes it possible for the mod to expand with new ideas and tools created by the community.
+
 ## Contributing
 
 Contributions are welcome and appreciated.

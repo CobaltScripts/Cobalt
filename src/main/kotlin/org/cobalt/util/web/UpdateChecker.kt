@@ -77,16 +77,20 @@ object UpdateChecker {
           )
         )
         append(" ")
-        append(createLink(
-          label = "[DISCORD]",
-          color = ChatFormatting.BLUE,
-          url = "https://cobalt.quiteboring.dev/discord/")
+        append(
+          createLink(
+            label = "[DISCORD]",
+            color = ChatFormatting.BLUE,
+            url = "https://cobalt.quiteboring.dev/discord/"
+          )
         )
         append(" ")
-        append(createLink(
-          label = "[WEBSITE]",
-          color = ChatFormatting.GOLD,
-          url = "https://cobalt.quiteboring.dev/")
+        append(
+          createLink(
+            label = "[WEBSITE]",
+            color = ChatFormatting.GOLD,
+            url = "https://cobalt.quiteboring.dev/"
+          )
         )
       }
 

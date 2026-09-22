@@ -129,7 +129,7 @@ object GizmoRenderer {
     color: Color,
     esp: Boolean = true,
     lineWidth: Float = 2f,
-    speedMs: Double = 1500.0
+    speedMs: Double = 1500.0,
   ) {
     if (color.alpha == 0) {
       return

@@ -16,7 +16,7 @@ import org.cobalt.util.chat.MessageType
 import org.cobalt.util.client.PlayerUtils
 import org.cobalt.util.scheduling.TickScheduler
 
-object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
+object ChatMentionFailsafe : Failsafe("Chat Mention", 10, false) {
   private var respond by CheckboxSetting("Respond to chat messages", "respond", false)
   private var badPhrases by TextSetting(
     "Other phrases",
@@ -71,7 +71,7 @@ object ChatMentionFailsafe: Failsafe("Chat Mention", 10, false) {
     val i = text.indexOf(":")
     if (i == -1) return null
 
-    val bc = text.substring(0,i)
+    val bc = text.substring(0, i)
 
     return bc
       .substringAfterLast(']')

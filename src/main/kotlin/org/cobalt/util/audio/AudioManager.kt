@@ -12,7 +12,8 @@ object AudioManager {
   private val logger =
     LoggerFactory.getLogger(this::class.java)
   private val clips = mutableListOf<Clip>()
-// YES I KNOW THIS PLAYS THRU SPEAKERS ISNTEAD OF HEADPHONES IDK WHY
+
+  // YES I KNOW THIS PLAYS THRU SPEAKERS ISNTEAD OF HEADPHONES IDK WHY
   fun play(file: File, volume: Float = 1.0f) {
     if (!file.exists()) return
 

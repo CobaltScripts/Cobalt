@@ -12,7 +12,7 @@ import org.cobalt.module.type.Failsafe
 import org.cobalt.util.client.PlayerUtils
 import org.cobalt.util.failsafe.FailsafeManager
 
-object VelocityFailsafe: Failsafe("Velocity", 10, false) {
+object VelocityFailsafe : Failsafe("Velocity", 10, false) {
 
   private val bouncePadVelocities = setOf(
     1.4999694805591162,

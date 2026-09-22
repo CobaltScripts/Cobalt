@@ -16,10 +16,11 @@ object NotificationManager {
   init {
     EventBus.register(this)
   }
+
   // Java cant use kotlin.time.Duration
   @JvmStatic
   fun queue(title: String, description: String, duration: java.time.Duration) {
-    queue(title,description,duration.toMillis().milliseconds)
+    queue(title, description, duration.toMillis().milliseconds)
   }
 
   fun queue(title: String, description: String, duration: Duration) {

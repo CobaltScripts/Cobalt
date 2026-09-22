@@ -10,7 +10,7 @@ import org.cobalt.module.type.Failsafe
 import org.cobalt.util.failsafe.FailsafeManager
 import org.cobalt.util.inventory.InventoryUtils
 
-object SlotChangeFailsafe: Failsafe("Slot Change", 10, false) {
+object SlotChangeFailsafe : Failsafe("Slot Change", 10, false) {
   @SubscribeEvent
   fun onServerItemChange(event: PacketEvent.Receive) {
     if (!ModuleManager.isScriptRunning() && !FabricLoader.getInstance().isDevelopmentEnvironment) return
@@ -22,11 +22,12 @@ object SlotChangeFailsafe: Failsafe("Slot Change", 10, false) {
 
     if (oldSlot == newSlot) return
 
-    FailsafeManager.alertUser(this,
+    FailsafeManager.alertUser(
+      this,
       "<red>FROM SLOT</red>" +
-      " <yellow>$oldSlot</yellow>" +
-      " <red>TO SLOT</red>" +
-      " <yellow>$newSlot</yellow>"
+        " <yellow>$oldSlot</yellow>" +
+        " <red>TO SLOT</red>" +
+        " <yellow>$newSlot</yellow>"
     )
   }
 

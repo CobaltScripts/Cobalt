@@ -110,6 +110,7 @@ object ModuleManager {
 
   @JvmStatic
   fun pauseScript() = currentScript?.pause()
+
   @JvmStatic
   fun resumeScript() = currentScript?.resume()
 

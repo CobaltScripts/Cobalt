@@ -18,7 +18,7 @@ import org.cobalt.util.inventory.InventoryUtils
 import org.cobalt.util.inventory.ItemUtils
 import org.cobalt.util.rotation.data.Rotation
 
-object TeleportFailsafe: Failsafe("Teleport", 10, false) {
+object TeleportFailsafe : Failsafe("Teleport", 10, false) {
   @SubscribeEvent
   fun onTeleport(event: PacketEvent.Any) {
     if (!ModuleManager.isScriptRunning() && !FabricLoader.getInstance().isDevelopmentEnvironment) return
@@ -33,8 +33,8 @@ object TeleportFailsafe: Failsafe("Teleport", 10, false) {
         if (currentRot != newRot) {
           RotationFailsafe.onRotation(currentRot, newRot)
         } // I'll be honest I'm not entirely sure what else to do here since they both use the same packet?
-          // this will indeed flag both teleport and rotation on rotation check rn i can't think of a way to
-          // distinguish them (tired zzz)
+        // this will indeed flag both teleport and rotation on rotation check rn i can't think of a way to
+        // distinguish them (tired zzz)
 
         val oldBP
           : BlockPos = BlockPos(
@@ -58,8 +58,8 @@ object TeleportFailsafe: Failsafe("Teleport", 10, false) {
         FailsafeManager.alertUser(
           this,
           "<red>FROM</red> <yellow>$oldBP</yellow>" +
-          " <red>TO</red>" +
-          " <yellow>$newBP</yellow>"
+            " <red>TO</red>" +
+            " <yellow>$newBP</yellow>"
         )
       }
 

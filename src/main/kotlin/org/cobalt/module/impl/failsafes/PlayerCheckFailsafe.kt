@@ -12,7 +12,7 @@ import org.cobalt.module.type.Failsafe
 import org.cobalt.util.client.PlayerUtils
 import org.cobalt.util.failsafe.FailsafeManager
 
-object PlayerCheckFailsafe: Failsafe("Player Check", 10, false) {
+object PlayerCheckFailsafe : Failsafe("Player Check", 10, false) {
   private val offenders = mutableMapOf<String, Int>()
 
   @SubscribeEvent
