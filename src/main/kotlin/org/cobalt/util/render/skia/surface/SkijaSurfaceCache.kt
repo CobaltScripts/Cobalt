@@ -4,7 +4,6 @@ import io.github.humbleui.skija.BackendRenderTarget
 import io.github.humbleui.skija.DirectContext
 import io.github.humbleui.skija.Surface
 
-/** Owns the DirectContext/BackendRenderTarget/Surface triple every SkiaSurface backend caches, and their teardown. */
 internal class SkijaSurfaceCache {
 
   var context: DirectContext? = null

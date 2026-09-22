@@ -2,7 +2,6 @@ package org.cobalt.ui.animation
 
 import java.awt.Color
 
-/** Shared hover-transition animation: restarts a color/alpha fade whenever the hover state flips. */
 class HoverFade(duration: Long = 150L) {
 
   private val colorAnimation = ColorAnimation(duration)

@@ -8,10 +8,7 @@ import org.cobalt.event.impl.TickEvent
 object TickScheduler {
 
   private var currentTick: Long = 0
-
-  // PriorityBlockingQueue rather than PriorityQueue: schedule() can be called from Multithreading's worker
-  // threads while onClientTick concurrently drains this on the client thread.
-  private val taskQueue = PriorityBlockingQueue<ScheduledTask>(
+  private val taskQueue = PriorityBlockingQueue(
     11,
     Comparator.comparingLong(ScheduledTask::executeTick)
   )

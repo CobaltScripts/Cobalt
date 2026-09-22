@@ -15,7 +15,6 @@ abstract class Failsafe @JvmOverloads constructor(
   startValue = startValue
 ) {
 
-  /** Failsafes only need to react while a script is running, or during manual testing in a dev environment. */
   protected fun shouldReactToEvents(): Boolean =
     ModuleManager.isScriptRunning() || FabricLoader.getInstance().isDevelopmentEnvironment
 
