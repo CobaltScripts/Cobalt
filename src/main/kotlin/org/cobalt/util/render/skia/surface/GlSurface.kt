@@ -12,9 +12,7 @@ import org.lwjgl.opengl.GL33C
 
 internal class GlSurface : SkiaSurface {
 
-  private var context: DirectContext? = null
-  private var renderTarget: BackendRenderTarget? = null
-  private var surface: Surface? = null
+  private val skija = SkijaSurfaceCache()
 
   private var fbo = 0
   private var depthStencil = 0
@@ -39,8 +37,8 @@ internal class GlSurface : SkiaSurface {
       GlStateManager._viewport(0, 0, width, height)
       GL33C.glBindSampler(0, 0)
 
-      val directContext = context ?: DirectContext.makeGL().also {
-        context = it
+      val directContext = skija.context ?: DirectContext.makeGL().also {
+        skija.context = it
       }
 
       directContext.resetGLAll()
@@ -99,16 +97,13 @@ internal class GlSurface : SkiaSurface {
   }
 
   private fun surfaceFor(width: Int, height: Int, textureId: Int): Surface {
-    val existing = surface
+    val existing = skija.surface
 
     if (existing != null && existing.width == width && existing.height == height && lastTextureId == textureId) {
       return existing
     }
 
-    surface?.close()
-    renderTarget?.close()
-
-    val directContext = context ?: DirectContext.makeGL().also { context = it }
+    val directContext = skija.context ?: DirectContext.makeGL().also { skija.context = it }
     val target = BackendRenderTarget.makeGL(width, height, 0, 8, fbo, GL30C.GL_RGBA8)
     val created = Surface.wrapBackendRenderTarget(
       directContext,
@@ -118,18 +113,14 @@ internal class GlSurface : SkiaSurface {
       ColorSpace.getSRGB()
     )
 
-    renderTarget = target
-    surface = created
+    skija.replaceSurface(target, created)
     lastTextureId = textureId
 
     return created
   }
 
   override fun close() {
-    surface?.close()
-    surface = null
-    renderTarget?.close()
-    renderTarget = null
+    skija.close()
 
     if (depthStencil != 0) {
       GL30C.glDeleteRenderbuffers(depthStencil)
@@ -140,9 +131,6 @@ internal class GlSurface : SkiaSurface {
       GlStateManager._glDeleteFramebuffers(fbo)
       fbo = 0
     }
-
-    context?.close()
-    context = null
   }
 
 }
