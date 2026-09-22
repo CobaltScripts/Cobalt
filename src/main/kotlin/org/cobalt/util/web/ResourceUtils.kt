@@ -6,7 +6,6 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URI
 import java.nio.file.Files
-import kotlinx.coroutines.runBlocking
 import org.cobalt.Cobalt
 
 object ResourceUtils {
@@ -16,9 +15,7 @@ object ResourceUtils {
     val trimmedPath = location.trim()
 
     return if (trimmedPath.startsWith("http")) {
-      runBlocking {
-        getInputStream(trimmedPath).readBytes()
-      }
+      getInputStream(trimmedPath).use { it.readBytes() }
     } else {
       val file = File(trimmedPath)
 
