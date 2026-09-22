@@ -1,8 +1,7 @@
 package org.cobalt.ui.component.button
 
 import org.cobalt.ui.UIComponent
-import org.cobalt.ui.animation.ColorAnimation
-import org.cobalt.ui.animation.EaseOutAnimation
+import org.cobalt.ui.animation.HoverFade
 import org.cobalt.util.color.updateAlpha
 import org.cobalt.util.input.Mouse
 import org.cobalt.util.render.SkiaRenderer
@@ -16,23 +15,15 @@ class IconButton(
 ) {
 
   private val icon = SkiaRenderer.createImage(resourcePath)
-  private val colorAnimation = ColorAnimation(150L)
-  private val alphaAnimation = EaseOutAnimation(150L)
-
-  private var wasHovering = false
+  private val hoverFade = HoverFade()
 
   override fun renderComponent() {
     val hovering = Mouse.isHoveringOver(xPos, yPos, width, height)
+    hoverFade.update(hovering)
 
-    if (hovering != wasHovering) {
-      colorAnimation.start()
-      alphaAnimation.start()
-      wasHovering = hovering
-    }
-
-    val alpha = alphaAnimation.get(0f, 40f, !hovering).toInt()
-    val borderColor = colorAnimation.get(theme.border, theme.accentPrimary, !hovering)
-    val iconColor = colorAnimation.get(theme.textMuted, theme.accentPrimary, !hovering)
+    val alpha = hoverFade.overlayAlpha(hovering)
+    val borderColor = hoverFade.color(theme.border, theme.accentPrimary, hovering)
+    val iconColor = hoverFade.color(theme.textMuted, theme.accentPrimary, hovering)
 
     SkiaRenderer.roundedRect(
       x = xPos,
