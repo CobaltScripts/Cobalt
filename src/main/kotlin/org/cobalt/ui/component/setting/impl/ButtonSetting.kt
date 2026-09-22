@@ -27,7 +27,6 @@ class ButtonSetting(
     SkiaRenderer.textWidth(SkiaRenderer.regularFont, buttonLabel, FONT_SIZE) + 30f
 
   override fun renderSetting() {
-    val buttonWidth = buttonWidth
     val startX = xPos + width - buttonWidth - PADDING
     val startY = yPos + (height - BUTTON_HEIGHT) / 2
 

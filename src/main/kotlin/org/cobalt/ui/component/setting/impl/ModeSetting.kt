@@ -66,10 +66,6 @@ class ModeSetting(
   }
 
   override fun mouseClicked(button: Int): Boolean {
-    if (options.isEmpty()) {
-      return false
-    }
-
     val display = options.getOrNull(value).orEmpty()
     val buttonWidth = SkiaRenderer.textWidth(SkiaRenderer.regularFont, display, FONT_SIZE) + 30f
     val startX = xPos + width - buttonWidth - PADDING
