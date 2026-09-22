@@ -3,7 +3,6 @@ package org.cobalt.ui.component.setting.impl
 import java.awt.Color
 import org.cobalt.util.render.SkiaRenderer
 
-/** Value-box and track rendering shared by RangeSetting (two knobs) and SliderSetting (one knob). */
 internal object TrackSettingHelper {
 
   const val KNOB_RADIUS = 5f

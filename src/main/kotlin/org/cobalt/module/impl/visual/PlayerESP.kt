@@ -83,7 +83,7 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
           esp = true
         )
 
-        EspType.OUTLINE -> Unit // handled by shouldOutline(), not drawn in this loop
+        EspType.OUTLINE -> Unit
       }
     }
   }

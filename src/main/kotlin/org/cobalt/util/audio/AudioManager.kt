@@ -12,7 +12,6 @@ object AudioManager {
   private val logger =
     LoggerFactory.getLogger(this::class.java)
 
-  // clip.addLineListener callbacks fire on the Java Sound line-event thread, not the caller's thread
   private val clips = CopyOnWriteArrayList<Clip>()
 
   // YES I KNOW THIS PLAYS THRU SPEAKERS ISNTEAD OF HEADPHONES IDK WHY
