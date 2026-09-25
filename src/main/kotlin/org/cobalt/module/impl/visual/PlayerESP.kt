@@ -22,7 +22,7 @@ object PlayerESP : Module(name = "PlayerESP", category = ModuleCategory.VISUAL) 
   )
 
   fun shouldOutline(entity: Entity): Boolean {
-    if (espType != 2 && espType != 3) {
+    if ( (espType != 2 && espType != 3 ) || !enabled) {
       return false
     }
 
